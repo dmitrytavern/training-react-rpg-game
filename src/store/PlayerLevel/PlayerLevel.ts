@@ -5,9 +5,9 @@ class PlayerLevel {
 	private experience: number
 	private experienceForLevelUp: number
 
-	constructor(playerLevel: number, playerExp: number) {
-		this.level = playerLevel
-		this.experience = playerExp
+	constructor(startLevel: number, startExp: number) {
+		this.level = startLevel
+		this.experience = startExp
 		this.experienceForLevelUp = this._calcExperienceForLevelUp()
 
 		this.floatExperience()

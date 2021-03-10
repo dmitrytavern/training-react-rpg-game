@@ -6,6 +6,7 @@ class PlayerEquipmentSlot {
 
 	constructor() {
 		makeAutoObservable(this)
+		console.log(this)
 	}
 
 	public getName(): string {

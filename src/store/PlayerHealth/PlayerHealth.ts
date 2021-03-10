@@ -1,10 +1,14 @@
+import {makeAutoObservable} from 'mobx'
+
 class PlayerHealth {
 	private readonly maxHealth: number
 	private health: number
 
-	constructor(health: number, maxHealth: number) {
-		this.health = health
-		this.maxHealth = maxHealth // DELETE IT!
+	constructor(startValue: number, maxValue: number) {
+		this.health = startValue
+		this.maxHealth = maxValue // DELETE IT!
+
+		makeAutoObservable(this)
 	}
 
 	public get alive(): boolean {

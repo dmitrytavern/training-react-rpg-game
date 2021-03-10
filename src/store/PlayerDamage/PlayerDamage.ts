@@ -15,6 +15,14 @@ class PlayerDamage {
 	public getDamage(): number {
 		return randomInteger(this.minDamage, this.maxDamage)
 	}
+
+	public getMinDamage(): number {
+		return this.minDamage
+	}
+
+	public getMaxDamage(): number {
+		return this.maxDamage
+	}
 }
 
 export default PlayerDamage

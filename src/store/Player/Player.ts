@@ -1,18 +1,24 @@
 import {Effect} from "../../../types/Effect"
 import PlayerLevel from "../PlayerLevel"
 import PlayerDamage from "../PlayerDamage"
+import PlayerHealth from "../PlayerHealth"
+import PlayerEnergy from "../PlayerEnergy"
 import PlayerInventory from "../PlayerInventory"
 import PlayerEquipment from "../PlayerEquipment"
 
 class Player {
 	public readonly level: PlayerLevel
 	public readonly damage: PlayerDamage
+	public readonly health: PlayerHealth
+	public readonly energy: PlayerEnergy
 	public readonly inventory: PlayerInventory
 	public readonly equipment: PlayerEquipment
 
 	constructor() {
 		this.level = new PlayerLevel(1, 10)
 		this.damage = new PlayerDamage(30, 50)
+		this.health = new PlayerHealth(50, 100)
+		this.energy = new PlayerEnergy(50, 100)
 		this.inventory = new PlayerInventory()
 		this.equipment = new PlayerEquipment()
 	}
