@@ -23,7 +23,8 @@ const data: Item[] = [
 		type: 'Armor',
 		name: 'Super legendary Helmet',
 		effects: [
-			{ name: 'Health', type: 'health', operator: '+', value: 100 }
+			{ name: 'Health', type: 'maxHealth', operator: '+', value: 100 },
+			{ name: 'Energy', type: 'maxEnergy', operator: '+', value: 40 }
 		]
 	},
 
@@ -32,7 +33,7 @@ const data: Item[] = [
 		type: 'Armor',
 		name: 'Super legendary Armor',
 		effects: [
-			{ name: 'Health', type: 'health', operator: '+', value: 10 },
+			{ name: 'Health', type: 'maxHealth', operator: '+', value: 10 },
 			{ name: 'Defense', type: 'defense', operator: '+', value: 50 }
 		]
 	},
@@ -42,7 +43,7 @@ const data: Item[] = [
 		type: 'Armor',
 		name: 'Super legendary Boots',
 		effects: [
-			{ name: 'Health', type: 'health', operator: '+', value: 10 },
+			{ name: 'Health', type: 'maxHealth', operator: '+', value: 10 },
 			{ name: 'Defense', type: 'defense', operator: '+', value: 40 }
 		]
 	},

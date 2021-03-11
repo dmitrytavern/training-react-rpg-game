@@ -1,10 +1,29 @@
 import PlayerEnergy from "./PlayerEnergy"
 
+const maxEnergyFormula = (max: number, lvl: number) => {
+	return max * lvl
+}
+
 it('Check default properties', () => {
 	const energy = new PlayerEnergy(50, 100)
 
 	expect(energy.getEnergy()).toBe(50)
 	expect(energy.getMaxEnergy()).toBe(100)
+})
+
+it('Check default properties with effects', () => {
+	const startMaxEnergy = 100
+	const lvl = 2
+	const effect = 300
+	const energy = new PlayerEnergy(50, startMaxEnergy)
+
+	energy.setPlayerLevel(() => lvl)
+	energy.setMaxEnergyEffect(() => effect)
+
+	expect(energy.getEnergy()).toBe(50)
+	expect(energy.getMaxEnergy()).toBe(
+		maxEnergyFormula(startMaxEnergy, lvl) + effect
+	)
 })
 
 describe('Check increment function', () => {
@@ -36,6 +55,40 @@ describe('Check increment function', () => {
 		energy.incrementHealth(150)
 
 		expect(energy.getEnergy()).toBe(100)
+	})
+})
+
+describe('Check increment function with effects', () => {
+	const startMaxEnergy = 100
+	const lvl = 2
+	const effect = 300
+
+	it('Increment energy to full with effects', () => {
+		const expectValue = maxEnergyFormula(startMaxEnergy, lvl) + effect
+		const health = new PlayerEnergy(50, startMaxEnergy)
+
+		health.setPlayerLevel(() => lvl)
+		health.setMaxEnergyEffect(() => effect)
+
+		expect(health.getEnergy()).toBe(50)
+
+		health.incrementHealth(expectValue - 50)
+
+		expect(health.getEnergy()).toBe(expectValue)
+	})
+
+	it('Increment energy to overfull with effects', () => {
+		const expectValue = maxEnergyFormula(startMaxEnergy, lvl) + effect
+		const health = new PlayerEnergy(50, startMaxEnergy)
+
+		health.setPlayerLevel(() => lvl)
+		health.setMaxEnergyEffect(() => effect)
+
+		expect(health.getEnergy()).toBe(50)
+
+		health.incrementHealth(expectValue + 1000)
+
+		expect(health.getEnergy()).toBe(expectValue)
 	})
 })
 

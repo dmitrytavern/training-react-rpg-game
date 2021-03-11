@@ -10,6 +10,11 @@ const App = () => {
 	const xp = player.level.getExperience()
 	const maxEp = player.level.getExperienceForLevelUp()
 
+	const addExp = () => {
+		player.level.addExperience(50)
+		player.level.floatExperience()
+	}
+
 	const health = player.health.getHealth()
 	const maxHealth = player.health.getMaxHealth()
 
@@ -73,6 +78,8 @@ const App = () => {
 			<div>Your energy: {energy}/{maxEnergy}</div>
 
 			<div>Your damage: {minDamage} - {maxDamage}</div>
+
+			<button onClick={addExp}>Add 50 xp</button>
 
 			<div>Your inventory: </div>
 			<ul>
