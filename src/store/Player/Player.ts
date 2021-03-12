@@ -3,6 +3,7 @@ import PlayerLevel from "../PlayerLevel"
 import PlayerDamage from "../PlayerDamage"
 import PlayerHealth from "../PlayerHealth"
 import PlayerEnergy from "../PlayerEnergy"
+import PlayerDefense from "../PlayerDefense"
 import PlayerInventory from "../PlayerInventory"
 import PlayerEquipment from "../PlayerEquipment"
 
@@ -11,20 +12,23 @@ class Player {
 	public readonly health: PlayerHealth
 	public readonly energy: PlayerEnergy
 	public readonly damage: PlayerDamage
+	public readonly defense: PlayerDefense
 	public readonly inventory: PlayerInventory
 	public readonly equipment: PlayerEquipment
 
 	constructor() {
-		this.level = new PlayerLevel(1, 10)
+		this.level = new PlayerLevel(100, 10)
 		this.health = new PlayerHealth(50, 100)
 		this.energy = new PlayerEnergy(50, 100)
 		this.damage = new PlayerDamage(30, 50)
+		this.defense = new PlayerDefense()
 		this.inventory = new PlayerInventory()
 		this.equipment = new PlayerEquipment()
 
 		this.initPlayerHealth()
 		this.initPlayerDamage()
 		this.initPlayerEnergy()
+		this.initPlayerDefense()
 	}
 
 	private initPlayerHealth() {
@@ -58,6 +62,18 @@ class Player {
 
 		this.damage.setDamageEffect(() => {
 			return Player.calculateEffect('damage', [
+				...this.equipment.getEffects()
+			])
+		})
+	}
+
+	private initPlayerDefense() {
+		this.defense.setPlayerLevel(() => {
+			return this.level.getLevel()
+		})
+
+		this.defense.setDefenseEffect(() => {
+			return Player.calculateEffect('defense', [
 				...this.equipment.getEffects()
 			])
 		})

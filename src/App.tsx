@@ -24,6 +24,8 @@ const App = () => {
 	const minDamage = player.damage.getMinDamage()
 	const maxDamage = player.damage.getMaxDamage()
 
+	const defenceNumber = player.defense.getDefense()
+	const defencePercent = player.defense.getDefensePercent()
 
 	const inventory = player.inventory.getInventory()
 
@@ -78,6 +80,7 @@ const App = () => {
 			<div>Your energy: {energy}/{maxEnergy}</div>
 
 			<div>Your damage: {minDamage} - {maxDamage}</div>
+			<div>Your defense: {defenceNumber} or {defencePercent}%</div>
 
 			<button onClick={addExp}>Add 50 xp</button>
 
