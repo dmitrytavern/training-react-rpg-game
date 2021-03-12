@@ -20,7 +20,7 @@ class Player {
 
 	constructor() {
 		this.level = new PlayerLevel(100, 10)
-		this.health = new PlayerHealth(50, 100)
+		this.health = new PlayerHealth(5000, 100)
 		this.energy = new PlayerEnergy(50, 100)
 		this.damage = new PlayerDamage(30, 50)
 		this.defense = new PlayerDefense()
@@ -80,28 +80,6 @@ class Player {
 				...this.equipment.getEffects()
 			])
 		})
-	}
-
-
-	public calculateDamaging(damage: number): number {
-		const effects: Effect[] = [
-			...this.equipment.getEffects()
-		]
-
-		let effectDefense = 0
-		effects.map((item) => {
-			if (item.type === 'defense') {
-				switch (item.operator) {
-					case '+': effectDefense += item.value; break
-					case '-': effectDefense -= item.value; break
-					default: throw new Error('Not found operator: '+item.operator)
-				}
-			}
-			return item
-		})
-
-		const value = damage - effectDefense
-		return value <= 0 ? 1 : value
 	}
 
 	static calculateEffect(effectName: string, effects: Effect[]) {

@@ -26,6 +26,14 @@ class PlayerDefense {
 		this.getEffects = computed
 	}
 
+	public calculateDamaging(damage: number): number {
+		const percent = this.getDefensePercent()
+
+		const res = damage / 100 * (100 - percent)
+
+		return res
+	}
+
 	public getDefense(): number {
 		return this.getEffects()
 	}

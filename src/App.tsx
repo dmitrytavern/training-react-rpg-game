@@ -15,6 +15,7 @@ const App = () => {
 		player.level.floatExperience()
 	}
 
+	const alive = player.health.alive
 	const health = player.health.getHealth()
 	const maxHealth = player.health.getMaxHealth()
 
@@ -23,6 +24,11 @@ const App = () => {
 
 	const minDamage = player.damage.getMinDamage()
 	const maxDamage = player.damage.getMaxDamage()
+
+	const getHit = () => {
+		const damage = player.defense.calculateDamaging(500)
+		player.health.decrementHealth(damage)
+	}
 
 	const defenceNumber = player.defense.getDefense()
 	const defencePercent = player.defense.getDefensePercent()
@@ -81,6 +87,7 @@ const App = () => {
 	return (
 		<div>
 
+			<div>You are {alive ? 'alive' : 'death'}</div>
 			<div>Your level: {level}</div>
 			<div>Your xp: {xp}/{maxEp}</div>
 
@@ -91,6 +98,8 @@ const App = () => {
 			<div>Your defense: {defenceNumber} or {defencePercent}%</div>
 
 			<button onClick={addExp}>Add 50 xp</button>
+
+			<button onClick={getHit}>Get 500 damage</button>
 
 			<div>Your inventory: </div>
 			<ul>

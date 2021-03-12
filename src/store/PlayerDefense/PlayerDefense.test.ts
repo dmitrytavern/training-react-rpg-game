@@ -4,37 +4,79 @@ const defensePercentFormula = (defense: number, lvl: number) => {
 	return +(lvl * 0.1 + 50 * defense / (1500 + defense)).toFixed(2)
 }
 
-it('Check default value', () => {
-	const defense = new PlayerDefense()
+const calcDamagingFormula = (damage: number, defense: number, lvl: number) => {
+	const percent = defensePercentFormula(defense, lvl)
 
-	expect(defense.getDefense()).toBe(0)
-	expect(defense.getDefensePercent()).toBe(0)
+	return damage / 100 * (100 - percent)
+}
+
+describe('Check value', () => {
+	it('Default value', () => {
+		const defense = new PlayerDefense()
+
+		expect(defense.getDefense()).toBe(0)
+		expect(defense.getDefensePercent()).toBe(0)
+	})
+
+	it('With level', () => {
+		const defense = new PlayerDefense()
+
+		defense.setPlayerLevel(() => 2)
+
+		expect(defense.getDefense()).toBe(0)
+		expect(defense.getDefensePercent()).toBe(0)
+	})
+
+	it('With effect', () => {
+		const defense = new PlayerDefense()
+
+		defense.setDefenseEffect(() => 500)
+
+		expect(defense.getDefense()).toBe(500)
+		expect(defense.getDefensePercent()).toBe(defensePercentFormula(500, 1))
+	})
+
+	it('With effect and level', () => {
+		const defense = new PlayerDefense()
+
+		defense.setPlayerLevel(() => 2)
+		defense.setDefenseEffect(() => 500)
+
+		expect(defense.getDefense()).toBe(500)
+		expect(defense.getDefensePercent()).toBe(defensePercentFormula(500, 2))
+	})
+
 })
 
-it('Check value with level', () => {
-	const defense = new PlayerDefense()
+describe('Check calculate damage', () => {
+	const damage = 500
 
-	defense.setPlayerLevel(() => 2)
+	it('With default property', () => {
+		const defense = new PlayerDefense()
 
-	expect(defense.getDefense()).toBe(0)
-	expect(defense.getDefensePercent()).toBe(0)
-})
+		const availableDamage = defense.calculateDamaging(damage)
 
-it('Check value with effect', () => {
-	const defense = new PlayerDefense()
+		expect(availableDamage).toBe(damage)
+	})
 
-	defense.setDefenseEffect(() => 500)
+	it('With effect', () => {
+		const defense = new PlayerDefense()
 
-	expect(defense.getDefense()).toBe(500)
-	expect(defense.getDefensePercent()).toBe(defensePercentFormula(500, 1))
-})
+		defense.setDefenseEffect(() => 500)
 
-it('Check value with effect and level', () => {
-	const defense = new PlayerDefense()
+		const availableDamage = defense.calculateDamaging(damage)
 
-	defense.setPlayerLevel(() => 2)
-	defense.setDefenseEffect(() => 500)
+		expect(availableDamage).toBe(calcDamagingFormula(damage, 500, 1))
+	})
 
-	expect(defense.getDefense()).toBe(500)
-	expect(defense.getDefensePercent()).toBe(defensePercentFormula(500, 2))
+	it('With effect and level', () => {
+		const defense = new PlayerDefense()
+
+		defense.setPlayerLevel(() => 2)
+		defense.setDefenseEffect(() => 500)
+
+		const availableDamage = defense.calculateDamaging(damage)
+
+		expect(availableDamage).toBe(calcDamagingFormula(damage, 500, 2))
+	})
 })

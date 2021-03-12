@@ -46,13 +46,13 @@ class PlayerHealth {
 		const max = this.getMaxHealth()
 		let _val = this.health + count
 		if (_val > max) _val = max
-		this.health = _val
+		this.health = +(_val).toFixed(2)
 	}
 
 	public decrementHealth(count: number): void {
 		let _val = this.health - count
 		if (_val < 0) _val = 0
-		this.health = _val
+		this.health = +(_val).toFixed(2)
 	}
 }
 
