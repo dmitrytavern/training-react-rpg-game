@@ -7,6 +7,7 @@ import PlayerDefense from "../PlayerDefense"
 import PlayerInventory from "../PlayerInventory"
 import PlayerEquipment from "../PlayerEquipment"
 import PlayerFavorites from "../PlayerFavorites"
+import PlayerCharacteristic from "../PlayerCharacteristic"
 
 class Player {
 	public readonly level: PlayerLevel
@@ -17,9 +18,10 @@ class Player {
 	public readonly inventory: PlayerInventory
 	public readonly equipment: PlayerEquipment
 	public readonly favorites: PlayerFavorites
+	public readonly characteristic: PlayerCharacteristic
 
 	constructor() {
-		this.level = new PlayerLevel(100, 10)
+		this.level = new PlayerLevel(50, 10)
 		this.health = new PlayerHealth(5000, 100)
 		this.energy = new PlayerEnergy(50, 100)
 		this.damage = new PlayerDamage(30, 50)
@@ -27,11 +29,13 @@ class Player {
 		this.inventory = new PlayerInventory()
 		this.equipment = new PlayerEquipment()
 		this.favorites = new PlayerFavorites()
+		this.characteristic = new PlayerCharacteristic()
 
 		this.initPlayerHealth()
 		this.initPlayerDamage()
 		this.initPlayerEnergy()
 		this.initPlayerDefense()
+		this.initPlayerCharacteristic()
 	}
 
 	private initPlayerHealth() {
@@ -79,6 +83,12 @@ class Player {
 			return Player.calculateEffect('defense', [
 				...this.equipment.getEffects()
 			])
+		})
+	}
+
+	private initPlayerCharacteristic() {
+		this.characteristic.setPlayerLevel(() => {
+			return this.level.getLevel()
 		})
 	}
 

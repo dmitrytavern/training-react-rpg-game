@@ -33,6 +33,20 @@ const App = () => {
 	const defenceNumber = player.defense.getDefense()
 	const defencePercent = player.defense.getDefensePercent()
 
+	const characteristic = player.characteristic
+	const allCharacteristicPoints = characteristic.getAllPoints()
+	const availableCharacteristicPoints = characteristic.getAvailablePoints()
+
+	const addCharacteristicPoint = (name: any) => {
+		characteristic.setPoint(name)
+	}
+	const unsetAllPoints = () => {
+		characteristic.unsetPoints()
+	}
+	const disabledCharacteristicButton = (name: any) => {
+		return characteristic.characteristicLimitReached(name) || characteristic.getAvailablePoints() === 0
+	}
+
 	const inventory = player.inventory.getInventory()
 
 	const addItem = () => {
@@ -98,8 +112,26 @@ const App = () => {
 			<div>Your defense: {defenceNumber} or {defencePercent}%</div>
 
 			<button onClick={addExp}>Add 50 xp</button>
-
 			<button onClick={getHit}>Get 500 damage</button>
+
+			<div>Your characteristic: </div>
+			<div>All: {allCharacteristicPoints}</div>
+			<div>Available: {availableCharacteristicPoints}</div>
+
+			<button onClick={unsetAllPoints}>Rest</button>
+
+			<ul>
+				<li>
+					Strength: {characteristic.getCharacteristic('strength')}/10
+					|
+					<button onClick={() => addCharacteristicPoint('strength')} disabled={disabledCharacteristicButton('strength')}>+1</button>
+				</li>
+				<li>
+					Constitution: {characteristic.getCharacteristic('constitution')}/10
+					|
+					<button onClick={() => addCharacteristicPoint('constitution')} disabled={disabledCharacteristicButton('constitution')}>+1</button>
+				</li>
+			</ul>
 
 			<div>Your inventory: </div>
 			<ul>
