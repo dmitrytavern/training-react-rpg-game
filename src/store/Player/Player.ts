@@ -6,6 +6,7 @@ import PlayerEnergy from "../PlayerEnergy"
 import PlayerDefense from "../PlayerDefense"
 import PlayerInventory from "../PlayerInventory"
 import PlayerEquipment from "../PlayerEquipment"
+import PlayerFavorites from "../PlayerFavorites"
 
 class Player {
 	public readonly level: PlayerLevel
@@ -15,6 +16,7 @@ class Player {
 	public readonly defense: PlayerDefense
 	public readonly inventory: PlayerInventory
 	public readonly equipment: PlayerEquipment
+	public readonly favorites: PlayerFavorites
 
 	constructor() {
 		this.level = new PlayerLevel(100, 10)
@@ -24,6 +26,7 @@ class Player {
 		this.defense = new PlayerDefense()
 		this.inventory = new PlayerInventory()
 		this.equipment = new PlayerEquipment()
+		this.favorites = new PlayerFavorites()
 
 		this.initPlayerHealth()
 		this.initPlayerDamage()

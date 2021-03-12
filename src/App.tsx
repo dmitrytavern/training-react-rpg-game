@@ -38,6 +38,14 @@ const App = () => {
 		player.inventory.removeItem(1, 1)
 	}
 
+	const addItemToFavorite = (id: number) => {
+		player.favorites.setItem(id)
+	}
+
+	const unsetItemFromFavorite = (id: number) => {
+		player.favorites.unsetItem(id)
+	}
+
 
 	const equipment = player.equipment
 
@@ -87,8 +95,24 @@ const App = () => {
 			<div>Your inventory: </div>
 			<ul>
 				{inventory.map((item, i) => (
-					<li key={i}>{item.item.name} x{item.getQuantity()}</li>
+					<li key={i}>
+						<span>{item.item.name} x{item.getQuantity()}</span>
+						|
+						<button onClick={() => addItemToFavorite(item.id)} disabled={player.favorites.exists(item.id)}>Add to favorite</button>
+						<button onClick={() => unsetItemFromFavorite(item.id)} disabled={!player.favorites.exists(item.id)}>Unset from favorite</button>
+					</li>
 				))}
+			</ul>
+
+			<div>Your favorite items: </div>
+			<ul>
+				{player.favorites.getItems().map((id, i) => {
+					const item = player.inventory.getItem(id)
+					if (!item) return null
+					return (
+						<li key={i}>{item.item.name} x{item.getQuantity()}</li>
+					)
+				})}
 			</ul>
 
 			<button onClick={addItem}>Add 1 Sword</button>
