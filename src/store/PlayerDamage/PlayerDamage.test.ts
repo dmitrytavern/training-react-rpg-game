@@ -43,9 +43,9 @@ describe('Checking damage range with effects', () => {
 		const max = 2
 		const damage = new PlayerDamage(min, max)
 
-		damage.setPlayerLevel(() => lvl)
-		damage.setDamageEffect(() => effect)
-		damage.setStrengthCharacteristic(() => strength)
+		damage.setComputedFunction('level', () => lvl)
+		damage.setComputedFunction('effects', () => effect)
+		damage.setComputedFunction('strength', () => strength)
 
 		for (let i=0; i <= 50; i++) {
 			expect(damage.getDamage()).toBeGreaterThanOrEqual(damageFormula(min, lvl, strength) + effect)
@@ -59,9 +59,9 @@ describe('Checking damage range with effects', () => {
 		const damage = new PlayerDamage(min, max)
 		const strength = 4
 
-		damage.setPlayerLevel(() => lvl)
-		damage.setDamageEffect(() => effect)
-		damage.setStrengthCharacteristic(() => strength)
+		damage.setComputedFunction('level', () => lvl)
+		damage.setComputedFunction('effects', () => effect)
+		damage.setComputedFunction('strength', () => strength)
 
 		for (let i=0; i <= 100; i++) {
 			expect(damage.getDamage()).toBeGreaterThanOrEqual(damageFormula(min, lvl, strength) + effect)
@@ -73,9 +73,9 @@ describe('Checking damage range with effects', () => {
 		const dmg = 1
 		const damage = new PlayerDamage(dmg, dmg)
 
-		damage.setPlayerLevel(() => lvl)
-		damage.setDamageEffect(() => effect)
-		damage.setStrengthCharacteristic(() => strength)
+		damage.setComputedFunction('level', () => lvl)
+		damage.setComputedFunction('effects', () => effect)
+		damage.setComputedFunction('strength', () => strength)
 
 		expect(damage.getDamage()).toBe(damageFormula(dmg, lvl, strength) + effect)
 	})

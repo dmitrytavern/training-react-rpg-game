@@ -3,6 +3,11 @@ import {makeAutoObservable} from 'mobx'
 type ComputedProperties = 'getIntelligenceCharacteristic'
 type IntelligenceFunction = () => number
 
+type ComputedNames = keyof ComputedFunctions
+type ComputedFunctions = {
+	intelligence: IntelligenceFunction
+}
+
 class PlayerLevel {
 	private level: number
 	private experience: number
@@ -22,8 +27,11 @@ class PlayerLevel {
 		})
 	}
 
-	public setIntelligenceCharacteristic(computed: IntelligenceFunction) {
-		this.getIntelligenceCharacteristic = computed
+	public setComputedFunction(name: ComputedNames, computed: ComputedFunctions[ComputedNames]) {
+		if (typeof computed !== 'function') return
+		switch (name) {
+			case "intelligence": this.getIntelligenceCharacteristic = computed; break;
+		}
 	}
 
 	public getLevel(): number {

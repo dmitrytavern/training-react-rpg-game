@@ -28,7 +28,7 @@ describe('Check value', () => {
 	it('With level', () => {
 		const defense = new PlayerDefense()
 
-		defense.setPlayerLevel(() => 2)
+		defense.setComputedFunction('level', () => 2)
 
 		expect(defense.getDefense()).toBe(baseDefenseFormula(2, 1))
 		expect(defense.getDefensePercent()).toBe(defensePercentFormula(0, 2, 1))
@@ -37,7 +37,7 @@ describe('Check value', () => {
 	it('With effect', () => {
 		const defense = new PlayerDefense()
 
-		defense.setDefenseEffect(() => 500)
+		defense.setComputedFunction('effects', () => 500)
 
 		expect(defense.getDefense()).toBe(baseDefenseFormula(1, 1) + 500)
 		expect(defense.getDefensePercent()).toBe(defensePercentFormula(500, 1, 1))
@@ -46,8 +46,8 @@ describe('Check value', () => {
 	it('With effect and level', () => {
 		const defense = new PlayerDefense()
 
-		defense.setPlayerLevel(() => 2)
-		defense.setDefenseEffect(() => 500)
+		defense.setComputedFunction('level', () => 2)
+		defense.setComputedFunction('effects', () => 500)
 
 		expect(defense.getDefense()).toBe(baseDefenseFormula(2, 1) + 500)
 		expect(defense.getDefensePercent()).toBe(defensePercentFormula(500, 2, 1))
@@ -56,9 +56,9 @@ describe('Check value', () => {
 	it('With effect, level and characteristic', () => {
 		const defense = new PlayerDefense()
 
-		defense.setPlayerLevel(() => 2)
-		defense.setDefenseEffect(() => 500)
-		defense.setStrengthCharacteristic(() => 5)
+		defense.setComputedFunction('level', () => 2)
+		defense.setComputedFunction('effects', () => 500)
+		defense.setComputedFunction('strength', () => 5)
 
 		expect(defense.getDefense()).toBe(baseDefenseFormula(2, 5) + 500)
 		expect(defense.getDefensePercent()).toBe(defensePercentFormula(500, 2, 5))
@@ -79,7 +79,7 @@ describe('Check calculate damage', () => {
 	it('With effect', () => {
 		const defense = new PlayerDefense()
 
-		defense.setDefenseEffect(() => 500)
+		defense.setComputedFunction('effects', () => 500)
 
 		const availableDamage = defense.calculateDamaging(damage)
 
@@ -89,8 +89,8 @@ describe('Check calculate damage', () => {
 	it('With effect and level', () => {
 		const defense = new PlayerDefense()
 
-		defense.setPlayerLevel(() => 2)
-		defense.setDefenseEffect(() => 500)
+		defense.setComputedFunction('level', () => 2)
+		defense.setComputedFunction('effects', () => 500)
 
 		const availableDamage = defense.calculateDamaging(damage)
 
@@ -100,9 +100,9 @@ describe('Check calculate damage', () => {
 	it('With effect, level and characteristic', () => {
 		const defense = new PlayerDefense()
 
-		defense.setPlayerLevel(() => 2)
-		defense.setDefenseEffect(() => 500)
-		defense.setStrengthCharacteristic(() => 5)
+		defense.setComputedFunction('level', () => 2)
+		defense.setComputedFunction('effects', () => 500)
+		defense.setComputedFunction('strength', () => 5)
 
 		const availableDamage = defense.calculateDamaging(damage)
 

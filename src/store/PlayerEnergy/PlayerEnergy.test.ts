@@ -18,9 +18,9 @@ it('Check default properties with effects', () => {
 	const endurance = 4
 	const energy = new PlayerEnergy(50, startMaxEnergy)
 
-	energy.setPlayerLevel(() => lvl)
-	energy.setMaxEnergyEffect(() => effect)
-	energy.setEnduranceCharacteristic(() => endurance)
+	energy.setComputedFunction('level', () => lvl)
+	energy.setComputedFunction('effects',() => effect)
+	energy.setComputedFunction('endurance', () => endurance)
 
 	expect(energy.getEnergy()).toBe(50)
 	expect(energy.getMaxEnergy()).toBe(
@@ -68,31 +68,31 @@ describe('Check increment function with effects', () => {
 	const expectValue = maxEnergyFormula(startMaxEnergy, lvl, endurance) + effect
 
 	it('Increment energy to full with effects', () => {
-		const health = new PlayerEnergy(50, startMaxEnergy)
+		const energy = new PlayerEnergy(50, startMaxEnergy)
 
-		health.setPlayerLevel(() => lvl)
-		health.setMaxEnergyEffect(() => effect)
-		health.setEnduranceCharacteristic(() => endurance)
+		energy.setComputedFunction('level', () => lvl)
+		energy.setComputedFunction('effects',() => effect)
+		energy.setComputedFunction('endurance', () => endurance)
 
-		expect(health.getEnergy()).toBe(50)
+		expect(energy.getEnergy()).toBe(50)
 
-		health.incrementHealth(expectValue - 50)
+		energy.incrementHealth(expectValue - 50)
 
-		expect(health.getEnergy()).toBe(expectValue)
+		expect(energy.getEnergy()).toBe(expectValue)
 	})
 
 	it('Increment energy to overfull with effects', () => {
-		const health = new PlayerEnergy(50, startMaxEnergy)
+		const energy = new PlayerEnergy(50, startMaxEnergy)
 
-		health.setPlayerLevel(() => lvl)
-		health.setMaxEnergyEffect(() => effect)
-		health.setEnduranceCharacteristic(() => endurance)
+		energy.setComputedFunction('level', () => lvl)
+		energy.setComputedFunction('effects',() => effect)
+		energy.setComputedFunction('endurance', () => endurance)
 
-		expect(health.getEnergy()).toBe(50)
+		expect(energy.getEnergy()).toBe(50)
 
-		health.incrementHealth(expectValue + 1000)
+		energy.incrementHealth(expectValue + 1000)
 
-		expect(health.getEnergy()).toBe(expectValue)
+		expect(energy.getEnergy()).toBe(expectValue)
 	})
 })
 

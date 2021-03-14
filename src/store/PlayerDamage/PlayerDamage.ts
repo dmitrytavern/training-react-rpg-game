@@ -10,6 +10,13 @@ type PlayerLevelFunction = () => number
 type EffectsFunction = () => number
 type StrengthFunction = () => number
 
+type ComputedNames = keyof ComputedFunctions
+type ComputedFunctions = {
+	level: PlayerLevelFunction
+	effects: EffectsFunction
+	strength: StrengthFunction
+}
+
 class PlayerDamage {
 	private readonly minDamage: number
 	private readonly maxDamage: number
@@ -31,16 +38,13 @@ class PlayerDamage {
 		})
 	}
 
-	public setPlayerLevel(computed: PlayerLevelFunction) {
-		this.getPlayerLevel = computed
-	}
-
-	public setDamageEffect(computed: EffectsFunction) {
-		this.getEffects = computed
-	}
-
-	public setStrengthCharacteristic(computed: StrengthFunction) {
-		this.getStrengthCharacteristic = computed
+	public setComputedFunction(name: ComputedNames, computed: ComputedFunctions[ComputedNames]) {
+		if (typeof computed !== 'function') return
+		switch (name) {
+			case "level": this.getPlayerLevel = computed; break;
+			case "effects": this.getEffects = computed; break;
+			case "strength": this.getStrengthCharacteristic = computed; break;
+		}
 	}
 
 	public getDamage(): number {

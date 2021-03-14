@@ -55,7 +55,7 @@ describe('Check calculate experience', () => {
 	it('When intelligence 5', () => {
 		const module = new PlayerLevel(1, 0)
 
-		module.setIntelligenceCharacteristic(() => 5)
+		module.setComputedFunction('intelligence', () => 5)
 
 		expect(module.calculateExperience(100)).toBe(
 			calculateExperienceFormula(100, 5)
@@ -65,7 +65,7 @@ describe('Check calculate experience', () => {
 	it('When intelligence 10', () => {
 		const module = new PlayerLevel(1, 0)
 
-		module.setIntelligenceCharacteristic(() => 10)
+		module.setComputedFunction('intelligence', () => 10)
 
 		expect(module.calculateExperience(100)).toBe(
 			calculateExperienceFormula(100, 10)

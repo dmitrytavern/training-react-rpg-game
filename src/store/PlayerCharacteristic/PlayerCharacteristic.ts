@@ -3,6 +3,11 @@ import {makeAutoObservable} from "mobx"
 type ComputedProperties = 'getPlayerLevel'
 type PlayerLevelFunction = () => number
 
+type ComputedNames = keyof ComputedFunctions
+type ComputedFunctions = {
+	level: PlayerLevelFunction
+}
+
 interface Characteristics {
 	strength: number
 	endurance: number
@@ -29,8 +34,11 @@ class PlayerCharacteristic {
 		})
 	}
 
-	public setPlayerLevel(computed: PlayerLevelFunction) {
-		this.getPlayerLevel = computed
+	public setComputedFunction(name: ComputedNames, computed: ComputedFunctions[ComputedNames]) {
+		if (typeof computed !== 'function') return
+		switch (name) {
+			case "level": this.getPlayerLevel = computed; break;
+		}
 	}
 
 	public getCharacteristic(name: keyof Characteristics): number {

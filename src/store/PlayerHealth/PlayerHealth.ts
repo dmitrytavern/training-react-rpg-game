@@ -1,9 +1,17 @@
 import {makeAutoObservable} from 'mobx'
 
 type ComputedProperties = 'getPlayerLevel' | 'getEffects' | 'getEnduranceCharacteristic'
+
 type PlayerLevelFunction = () => number
 type EffectsFunction = () => number
 type EnduranceFunction = () => number
+
+type ComputedNames = keyof ComputedFunctions
+type ComputedFunctions = {
+	level: PlayerLevelFunction
+	effects: EffectsFunction
+	endurance: EnduranceFunction
+}
 
 class PlayerHealth {
 	private readonly maxHealth: number
@@ -26,16 +34,13 @@ class PlayerHealth {
 		})
 	}
 
-	public setPlayerLevel(computed: PlayerLevelFunction) {
-		this.getPlayerLevel = computed
-	}
-
-	public setMaxHealthEffect(computed: EffectsFunction) {
-		this.getEffects = computed
-	}
-
-	public setEnduranceCharacteristic(computed: EnduranceFunction) {
-		this.getEnduranceCharacteristic = computed
+	public setComputedFunction(name: ComputedNames, computed: ComputedFunctions[ComputedNames]) {
+		if (typeof computed !== 'function') return
+		switch (name) {
+			case "level": this.getPlayerLevel = computed; break;
+			case "effects": this.getEffects = computed; break;
+			case "endurance": this.getEnduranceCharacteristic = computed; break;
+		}
 	}
 
 	public get alive(): boolean {

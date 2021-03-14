@@ -40,77 +40,77 @@ class Player {
 	}
 
 	private initPlayerLevel() {
-		this.level.setIntelligenceCharacteristic(() => {
+		this.level.setComputedFunction('intelligence', () => {
 			return this.characteristic.getCharacteristic('intelligence')
 		})
 	}
 
 	private initPlayerHealth() {
-		this.health.setPlayerLevel(() => {
+		this.health.setComputedFunction('level', () => {
 			return this.level.getLevel()
 		})
 
-		this.health.setMaxHealthEffect(() => {
+		this.health.setComputedFunction('effects', () => {
 			return Player.calculateEffect('maxHealth', [
 				...this.equipment.getEffects()
 			])
 		})
 
-		this.health.setEnduranceCharacteristic(() => {
+		this.health.setComputedFunction('endurance', () => {
 			return this.characteristic.getCharacteristic('endurance')
 		})
 	}
 
 	private initPlayerEnergy() {
-		this.energy.setPlayerLevel(() => {
+		this.energy.setComputedFunction('level', () => {
 			return this.level.getLevel()
 		})
 
-		this.energy.setMaxEnergyEffect(() => {
+		this.energy.setComputedFunction('effects', () => {
 			return Player.calculateEffect('maxEnergy', [
 				...this.equipment.getEffects()
 			])
 		})
 
-		this.energy.setEnduranceCharacteristic(() => {
+		this.energy.setComputedFunction('endurance', () => {
 			return this.characteristic.getCharacteristic('endurance')
 		})
 	}
 
 	private initPlayerDamage() {
-		this.damage.setPlayerLevel(() => {
+		this.damage.setComputedFunction('level', () => {
 			return this.level.getLevel()
 		})
 
-		this.damage.setDamageEffect(() => {
+		this.damage.setComputedFunction('effects', () => {
 			return Player.calculateEffect('damage', [
 				...this.equipment.getEffects()
 			])
 		})
 
-		this.damage.setStrengthCharacteristic(() => {
+		this.damage.setComputedFunction('strength', () => {
 			return this.characteristic.getCharacteristic('strength')
 		})
 	}
 
 	private initPlayerDefense() {
-		this.defense.setPlayerLevel(() => {
+		this.defense.setComputedFunction('level',() => {
 			return this.level.getLevel()
 		})
 
-		this.defense.setDefenseEffect(() => {
+		this.defense.setComputedFunction('effects',() => {
 			return Player.calculateEffect('defense', [
 				...this.equipment.getEffects()
 			])
 		})
 
-		this.defense.setStrengthCharacteristic(() => {
+		this.defense.setComputedFunction('strength', () => {
 			return this.characteristic.getCharacteristic('strength')
 		})
 	}
 
 	private initPlayerCharacteristic() {
-		this.characteristic.setPlayerLevel(() => {
+		this.characteristic.setComputedFunction('level', () => {
 			return this.level.getLevel()
 		})
 	}

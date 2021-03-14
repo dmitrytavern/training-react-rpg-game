@@ -35,9 +35,9 @@ describe('Check default properties with effects', () => {
 		const health = new PlayerHealth(50, startMaxHealth)
 		const maxHealth = maxHealthFormula(startMaxHealth, lvl, endurance) + effect
 
-		health.setPlayerLevel(() => lvl)
-		health.setMaxHealthEffect(() => effect)
-		health.setEnduranceCharacteristic(() => endurance)
+		health.setComputedFunction('level', () => lvl)
+		health.setComputedFunction('effects',() => effect)
+		health.setComputedFunction('endurance',() => endurance)
 
 		expect(health.getHealth()).toBe(50)
 		expect(health.getMaxHealth()).toBe(maxHealth)
@@ -47,7 +47,7 @@ describe('Check default properties with effects', () => {
 		const health = new PlayerHealth(50, startMaxHealth)
 		const maxHealth = maxHealthFormula(startMaxHealth, lvl, 1)
 
-		health.setPlayerLevel(() => 2)
+		health.setComputedFunction('level',() => 2)
 
 		expect(health.getMaxHealth()).toBe(maxHealth)
 	})
@@ -56,8 +56,8 @@ describe('Check default properties with effects', () => {
 		const health = new PlayerHealth(50, startMaxHealth)
 		const maxHealth = maxHealthFormula(startMaxHealth, lvl, 1) + effect
 
-		health.setPlayerLevel(() => 2)
-		health.setMaxHealthEffect(() => effect)
+		health.setComputedFunction('level',() => 2)
+		health.setComputedFunction('effects',() => effect)
 
 		expect(health.getMaxHealth()).toBe(maxHealth)
 	})
@@ -66,7 +66,7 @@ describe('Check default properties with effects', () => {
 		const health = new PlayerHealth(50, startMaxHealth)
 		const maxHealth = maxHealthFormula(startMaxHealth, 1, endurance)
 
-		health.setEnduranceCharacteristic(() => endurance)
+		health.setComputedFunction('endurance',() => endurance)
 
 		expect(health.getMaxHealth()).toBe(maxHealth)
 	})
@@ -115,9 +115,9 @@ describe('Check increment function with effects', () => {
 	it('Increment health to full with effects', () => {
 		const health = new PlayerHealth(50, startMaxHealth)
 
-		health.setPlayerLevel(() => lvl)
-		health.setMaxHealthEffect(() => effect)
-		health.setEnduranceCharacteristic(() => endurance)
+		health.setComputedFunction('level', () => lvl)
+		health.setComputedFunction('effects',() => effect)
+		health.setComputedFunction('endurance',() => endurance)
 
 		expect(health.getHealth()).toBe(50)
 
@@ -129,9 +129,9 @@ describe('Check increment function with effects', () => {
 	it('Increment health to overfull with effects', () => {
 		const health = new PlayerHealth(50, startMaxHealth)
 
-		health.setPlayerLevel(() => lvl)
-		health.setMaxHealthEffect(() => effect)
-		health.setEnduranceCharacteristic(() => endurance)
+		health.setComputedFunction('level', () => lvl)
+		health.setComputedFunction('effects',() => effect)
+		health.setComputedFunction('endurance',() => endurance)
 
 		expect(health.getHealth()).toBe(50)
 

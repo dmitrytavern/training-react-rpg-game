@@ -32,16 +32,16 @@ describe('Check getting with default characteristics', () => {
 	it('Getting points with level', () => {
 		const characteristic = new PlayerCharacteristic()
 
-		characteristic.setPlayerLevel(() => 4)
+		characteristic.setComputedFunction('level', () => 4)
 
 		expect(characteristic.getAvailablePoints()).toBe(0)
 
-		characteristic.setPlayerLevel(() => 5)
+		characteristic.setComputedFunction('level', () => 5)
 
 		expect(characteristic.getAvailablePoints()).toBe(1)
 		expect(characteristic.getAllPoints()).toBe(startPoint + levelFormula(5))
 
-		characteristic.setPlayerLevel(() => 40)
+		characteristic.setComputedFunction('level', () => 40)
 
 		expect(characteristic.getAvailablePoints()).toBe(8)
 		expect(characteristic.getAllPoints()).toBe(startPoint + levelFormula(40))
@@ -49,32 +49,22 @@ describe('Check getting with default characteristics', () => {
 })
 
 describe('Check getting with custom characteristics', () => {
+	const characteristic = new PlayerCharacteristic()
+
+	characteristic.setComputedFunction('level', () => 10)
+
+	characteristic.setCustomCharacteristics({
+		strength: 2,
+		endurance: 2,
+		intelligence: 1
+	})
+
 	it('Getting points with custom properties', () => {
-		const characteristic = new PlayerCharacteristic()
-
-		characteristic.setPlayerLevel(() => 10)
-
-		characteristic.setCustomCharacteristics({
-			strength: 2,
-			endurance: 2,
-			intelligence: 1
-		})
-
 		expect(characteristic.getAllPoints()).toBe(startPoint + levelFormula(10))
 		expect(characteristic.getAvailablePoints()).toBe(0)
 	})
 
 	it('Getting characteristics with custom properties', () => {
-		const characteristic = new PlayerCharacteristic()
-
-		characteristic.setPlayerLevel(() => 10)
-
-		characteristic.setCustomCharacteristics({
-			strength: 2,
-			endurance: 2,
-			intelligence: 1
-		})
-
 		expect(characteristic.getCharacteristic('strength')).toBe(2)
 		expect(characteristic.getCharacteristic('endurance')).toBe(2)
 		expect(characteristic.getCharacteristic('intelligence')).toBe(1)
@@ -86,7 +76,7 @@ describe('Check setting custom characteristics', () => {
 		function set() {
 			const characteristic = new PlayerCharacteristic()
 
-			characteristic.setPlayerLevel(() => 10)
+			characteristic.setComputedFunction('level', () => 10)
 
 			characteristic.setCustomCharacteristics({
 				strength: 3,
@@ -102,7 +92,7 @@ describe('Check setting custom characteristics', () => {
 		function set() {
 			const characteristic = new PlayerCharacteristic()
 
-			characteristic.setPlayerLevel(() => 100)
+			characteristic.setComputedFunction('level', () => 100)
 
 			characteristic.setCustomCharacteristics({
 				strength: 0,
@@ -129,7 +119,7 @@ describe('Check setting/unsetting functions', () => {
 	it('Set with available point', () => {
 		const characteristic = new PlayerCharacteristic()
 
-		characteristic.setPlayerLevel(() => 5)
+		characteristic.setComputedFunction('level', () => 5)
 
 		characteristic.setPoint('strength')
 
@@ -139,7 +129,7 @@ describe('Check setting/unsetting functions', () => {
 	it('Unset custom characteristics', () => {
 		const characteristic = new PlayerCharacteristic()
 
-		characteristic.setPlayerLevel(() => 10)
+		characteristic.setComputedFunction('level', () => 10)
 
 		characteristic.setCustomCharacteristics({
 			strength: 2,

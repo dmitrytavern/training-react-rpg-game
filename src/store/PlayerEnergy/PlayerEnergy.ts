@@ -5,6 +5,13 @@ type PlayerLevelFunction = () => number
 type EffectsFunction = () => number
 type EnduranceFunction = () => number
 
+type ComputedNames = keyof ComputedFunctions
+type ComputedFunctions = {
+	level: PlayerLevelFunction
+	effects: EffectsFunction
+	endurance: EnduranceFunction
+}
+
 class PlayerEnergy {
 	private readonly maxEnergy: number
 	private energy: number
@@ -26,16 +33,13 @@ class PlayerEnergy {
 		})
 	}
 
-	public setPlayerLevel(computed: PlayerLevelFunction) {
-		this.getPlayerLevel = computed
-	}
-
-	public setMaxEnergyEffect(computed: EffectsFunction) {
-		this.getEffects = computed
-	}
-
-	public setEnduranceCharacteristic(computed: EnduranceFunction) {
-		this.getEnduranceCharacteristic = computed
+	public setComputedFunction(name: ComputedNames, computed: ComputedFunctions[ComputedNames]) {
+		if (typeof computed !== 'function') return
+		switch (name) {
+			case "level": this.getPlayerLevel = computed; break;
+			case "effects": this.getEffects = computed; break;
+			case "endurance": this.getEnduranceCharacteristic = computed; break;
+		}
 	}
 
 	public getEnergy(): number {
