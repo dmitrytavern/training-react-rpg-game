@@ -39,6 +39,18 @@ const App = () => {
 	const defenceNumber = player.defense.getDefense()
 	const defencePercent = player.defense.getDefensePercent()
 
+
+	const balance = player.balance
+	const balanceMoney = balance.money.getMoney()
+
+	const addMoney = (count: number) => {
+		balance.money.incrementMoney(count)
+	}
+
+	const removeMoney = (count: number) => {
+		balance.money.decrementMoney(count)
+	}
+
 	const characteristic = player.characteristic
 	const allCharacteristicPoints = characteristic.getAllPoints()
 	const availableCharacteristicPoints = characteristic.getAvailablePoints()
@@ -109,6 +121,20 @@ const App = () => {
 			<button onClick={addExp}>Add 50 xp</button>
 			<button onClick={addExpWithCalc}>Add 50 xp with calc</button>
 			<button onClick={getHit}>Get 500 damage</button>
+
+			<div>Your balance:</div>
+			<div>
+				Money:
+				{balanceMoney.gold !== 0 && <span> {balanceMoney.gold} gold </span>}
+				{balanceMoney.silver !== 0 && <span> {balanceMoney.silver} silvers </span>}
+				<span> {balanceMoney.copper} coppers </span>
+				<button onClick={() => addMoney(1)}>Add 1 copper</button>
+				<button onClick={() => addMoney(100)}>Add 1 silver</button>
+				<button onClick={() => addMoney(10000)}>Add 1 gold</button>
+				<button onClick={() => removeMoney(1)} disabled={balanceMoney.copper === 0 && balanceMoney.silver === 0 && balanceMoney.gold === 0}>Remove 1 copper</button>
+				<button onClick={() => removeMoney(100)} disabled={balanceMoney.silver === 0 && balanceMoney.gold === 0}>Remove 1 silver</button>
+				<button onClick={() => removeMoney(10000)} disabled={balanceMoney.gold === 0}>Remove 1 gold</button>
+			</div>
 
 			<div>Your characteristic: </div>
 			<div>All: {allCharacteristicPoints}</div>

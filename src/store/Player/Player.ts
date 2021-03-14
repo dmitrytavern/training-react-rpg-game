@@ -8,6 +8,7 @@ import PlayerInventory from "../PlayerInventory"
 import PlayerEquipment from "../PlayerEquipment"
 import PlayerFavorites from "../PlayerFavorites"
 import PlayerCharacteristic from "../PlayerCharacteristic"
+import PlayerBalance from "../PlayerBalance"
 
 class Player {
 	public readonly level: PlayerLevel
@@ -19,6 +20,7 @@ class Player {
 	public readonly equipment: PlayerEquipment
 	public readonly favorites: PlayerFavorites
 	public readonly characteristic: PlayerCharacteristic
+	public readonly balance: PlayerBalance
 
 	constructor() {
 		this.level = new PlayerLevel(50, 10)
@@ -30,6 +32,7 @@ class Player {
 		this.equipment = new PlayerEquipment()
 		this.favorites = new PlayerFavorites()
 		this.characteristic = new PlayerCharacteristic()
+		this.balance = new PlayerBalance({money: 0})
 
 		this.initPlayerLevel()
 		this.initPlayerHealth()
