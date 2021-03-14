@@ -31,11 +31,18 @@ class Player {
 		this.favorites = new PlayerFavorites()
 		this.characteristic = new PlayerCharacteristic()
 
+		this.initPlayerLevel()
 		this.initPlayerHealth()
 		this.initPlayerDamage()
 		this.initPlayerEnergy()
 		this.initPlayerDefense()
 		this.initPlayerCharacteristic()
+	}
+
+	private initPlayerLevel() {
+		this.level.setIntelligenceCharacteristic(() => {
+			return this.characteristic.getCharacteristic('intelligence')
+		})
 	}
 
 	private initPlayerHealth() {
@@ -47,6 +54,10 @@ class Player {
 			return Player.calculateEffect('maxHealth', [
 				...this.equipment.getEffects()
 			])
+		})
+
+		this.health.setEnduranceCharacteristic(() => {
+			return this.characteristic.getCharacteristic('endurance')
 		})
 	}
 
@@ -60,6 +71,10 @@ class Player {
 				...this.equipment.getEffects()
 			])
 		})
+
+		this.energy.setEnduranceCharacteristic(() => {
+			return this.characteristic.getCharacteristic('endurance')
+		})
 	}
 
 	private initPlayerDamage() {
@@ -72,6 +87,10 @@ class Player {
 				...this.equipment.getEffects()
 			])
 		})
+
+		this.damage.setStrengthCharacteristic(() => {
+			return this.characteristic.getCharacteristic('strength')
+		})
 	}
 
 	private initPlayerDefense() {
@@ -83,6 +102,10 @@ class Player {
 			return Player.calculateEffect('defense', [
 				...this.equipment.getEffects()
 			])
+		})
+
+		this.defense.setStrengthCharacteristic(() => {
+			return this.characteristic.getCharacteristic('strength')
 		})
 	}
 

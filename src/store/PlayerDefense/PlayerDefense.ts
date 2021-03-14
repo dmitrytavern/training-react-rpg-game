@@ -1,20 +1,24 @@
 import {makeAutoObservable} from 'mobx'
 
-type ComputedProperties = 'getPlayerLevel' | 'getEffects'
+type ComputedProperties = 'getPlayerLevel' | 'getEffects' | 'getStrengthCharacteristic'
 type PlayerLevelFunction = () => number
 type EffectsFunction = () => number
+type StrengthFunction = () => number
 
 class PlayerDefense {
 	private getPlayerLevel: PlayerLevelFunction
 	private getEffects: EffectsFunction
+	private getStrengthCharacteristic: StrengthFunction
 
 	constructor() {
 		this.getPlayerLevel = () => 1
 		this.getEffects = () => 0
+		this.getStrengthCharacteristic = () => 1
 
 		makeAutoObservable<PlayerDefense, ComputedProperties>(this, {
 			getPlayerLevel: false,
-			getEffects: false
+			getEffects: false,
+			getStrengthCharacteristic: false
 		})
 	}
 
@@ -26,22 +30,29 @@ class PlayerDefense {
 		this.getEffects = computed
 	}
 
+	public setStrengthCharacteristic(computed: StrengthFunction) {
+		this.getStrengthCharacteristic = computed
+	}
+
 	public calculateDamaging(damage: number): number {
 		const percent = this.getDefensePercent()
 
-		const res = damage / 100 * (100 - percent)
-
-		return res
+		return +(damage / 100 * (100 - percent)).toFixed()
 	}
 
 	public getDefense(): number {
-		return this.getEffects()
+		return this.getEffects() + this.getBaseDefense()
 	}
 
 	public getDefensePercent(): number {
-		const def = this.getEffects()
-		if (def === 0) return 0
-		return +(this.getPlayerLevel() * 0.1 + 50 * def / (1500 + def)).toFixed(2)
+		const lvl = this.getPlayerLevel()
+		const def = this.getEffects() + this.getBaseDefense()
+
+		return +(lvl * 0.1 + 50 * def / (1500 + def)).toFixed(2)
+	}
+
+	private getBaseDefense(): number {
+		return this.getPlayerLevel() * 5 * this.getStrengthCharacteristic()
 	}
 }
 

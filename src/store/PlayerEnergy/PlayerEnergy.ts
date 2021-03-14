@@ -1,24 +1,28 @@
 import {makeAutoObservable} from 'mobx'
 
-type ComputedProperties = 'getPlayerLevel' | 'getEffects'
+type ComputedProperties = 'getPlayerLevel' | 'getEffects' | 'getEnduranceCharacteristic'
 type PlayerLevelFunction = () => number
 type EffectsFunction = () => number
+type EnduranceFunction = () => number
 
 class PlayerEnergy {
 	private readonly maxEnergy: number
 	private energy: number
 	private getPlayerLevel: PlayerLevelFunction
 	private getEffects: EffectsFunction
+	private getEnduranceCharacteristic: EnduranceFunction
 
 	constructor(startValue: number, maxValue: number) {
 		this.energy = startValue
 		this.maxEnergy = maxValue
 		this.getPlayerLevel = () => 1
 		this.getEffects = () => 0
+		this.getEnduranceCharacteristic = () => 1
 
 		makeAutoObservable<PlayerEnergy, ComputedProperties>(this, {
 			getPlayerLevel: false,
-			getEffects: false
+			getEffects: false,
+			getEnduranceCharacteristic: false
 		})
 	}
 
@@ -30,12 +34,16 @@ class PlayerEnergy {
 		this.getEffects = computed
 	}
 
+	public setEnduranceCharacteristic(computed: EnduranceFunction) {
+		this.getEnduranceCharacteristic = computed
+	}
+
 	public getEnergy(): number {
 		return this.energy
 	}
 
 	public getMaxEnergy(): number {
-		return this.maxEnergy * this.getPlayerLevel() + this.getEffects()
+		return this.maxEnergy * this.getPlayerLevel() * this.getEnduranceCharacteristic() + this.getEffects()
 	}
 
 	public incrementHealth(count: number): void {

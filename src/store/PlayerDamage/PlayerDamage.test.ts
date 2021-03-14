@@ -1,7 +1,7 @@
 import PlayerDamage from "./PlayerDamage"
 
-const damageFormula = (dmg: number, lvl: number) => {
-	return dmg * lvl
+const damageFormula = (dmg: number, lvl: number, strength: number) => {
+	return dmg * lvl * strength
 }
 
 describe('Checking damage range', () => {
@@ -36,6 +36,7 @@ describe('Checking damage range', () => {
 describe('Checking damage range with effects', () => {
 	const lvl = 2
 	const effect = 10
+	const strength = 4
 
 	it('Checking damage range with 1-2', () => {
 		const min = 1
@@ -44,10 +45,11 @@ describe('Checking damage range with effects', () => {
 
 		damage.setPlayerLevel(() => lvl)
 		damage.setDamageEffect(() => effect)
+		damage.setStrengthCharacteristic(() => strength)
 
 		for (let i=0; i <= 50; i++) {
-			expect(damage.getDamage()).toBeGreaterThanOrEqual(damageFormula(min, lvl) + effect)
-			expect(damage.getDamage()).toBeLessThanOrEqual(damageFormula(max, lvl) + effect)
+			expect(damage.getDamage()).toBeGreaterThanOrEqual(damageFormula(min, lvl, strength) + effect)
+			expect(damage.getDamage()).toBeLessThanOrEqual(damageFormula(max, lvl, strength) + effect)
 		}
 	})
 
@@ -55,13 +57,15 @@ describe('Checking damage range with effects', () => {
 		const min = 10
 		const max = 20
 		const damage = new PlayerDamage(min, max)
+		const strength = 4
 
 		damage.setPlayerLevel(() => lvl)
 		damage.setDamageEffect(() => effect)
+		damage.setStrengthCharacteristic(() => strength)
 
 		for (let i=0; i <= 100; i++) {
-			expect(damage.getDamage()).toBeGreaterThanOrEqual(damageFormula(min, lvl) + effect)
-			expect(damage.getDamage()).toBeLessThanOrEqual(damageFormula(max, lvl) + effect)
+			expect(damage.getDamage()).toBeGreaterThanOrEqual(damageFormula(min, lvl, strength) + effect)
+			expect(damage.getDamage()).toBeLessThanOrEqual(damageFormula(max, lvl, strength) + effect)
 		}
 	})
 
@@ -71,7 +75,8 @@ describe('Checking damage range with effects', () => {
 
 		damage.setPlayerLevel(() => lvl)
 		damage.setDamageEffect(() => effect)
+		damage.setStrengthCharacteristic(() => strength)
 
-		expect(damage.getDamage()).toBe(damageFormula(dmg, lvl) + effect)
+		expect(damage.getDamage()).toBe(damageFormula(dmg, lvl, strength) + effect)
 	})
 })

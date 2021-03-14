@@ -1,6 +1,18 @@
 import PlayerCharacteristic from "./PlayerCharacteristic"
 
-const startPoint = 2
+const startPoint = 3
+
+const levelFormula = (lvl: number) => {
+	let newPoints = 0
+
+	let i = 1
+	while (lvl >= i * 5) {
+		newPoints++
+		i++
+	}
+
+	return newPoints
+}
 
 describe('Check getting with default characteristics', () => {
 	it('Getting points with default properties', () => {
@@ -14,7 +26,7 @@ describe('Check getting with default characteristics', () => {
 		const characteristic = new PlayerCharacteristic()
 
 		expect(characteristic.getCharacteristic('strength')).toBe(1)
-		expect(characteristic.getCharacteristic('constitution')).toBe(1)
+		expect(characteristic.getCharacteristic('endurance')).toBe(1)
 	})
 
 	it('Getting points with level', () => {
@@ -27,12 +39,12 @@ describe('Check getting with default characteristics', () => {
 		characteristic.setPlayerLevel(() => 5)
 
 		expect(characteristic.getAvailablePoints()).toBe(1)
-		expect(characteristic.getAllPoints()).toBe(startPoint + 1)
+		expect(characteristic.getAllPoints()).toBe(startPoint + levelFormula(5))
 
 		characteristic.setPlayerLevel(() => 40)
 
 		expect(characteristic.getAvailablePoints()).toBe(8)
-		expect(characteristic.getAllPoints()).toBe(startPoint + 8)
+		expect(characteristic.getAllPoints()).toBe(startPoint + levelFormula(40))
 	})
 })
 
@@ -44,10 +56,11 @@ describe('Check getting with custom characteristics', () => {
 
 		characteristic.setCustomCharacteristics({
 			strength: 2,
-			constitution: 2
+			endurance: 2,
+			intelligence: 1
 		})
 
-		expect(characteristic.getAllPoints()).toBe(startPoint + 2)
+		expect(characteristic.getAllPoints()).toBe(startPoint + levelFormula(10))
 		expect(characteristic.getAvailablePoints()).toBe(0)
 	})
 
@@ -58,11 +71,13 @@ describe('Check getting with custom characteristics', () => {
 
 		characteristic.setCustomCharacteristics({
 			strength: 2,
-			constitution: 2
+			endurance: 2,
+			intelligence: 1
 		})
 
 		expect(characteristic.getCharacteristic('strength')).toBe(2)
-		expect(characteristic.getCharacteristic('constitution')).toBe(2)
+		expect(characteristic.getCharacteristic('endurance')).toBe(2)
+		expect(characteristic.getCharacteristic('intelligence')).toBe(1)
 	})
 })
 
@@ -75,7 +90,8 @@ describe('Check setting custom characteristics', () => {
 
 			characteristic.setCustomCharacteristics({
 				strength: 3,
-				constitution: 2
+				endurance: 2,
+				intelligence: 1
 			})
 		}
 
@@ -86,9 +102,12 @@ describe('Check setting custom characteristics', () => {
 		function set() {
 			const characteristic = new PlayerCharacteristic()
 
+			characteristic.setPlayerLevel(() => 100)
+
 			characteristic.setCustomCharacteristics({
 				strength: 0,
-				constitution: 2
+				endurance: 2,
+				intelligence: 1
 			})
 		}
 
@@ -124,17 +143,18 @@ describe('Check setting/unsetting functions', () => {
 
 		characteristic.setCustomCharacteristics({
 			strength: 2,
-			constitution: 2
+			endurance: 2,
+			intelligence: 1
 		})
 
-		expect(characteristic.getAllPoints()).toBe(startPoint + 2)
+		expect(characteristic.getAllPoints()).toBe(startPoint + levelFormula(10))
 		expect(characteristic.getAvailablePoints()).toBe(0)
 		expect(characteristic.getCharacteristic('strength')).toBe(2)
 
 		characteristic.unsetPoints()
 
-		expect(characteristic.getAllPoints()).toBe(startPoint + 2)
-		expect(characteristic.getAvailablePoints()).toBe(2)
+		expect(characteristic.getAllPoints()).toBe(startPoint + levelFormula(10))
+		expect(characteristic.getAvailablePoints()).toBe(levelFormula(10))
 		expect(characteristic.getCharacteristic('strength')).toBe(1)
 	})
 })

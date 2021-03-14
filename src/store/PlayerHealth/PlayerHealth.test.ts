@@ -1,7 +1,7 @@
 import PlayerHealth from "./PlayerHealth"
 
-const maxHealthFormula = (max: number, lvl: number) => {
-	return max * lvl
+const maxHealthFormula = (max: number, lvl: number, endurance: number) => {
+	return max * lvl * endurance
 }
 
 describe('Check default properties', () => {
@@ -29,36 +29,46 @@ describe('Check default properties with effects', () => {
 	const lvl = 2
 	const startMaxHealth = 100
 	const effect = 300
+	const endurance = 4
 
 	it('Check health and maxHealth with effects', () => {
 		const health = new PlayerHealth(50, startMaxHealth)
+		const maxHealth = maxHealthFormula(startMaxHealth, lvl, endurance) + effect
 
 		health.setPlayerLevel(() => lvl)
 		health.setMaxHealthEffect(() => effect)
+		health.setEnduranceCharacteristic(() => endurance)
 
 		expect(health.getHealth()).toBe(50)
-		expect(health.getMaxHealth()).toBe(
-			maxHealthFormula(startMaxHealth, lvl) + effect
-		)
+		expect(health.getMaxHealth()).toBe(maxHealth)
 	})
 
 	it('Check max health with level effect', () => {
 		const health = new PlayerHealth(50, startMaxHealth)
+		const maxHealth = maxHealthFormula(startMaxHealth, lvl, 1)
 
 		health.setPlayerLevel(() => 2)
 
-		expect(health.getMaxHealth()).toBe(maxHealthFormula(startMaxHealth, lvl))
+		expect(health.getMaxHealth()).toBe(maxHealth)
 	})
 
 	it('Check max health with effects', () => {
 		const health = new PlayerHealth(50, startMaxHealth)
+		const maxHealth = maxHealthFormula(startMaxHealth, lvl, 1) + effect
 
 		health.setPlayerLevel(() => 2)
 		health.setMaxHealthEffect(() => effect)
 
-		expect(health.getMaxHealth()).toBe(
-			maxHealthFormula(startMaxHealth, lvl) + effect
-		)
+		expect(health.getMaxHealth()).toBe(maxHealth)
+	})
+
+	it('Check max health with endurance', () => {
+		const health = new PlayerHealth(50, startMaxHealth)
+		const maxHealth = maxHealthFormula(startMaxHealth, 1, endurance)
+
+		health.setEnduranceCharacteristic(() => endurance)
+
+		expect(health.getMaxHealth()).toBe(maxHealth)
 	})
 })
 
@@ -99,33 +109,35 @@ describe('Check increment function with effects', () => {
 	const startMaxHealth = 100
 	const lvl = 2
 	const effect = 340
+	const endurance = 4
+	const maxHealth = maxHealthFormula(startMaxHealth, lvl, endurance) + effect
 
 	it('Increment health to full with effects', () => {
-		const expectValue = maxHealthFormula(startMaxHealth, lvl) + effect
 		const health = new PlayerHealth(50, startMaxHealth)
 
 		health.setPlayerLevel(() => lvl)
 		health.setMaxHealthEffect(() => effect)
+		health.setEnduranceCharacteristic(() => endurance)
 
 		expect(health.getHealth()).toBe(50)
 
-		health.incrementHealth(expectValue - 50)
+		health.incrementHealth(maxHealth - 50)
 
-		expect(health.getHealth()).toBe(expectValue)
+		expect(health.getHealth()).toBe(maxHealth)
 	})
 
 	it('Increment health to overfull with effects', () => {
-		const expectValue = maxHealthFormula(startMaxHealth, lvl) + effect
 		const health = new PlayerHealth(50, startMaxHealth)
 
 		health.setPlayerLevel(() => lvl)
 		health.setMaxHealthEffect(() => effect)
+		health.setEnduranceCharacteristic(() => endurance)
 
 		expect(health.getHealth()).toBe(50)
 
-		health.incrementHealth(expectValue + 1000)
+		health.incrementHealth(maxHealth + 1000)
 
-		expect(health.getHealth()).toBe(expectValue)
+		expect(health.getHealth()).toBe(maxHealth)
 	})
 })
 

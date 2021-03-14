@@ -5,25 +5,29 @@ function randomInteger(min: number, max: number) {
 	return Math.round(rand);
 }
 
-type ComputedProperties = 'getPlayerLevel' | 'getEffects'
+type ComputedProperties = 'getPlayerLevel' | 'getEffects' | 'getStrengthCharacteristic'
 type PlayerLevelFunction = () => number
 type EffectsFunction = () => number
+type StrengthFunction = () => number
 
 class PlayerDamage {
 	private readonly minDamage: number
 	private readonly maxDamage: number
 	private getPlayerLevel: PlayerLevelFunction
 	private getEffects: EffectsFunction
+	private getStrengthCharacteristic: StrengthFunction
 
 	constructor(minDamage: number, maxDamage: number) {
 		this.minDamage = minDamage
 		this.maxDamage = maxDamage
 		this.getPlayerLevel = () => 1
 		this.getEffects = () => 0
+		this.getStrengthCharacteristic = () => 1
 
 		makeAutoObservable<PlayerDamage, ComputedProperties>(this, {
 			getPlayerLevel: false,
-			getEffects: false
+			getEffects: false,
+			getStrengthCharacteristic: false
 		})
 	}
 
@@ -33,6 +37,10 @@ class PlayerDamage {
 
 	public setDamageEffect(computed: EffectsFunction) {
 		this.getEffects = computed
+	}
+
+	public setStrengthCharacteristic(computed: StrengthFunction) {
+		this.getStrengthCharacteristic = computed
 	}
 
 	public getDamage(): number {
@@ -48,7 +56,7 @@ class PlayerDamage {
 	}
 
 	private calculateDamage(dmg: number): number {
-		return dmg * this.getPlayerLevel() + this.getEffects()
+		return dmg * this.getPlayerLevel() * this.getStrengthCharacteristic() + this.getEffects()
 	}
 }
 

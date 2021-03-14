@@ -20,6 +20,12 @@ const levelFormula = (lvl: number, exp: number) => {
 	}
 }
 
+const calculateExperienceFormula = (exp: number, intelligence: number) => {
+	const percent = intelligence * 5
+
+	return exp + (exp / 100 * percent)
+}
+
 describe('Check default properties', () => {
 	const module = new PlayerLevel(1, 0)
 	const values = levelFormula(1, 0)
@@ -37,6 +43,35 @@ describe('Check default properties', () => {
 	})
 })
 
+describe('Check calculate experience', () => {
+	it('When intelligence is default', () => {
+		const module = new PlayerLevel(1, 0)
+
+		expect(module.calculateExperience(100)).toBe(
+			calculateExperienceFormula(100, 1)
+		)
+	})
+
+	it('When intelligence 5', () => {
+		const module = new PlayerLevel(1, 0)
+
+		module.setIntelligenceCharacteristic(() => 5)
+
+		expect(module.calculateExperience(100)).toBe(
+			calculateExperienceFormula(100, 5)
+		)
+	})
+
+	it('When intelligence 10', () => {
+		const module = new PlayerLevel(1, 0)
+
+		module.setIntelligenceCharacteristic(() => 10)
+
+		expect(module.calculateExperience(100)).toBe(
+			calculateExperienceFormula(100, 10)
+		)
+	})
+})
 
 describe('Check adding experience', () => {
 	it('Add exp for not level up', () => {

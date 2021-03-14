@@ -15,6 +15,12 @@ const App = () => {
 		player.level.floatExperience()
 	}
 
+	const addExpWithCalc = () => {
+		const exp = player.level.calculateExperience(50)
+		player.level.addExperience(exp)
+		player.level.floatExperience()
+	}
+
 	const alive = player.health.alive
 	const health = player.health.getHealth()
 	const maxHealth = player.health.getMaxHealth()
@@ -112,6 +118,7 @@ const App = () => {
 			<div>Your defense: {defenceNumber} or {defencePercent}%</div>
 
 			<button onClick={addExp}>Add 50 xp</button>
+			<button onClick={addExpWithCalc}>Add 50 xp with calc</button>
 			<button onClick={getHit}>Get 500 damage</button>
 
 			<div>Your characteristic: </div>
@@ -127,9 +134,14 @@ const App = () => {
 					<button onClick={() => addCharacteristicPoint('strength')} disabled={disabledCharacteristicButton('strength')}>+1</button>
 				</li>
 				<li>
-					Constitution: {characteristic.getCharacteristic('constitution')}/10
+					Endurance: {characteristic.getCharacteristic('endurance')}/10
 					|
-					<button onClick={() => addCharacteristicPoint('constitution')} disabled={disabledCharacteristicButton('constitution')}>+1</button>
+					<button onClick={() => addCharacteristicPoint('endurance')} disabled={disabledCharacteristicButton('endurance')}>+1</button>
+				</li>
+				<li>
+					Intelligence: {characteristic.getCharacteristic('intelligence')}/10
+					|
+					<button onClick={() => addCharacteristicPoint('intelligence')} disabled={disabledCharacteristicButton('intelligence')}>+1</button>
 				</li>
 			</ul>
 

@@ -5,16 +5,18 @@ type PlayerLevelFunction = () => number
 
 interface Characteristics {
 	strength: number
-	constitution: number
+	endurance: number
+	intelligence: number
 }
 
 const defaultCharacteristics = {
 	strength: 1,
-	constitution: 1
+	endurance: 1,
+	intelligence: 1
 }
 
 class PlayerCharacteristic {
-	static minPoint: number = 2
+	static minPoint: number = 3
 	private characteristics: Characteristics
 	private getPlayerLevel: PlayerLevelFunction
 
