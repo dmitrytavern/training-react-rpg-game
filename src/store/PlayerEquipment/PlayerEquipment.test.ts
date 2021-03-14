@@ -6,7 +6,11 @@ describe('Check effect getting', () => {
 
 	const helmet = itemsManager.create(4)
 	const armor = itemsManager.create(5)
-	const boots = itemsManager.create(6)
+	const arms = itemsManager.create(7)
+	const feet = itemsManager.create(6)
+	const leftRing = itemsManager.create(8)
+	const rightRing = itemsManager.create(9)
+	const waist = itemsManager.create(10)
 
 	it('Getting effects without equip', () => {
 		const equipment = new PlayerEquipment()
@@ -19,12 +23,20 @@ describe('Check effect getting', () => {
 
 		equipment.helmetSlot.setEquipment(helmet)
 		equipment.armorSlot.setEquipment(armor)
-		equipment.bootsSlot.setEquipment(boots)
+		equipment.armsSlot.setEquipment(arms)
+		equipment.feetSlot.setEquipment(feet)
+		equipment.leftRingSlot.setEquipment(leftRing)
+		equipment.rightRingSlot.setEquipment(rightRing)
+		equipment.waistSlot.setEquipment(waist)
 
 		expect(equipment.getEffects()).toEqual([
+			...leftRing.effects,
+			...rightRing.effects,
+			...waist.effects,
 			...helmet.effects,
 			...armor.effects,
-			...boots.effects,
+			...arms.effects,
+			...feet.effects,
 		])
 	})
 })
