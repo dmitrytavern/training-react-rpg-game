@@ -3,9 +3,17 @@ import ReactDOM from 'react-dom'
 import App from './App'
 import reportWebVitals from './reportWebVitals'
 
+import Player from "./store/Player"
+
+import { PlayerContext } from "./contexts/playerStoreContext"
+
+const player = new Player()
+
 ReactDOM.render(
   <React.StrictMode>
-    <App />
+    <PlayerContext.Provider value={player}>
+      <App />
+    </PlayerContext.Provider>
   </React.StrictMode>,
   document.getElementById('root')
 )
