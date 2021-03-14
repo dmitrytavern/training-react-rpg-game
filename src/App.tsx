@@ -75,34 +75,23 @@ const App = () => {
 
 	const equipment = player.equipment
 
-	const setWeapon = () => {
-		const weapon = itemsManager.create(1)
-		equipment.weapon.setEquipment(weapon)
-	}
-	const setHelmet = () => {
-		const helmet = itemsManager.create(4)
-		equipment.helmetSlot.setEquipment(helmet)
-	}
-	const setArmor = () => {
-		const armor = itemsManager.create(5)
-		equipment.armorSlot.setEquipment(armor)
-	}
-	const setBoots = () => {
-		const boots = itemsManager.create(6)
-		equipment.bootsSlot.setEquipment(boots)
-	}
-	const unsetWeapon = () => {
-		equipment.weapon.unsetEquipment()
-	}
-	const unsetHelmet = () => {
-		equipment.helmetSlot.unsetEquipment()
-	}
-	const unsetArmor = () => {
-		equipment.armorSlot.unsetEquipment()
-	}
-	const unsetBoots = () => {
-		equipment.bootsSlot.unsetEquipment()
-	}
+	const setWeapon = () => {equipment.weapon.setEquipment(itemsManager.create(1))}
+	const setHelmet = () => {equipment.helmetSlot.setEquipment(itemsManager.create(4))}
+	const setArmor = () => {equipment.armorSlot.setEquipment(itemsManager.create(5))}
+	const setArms = () => {equipment.armsSlot.setEquipment(itemsManager.create(7))}
+	const setFeet = () => {equipment.feetSlot.setEquipment(itemsManager.create(6))}
+	const setLeftRing = () => {equipment.leftRingSlot.setEquipment(itemsManager.create(8))}
+	const setRightRing = () => {equipment.rightRingSlot.setEquipment(itemsManager.create(9))}
+	const setWaist = () => {equipment.waistSlot.setEquipment(itemsManager.create(10))}
+
+	const unsetWeapon = () => {equipment.weapon.unsetEquipment()}
+	const unsetHelmet = () => {equipment.helmetSlot.unsetEquipment()}
+	const unsetArmor = () => {equipment.armorSlot.unsetEquipment()}
+	const unsetArms = () => {equipment.armsSlot.unsetEquipment()}
+	const unsetFeet = () => {equipment.feetSlot.unsetEquipment()}
+	const unsetLeftRing = () => {equipment.leftRingSlot.unsetEquipment()}
+	const unsetRightRing = () => {equipment.rightRingSlot.unsetEquipment()}
+	const unsetWaist = () => {equipment.waistSlot.unsetEquipment()}
 
 	return (
 		<div>
@@ -191,10 +180,34 @@ const App = () => {
 				<button onClick={unsetArmor} disabled={!equipment.armorSlot.existsEquipment()}>Unset armor</button>
 			</div>
 			<div>
-				Boots: {equipment.bootsSlot.getName()}
+				Feet: {equipment.feetSlot.getName()}
 				|
-				<button onClick={setBoots} disabled={equipment.bootsSlot.existsEquipment()}>Set boots</button>
-				<button onClick={unsetBoots} disabled={!equipment.bootsSlot.existsEquipment()}>Unset boots</button>
+				<button onClick={setFeet} disabled={equipment.feetSlot.existsEquipment()}>Set boots</button>
+				<button onClick={unsetFeet} disabled={!equipment.feetSlot.existsEquipment()}>Unset boots</button>
+			</div>
+			<div>
+				Arms: {equipment.armsSlot.getName()}
+				|
+				<button onClick={setArms} disabled={equipment.armsSlot.existsEquipment()}>Set arms</button>
+				<button onClick={unsetArms} disabled={!equipment.armsSlot.existsEquipment()}>Unset arms</button>
+			</div>
+			<div>
+				Left Ring: {equipment.leftRingSlot.getName()}
+				|
+				<button onClick={setLeftRing} disabled={equipment.leftRingSlot.existsEquipment()}>Set left ring</button>
+				<button onClick={unsetLeftRing} disabled={!equipment.leftRingSlot.existsEquipment()}>Unset left ring</button>
+			</div>
+			<div>
+				Right Ring: {equipment.rightRingSlot.getName()}
+				|
+				<button onClick={setRightRing} disabled={equipment.rightRingSlot.existsEquipment()}>Set right ring</button>
+				<button onClick={unsetRightRing} disabled={!equipment.rightRingSlot.existsEquipment()}>Unset right ring</button>
+			</div>
+			<div>
+				Waist: {equipment.waistSlot.getName()}
+				|
+				<button onClick={setWaist} disabled={equipment.waistSlot.existsEquipment()}>Set waist</button>
+				<button onClick={unsetWaist} disabled={!equipment.waistSlot.existsEquipment()}>Unset waist</button>
 			</div>
 
 		</div>

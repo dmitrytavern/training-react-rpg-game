@@ -27,7 +27,6 @@ const data: Item[] = [
 			{ name: 'Energy', type: 'maxEnergy', operator: '+', value: 40 }
 		]
 	},
-
 	{
 		id: 5,
 		type: 'Armor',
@@ -37,11 +36,46 @@ const data: Item[] = [
 			{ name: 'Defense', type: 'defense', operator: '+', value: 50 }
 		]
 	},
-
+	{
+		id: 7,
+		type: 'Armor',
+		name: 'Super legendary Arms',
+		effects: [
+			{ name: 'Health', type: 'maxHealth', operator: '+', value: 10 },
+			{ name: 'Defense', type: 'defense', operator: '+', value: 40 }
+		]
+	},
 	{
 		id: 6,
 		type: 'Armor',
-		name: 'Super legendary Boots',
+		name: 'Super legendary Feet',
+		effects: [
+			{ name: 'Health', type: 'maxHealth', operator: '+', value: 10 },
+			{ name: 'Defense', type: 'defense', operator: '+', value: 40 }
+		]
+	},
+	{
+		id: 8,
+		type: 'Armor',
+		name: 'Super legendary Left Ring',
+		effects: [
+			{ name: 'Health', type: 'maxHealth', operator: '+', value: 10 },
+			{ name: 'Defense', type: 'defense', operator: '+', value: 40 }
+		]
+	},
+	{
+		id: 9,
+		type: 'Armor',
+		name: 'Super legendary Right Ring',
+		effects: [
+			{ name: 'Health', type: 'maxHealth', operator: '+', value: 10 },
+			{ name: 'Defense', type: 'defense', operator: '+', value: 40 }
+		]
+	},
+	{
+		id: 10,
+		type: 'Armor',
+		name: 'Super legendary Waist',
 		effects: [
 			{ name: 'Health', type: 'maxHealth', operator: '+', value: 10 },
 			{ name: 'Defense', type: 'defense', operator: '+', value: 40 }
