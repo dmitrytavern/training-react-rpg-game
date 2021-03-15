@@ -1,15 +1,17 @@
 import {Effect} from "../../../types/Effect"
+import ItemWeapon from "../Items/ItemWeapon"
+import ItemArmor from "../Items/ItemArmor"
 import PlayerEquipmentSlot from "../PlayerEquipmentSlot"
 
 class PlayerEquipment {
-	public weapon: PlayerEquipmentSlot
-	public leftRingSlot: PlayerEquipmentSlot
-	public rightRingSlot: PlayerEquipmentSlot
-	public waistSlot: PlayerEquipmentSlot
-	public helmetSlot: PlayerEquipmentSlot
-	public armorSlot: PlayerEquipmentSlot
-	public armsSlot: PlayerEquipmentSlot
-	public feetSlot: PlayerEquipmentSlot
+	public weapon: PlayerEquipmentSlot<ItemWeapon>
+	public leftRingSlot: PlayerEquipmentSlot<ItemArmor>
+	public rightRingSlot: PlayerEquipmentSlot<ItemArmor>
+	public waistSlot: PlayerEquipmentSlot<ItemArmor>
+	public helmetSlot: PlayerEquipmentSlot<ItemArmor>
+	public armorSlot: PlayerEquipmentSlot<ItemArmor>
+	public armsSlot: PlayerEquipmentSlot<ItemArmor>
+	public feetSlot: PlayerEquipmentSlot<ItemArmor>
 
 	constructor() {
 		this.weapon = new PlayerEquipmentSlot()
