@@ -1,5 +1,5 @@
-import {Item} from "../../../types/Item"
 import {makeAutoObservable} from 'mobx'
+import Item from "../Items/Item"
 
 interface InventoryItemConstructor {
 	item: Item,

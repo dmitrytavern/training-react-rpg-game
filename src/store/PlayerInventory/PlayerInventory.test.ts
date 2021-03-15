@@ -1,11 +1,11 @@
-import ItemsManager from "../ItemsManager"
+import ItemsFactory from "../ItemsFactory"
 import PlayerInventory from './PlayerInventory'
 import PlayerInventoryItem from "../PlayerInventoryItem"
 
 describe('Check base function', () => {
-	const itemManager = new ItemsManager()
+	const itemsFactory = new ItemsFactory()
 
-	const item = itemManager.create(1)
+	const item = itemsFactory.create(1)
 	const inventoryItem = new PlayerInventoryItem({
 		item,
 		quantity: 1

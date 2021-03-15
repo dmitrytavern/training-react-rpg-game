@@ -1,12 +1,12 @@
 import PlayerEquipmentSlot from "./PlayerEquipmentSlot"
-import ItemsManager from "../ItemsManager"
+import ItemsFactory from "../ItemsFactory"
 
 describe('Check base functions', () => {
-	const itemsManger = new ItemsManager()
+	const itemsFactory = new ItemsFactory()
 
 	it('Getting name', () => {
 		const equipmentSlot = new PlayerEquipmentSlot()
-		const item = itemsManger.create(1)
+		const item = itemsFactory.create(1, 'weapon')
 		equipmentSlot.setEquipment(item)
 
 		expect(equipmentSlot.getName()).toBe(item.name)
@@ -20,7 +20,7 @@ describe('Check base functions', () => {
 
 	it('Existing item', () => {
 		const equipmentSlot = new PlayerEquipmentSlot()
-		const item = itemsManger.create(1)
+		const item = itemsFactory.create(1, 'weapon')
 		equipmentSlot.setEquipment(item)
 
 		expect(equipmentSlot.existsEquipment()).toBeTruthy()
@@ -28,7 +28,7 @@ describe('Check base functions', () => {
 
 	it('Getting item', () => {
 		const equipmentSlot = new PlayerEquipmentSlot()
-		const item = itemsManger.create(1)
+		const item = itemsFactory.create(1, 'weapon')
 		equipmentSlot.setEquipment(item)
 
 		expect(equipmentSlot.getEquipment()).toEqual(item)
@@ -42,7 +42,7 @@ describe('Check base functions', () => {
 
 	it('Getting effects', () => {
 		const equipmentSlot = new PlayerEquipmentSlot()
-		const item = itemsManger.create(1)
+		const item = itemsFactory.create(1, 'weapon')
 		equipmentSlot.setEquipment(item)
 
 		expect(equipmentSlot.getEffects()).toEqual(item.effects)
@@ -56,12 +56,12 @@ describe('Check base functions', () => {
 })
 
 describe('Check change equip', () => {
-	const itemsManger = new ItemsManager()
+	const itemsFactory = new ItemsFactory()
 
 	it('Changing item1 on item2', () => {
 		const equipmentSlot = new PlayerEquipmentSlot()
-		const item1 = itemsManger.create(1)
-		const item2 = itemsManger.create(4)
+		const item1 = itemsFactory.create(1, 'weapon')
+		const item2 = itemsFactory.create(4, 'armor')
 
 		equipmentSlot.setEquipment(item1)
 
@@ -74,7 +74,7 @@ describe('Check change equip', () => {
 
 	it('Unsetting item', () => {
 		const equipmentSlot = new PlayerEquipmentSlot()
-		const item1 = itemsManger.create(1)
+		const item1 = itemsFactory.create(1, 'weapon')
 
 		equipmentSlot.setEquipment(item1)
 

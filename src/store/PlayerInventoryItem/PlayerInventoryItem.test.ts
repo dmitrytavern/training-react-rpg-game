@@ -1,10 +1,10 @@
-import ItemsManager from "../ItemsManager"
+import ItemsFactory from "../ItemsFactory"
 import PlayerInventoryItem from "./PlayerInventoryItem"
 
 describe('Check default properties', () => {
-	const itemManager = new ItemsManager()
+	const itemsFactory = new ItemsFactory()
 	const item = new PlayerInventoryItem({
-		item: itemManager.create(1),
+		item: itemsFactory.create(1),
 		quantity: 1
 	})
 
@@ -14,9 +14,9 @@ describe('Check default properties', () => {
 })
 
 describe('Check increment functions', () => {
-	const itemManager = new ItemsManager()
+	const itemsFactory = new ItemsFactory()
 	const item = new PlayerInventoryItem({
-		item: itemManager.create(1),
+		item: itemsFactory.create(1),
 		quantity: 1
 	})
 
@@ -42,9 +42,9 @@ describe('Check increment functions', () => {
 })
 
 describe('Check decrement functions', () => {
-	const itemManager = new ItemsManager()
+	const itemsFactory = new ItemsFactory()
 	const item = new PlayerInventoryItem({
-		item: itemManager.create(1),
+		item: itemsFactory.create(1),
 		quantity: 10
 	})
 

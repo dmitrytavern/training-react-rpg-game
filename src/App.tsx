@@ -1,8 +1,8 @@
 import { observer } from 'mobx-react-lite'
 import { usePlayerStore } from "./contexts/playerStoreContext"
-import ItemsManager from "./store/ItemsManager"
+import ItemsFactory from "./store/ItemsFactory"
 
-const itemsManager = new ItemsManager()
+const itemsFactory = new ItemsFactory()
 const App = () => {
 	const player = usePlayerStore()
 
@@ -68,7 +68,7 @@ const App = () => {
 	const inventory = player.inventory.getInventory()
 
 	const addItem = () => {
-		const item = itemsManager.create(1)
+		const item = itemsFactory.create(1)
 		player.inventory.addItem(item, 1)
 	}
 
@@ -87,14 +87,14 @@ const App = () => {
 
 	const equipment = player.equipment
 
-	const setWeapon = () => {equipment.weapon.setEquipment(itemsManager.create(1))}
-	const setHelmet = () => {equipment.helmetSlot.setEquipment(itemsManager.create(4))}
-	const setArmor = () => {equipment.armorSlot.setEquipment(itemsManager.create(5))}
-	const setArms = () => {equipment.armsSlot.setEquipment(itemsManager.create(7))}
-	const setFeet = () => {equipment.feetSlot.setEquipment(itemsManager.create(6))}
-	const setLeftRing = () => {equipment.leftRingSlot.setEquipment(itemsManager.create(8))}
-	const setRightRing = () => {equipment.rightRingSlot.setEquipment(itemsManager.create(9))}
-	const setWaist = () => {equipment.waistSlot.setEquipment(itemsManager.create(10))}
+	const setWeapon = () => {equipment.weapon.setEquipment(itemsFactory.create(1, 'weapon'))}
+	const setHelmet = () => {equipment.helmetSlot.setEquipment(itemsFactory.create(4, 'armor'))}
+	const setArmor = () => {equipment.armorSlot.setEquipment(itemsFactory.create(5, 'armor'))}
+	const setArms = () => {equipment.armsSlot.setEquipment(itemsFactory.create(7, 'armor'))}
+	const setFeet = () => {equipment.feetSlot.setEquipment(itemsFactory.create(6, 'armor'))}
+	const setLeftRing = () => {equipment.leftRingSlot.setEquipment(itemsFactory.create(8, 'armor'))}
+	const setRightRing = () => {equipment.rightRingSlot.setEquipment(itemsFactory.create(9, 'armor'))}
+	const setWaist = () => {equipment.waistSlot.setEquipment(itemsFactory.create(10, 'armor'))}
 
 	const unsetWeapon = () => {equipment.weapon.unsetEquipment()}
 	const unsetHelmet = () => {equipment.helmetSlot.unsetEquipment()}

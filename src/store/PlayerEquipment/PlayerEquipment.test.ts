@@ -1,16 +1,16 @@
 import PlayerEquipment from "./PlayerEquipment"
-import ItemsManager from "../ItemsManager"
+import ItemsFactory from "../ItemsFactory"
 
 describe('Check effect getting', () => {
-	const itemsManager = new ItemsManager()
+	const itemsFactory = new ItemsFactory()
 
-	const helmet = itemsManager.create(4)
-	const armor = itemsManager.create(5)
-	const arms = itemsManager.create(7)
-	const feet = itemsManager.create(6)
-	const leftRing = itemsManager.create(8)
-	const rightRing = itemsManager.create(9)
-	const waist = itemsManager.create(10)
+	const helmet = itemsFactory.create(4, 'armor')
+	const armor = itemsFactory.create(5, 'armor')
+	const arms = itemsFactory.create(7, 'armor')
+	const feet = itemsFactory.create(6, 'armor')
+	const leftRing = itemsFactory.create(8, 'armor')
+	const rightRing = itemsFactory.create(9, 'armor')
+	const waist = itemsFactory.create(10, 'armor')
 
 	it('Getting effects without equip', () => {
 		const equipment = new PlayerEquipment()

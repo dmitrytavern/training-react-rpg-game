@@ -1,8 +1,9 @@
 import {makeAutoObservable} from 'mobx'
-import {Item} from "../../../types/Item"
+import ItemWeapon from "../Items/ItemWeapon"
+import ItemArmor from "../Items/ItemArmor"
 
-class PlayerEquipmentSlot {
-	private equipment: Item | undefined
+class PlayerEquipmentSlot<T extends ItemArmor | ItemWeapon> {
+	private equipment: T | undefined
 
 	constructor() {
 		makeAutoObservable(this)
@@ -12,11 +13,11 @@ class PlayerEquipmentSlot {
 		return this.equipment?.name || ''
 	}
 
-	public getEquipment(): Item | undefined {
+	public getEquipment(): T | undefined {
 		return this.equipment
 	}
 
-	public setEquipment(item: Item): void {
+	public setEquipment(item: T): void {
 		this.equipment = item
 	}
 
