@@ -2,11 +2,11 @@ import Item, {ItemProps} from "../Item"
 import {Effect} from "../../../../types/Effect"
 
 export interface ItemWeaponProps extends ItemProps {
-	effects: Effect[]
+	readonly effects: Effect[]
 }
 
 class ItemWeapon extends Item {
-	public effects: Effect[]
+	public readonly effects: Effect[]
 
 	constructor(props: ItemWeaponProps) {
 		super(props)

@@ -1,17 +1,17 @@
 export interface ItemProps {
-	id: number
-	name: string
-	type: string
-	category: string
-	quality: string
+	readonly id: number
+	readonly name: string
+	readonly type: string
+	readonly category: string
+	readonly quality: string
 }
 
 class Item {
-	public id: number
-	public name: string
-	public type: string
-	public category: string
-	public quality: string
+	public readonly id: number
+	public readonly name: string
+	public readonly type: string
+	public readonly category: string
+	public readonly quality: string
 
 	constructor(props: ItemProps) {
 		this.id = props.id
