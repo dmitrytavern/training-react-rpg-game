@@ -1,18 +1,25 @@
 import React from 'react'
 import ReactDOM from 'react-dom'
 import App from './App'
+import AppCraft from "./AppCraft"
 import reportWebVitals from './reportWebVitals'
 
 import Player from "./store/Player"
+import Craft from "./store/Craft"
 
 import { PlayerContext } from "./contexts/playerStoreContext"
+import { CraftContext } from "./contexts/craftStoreContext"
 
 const player = new Player()
+const craft = new Craft(player.inventory)
 
 ReactDOM.render(
   <React.StrictMode>
     <PlayerContext.Provider value={player}>
-      <App />
+      <CraftContext.Provider value={craft}>
+        <App />
+        <AppCraft />
+      </CraftContext.Provider>
     </PlayerContext.Provider>
   </React.StrictMode>,
   document.getElementById('root')
