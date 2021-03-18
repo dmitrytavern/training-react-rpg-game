@@ -1,6 +1,5 @@
 import {makeAutoObservable} from 'mobx'
 
-import ItemsFactory from "../ItemsFactory"
 import PlayerInventory from "../PlayerInventory"
 import CraftBlueprint from "../CraftBlueprint"
 import CraftMaterialFactory from "../CraftMaterialFactory"
@@ -9,7 +8,6 @@ import CraftToolFactory from "../CraftToolFactory"
 import data from "./data"
 
 class Craft {
-	private readonly itemsFactory: ItemsFactory
 	private readonly inventory: PlayerInventory
 	private readonly materialFactory: CraftMaterialFactory
 	private readonly toolFactory: CraftToolFactory
@@ -20,7 +18,6 @@ class Craft {
 		this.inventory = inventory
 		this.materialFactory = new CraftMaterialFactory(this.inventory)
 		this.toolFactory = new CraftToolFactory(this.inventory)
-		this.itemsFactory = ItemsFactory.newInstance()
 
 		this.initBlueprints()
 
@@ -60,8 +57,7 @@ class Craft {
 			this.inventory.removeItem(material.id, quantity)
 		}
 
-		const item = this.itemsFactory.create(blueprint.result.id)
-		this.inventory.addItem(item, blueprint.result.quantity)
+		this.inventory.addItem(blueprint.result.id, blueprint.result.quantity)
 	}
 }
 
