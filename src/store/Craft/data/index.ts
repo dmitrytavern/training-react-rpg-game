@@ -1,6 +1,6 @@
-import {CraftBlueprintProps} from "../../CraftBlueprint"
+import {CraftBlueprintItem} from "../../CraftBlueprint"
 
-const data: CraftBlueprintProps[] = [
+const data: CraftBlueprintItem[] = [
 	{
 		id: 1,
 		category: 'smithing',
@@ -8,6 +8,7 @@ const data: CraftBlueprintProps[] = [
 			{id: 101, quantity: 1},
 			{id: 102, quantity: 1}
 		],
+		tools: [],
 		result: {
 			id: 1,
 			quantity: 1
@@ -21,6 +22,9 @@ const data: CraftBlueprintProps[] = [
 			{id: 102, quantity: 1},
 			{id: 1, quantity: 1}
 		],
+		tools: [
+			{id: 301}
+		],
 		result: {
 			id: 11,
 			quantity: 1
@@ -33,6 +37,7 @@ const data: CraftBlueprintProps[] = [
 			{id: 103, quantity: 1},
 			{id: 104, quantity: 1}
 		],
+		tools: [],
 		result: {
 			id: 201,
 			quantity: 1

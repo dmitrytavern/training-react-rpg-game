@@ -20,16 +20,28 @@ const AppCraftBlueprintMaterial = (props: {id: number, quantity: number, availab
 	)
 }
 
+const AppCraftBlueprintTool = (props: {id: number, available: boolean}) => {
+	const {id, available} = props
+
+	const data = itemsFactory.getItemData(id)
+
+	const opacity = available ? 1 : 0.5
+	return (
+		<span style={{opacity}}>{data.name}</span>
+	)
+}
+
 interface BlueprintProps {
 	id: CraftBlueprint["id"]
 	materials: CraftBlueprint["materials"]
+	tools: CraftBlueprint["tools"]
 	result: CraftBlueprint["result"]
 	available: boolean
 }
 
 const AppCraftBlueprint = (props: BlueprintProps) => {
 	const craft = useCraftStore()
-	const {id, materials, result, available} = props
+	const {id, materials, tools, result, available} = props
 
 	const resultData = itemsFactory.getItemData(result.id)
 
@@ -40,15 +52,30 @@ const AppCraftBlueprint = (props: BlueprintProps) => {
 	const opacity = available ? 1 : 0.5
 	return (
 		<li>
-			{materials.map((item, i) => (
-				<span key={i}>
-					{i > 0 && " X "}
-					<AppCraftBlueprintMaterial id={item.material.id} quantity={item.quantity} available={item.material.isAvailable()} />
-				</span>
-			))}
+			<span>
+				<div>
+					{materials.map((item, i) => (
+						<span key={i}>
+							{i > 0 && " X "}
+							<AppCraftBlueprintMaterial id={item.material.id} quantity={item.quantity} available={item.material.isAvailable()} />
+						</span>
+					))}
 
-			<span> = </span>
-			<span style={{opacity}}>{resultData.name} x{result.quantity}</span>
+					<span> = </span>
+
+					<span style={{opacity}}>{resultData.name} x{result.quantity}</span>
+				</div>
+				{tools.length > 0 && <div>
+					Tools:
+					{tools.map((tool, i) => (
+						<span key={i}>
+							{i > 0 && ", "}
+							<AppCraftBlueprintTool id={tool.id} available={tool.isAvailable()}/>
+						</span>
+					))}
+				</div>}
+			</span>
+
 
 			|
 
@@ -62,6 +89,10 @@ const AppCraft = () => {
 	const craft = useCraftStore()
 
 	const [blueprints, setBlueprints] = useState(craft.getBlueprints())
+
+	const addCommonHammer = () => {
+		player.inventory.addItem(itemsFactory.create(301), 1)
+	}
 
 	const addCommonWood = () => {
 		player.inventory.addItem(itemsFactory.create(101), 1)
@@ -89,6 +120,7 @@ const AppCraft = () => {
 			<h2>Craft</h2>
 
 			<div>
+				<button onClick={addCommonHammer}>Add 1 Common Hammer</button>
 				<button onClick={addCommonWood}>Add 1 Common Wood</button>
 				<button onClick={addCommonIron}>Add 1 Common Iron</button>
 				<button onClick={addCommonMandrake}>Add 1 Common Mandrake</button>
@@ -109,6 +141,7 @@ const AppCraft = () => {
 						key={i}
 						id={item.id}
 						materials={item.materials}
+						tools={item.tools}
 						result={item.result}
 						available={item.isAvailable()}
 					/>

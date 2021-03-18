@@ -1,45 +1,75 @@
 import CraftMaterial from "../CraftMaterial"
 import CraftMaterialFactory from "../CraftMaterialFactory"
+import CraftTool from "../CraftTool"
+import CraftToolFactory from "../CraftToolFactory"
 
-interface CraftBlueprintData {
-	id: number
-	quantity: number
+interface CraftBlueprintDataMaterial {
+	readonly id: number
+	readonly quantity: number
 }
 
-interface CraftBlueprintItem {
+interface CraftBlueprintDataTool {
+	readonly id: number
+}
+
+interface CraftBlueprintResult {
+	readonly id: number
+	readonly quantity: number
+}
+
+interface CraftBlueprintMaterial {
 	readonly material: CraftMaterial
 	readonly quantity: number
 }
 
-export interface CraftBlueprintProps {
+export interface CraftBlueprintItem {
 	id: number
 	category: string
-	materials: CraftBlueprintData[]
-	result: CraftBlueprintData
+	materials: CraftBlueprintDataMaterial[]
+	tools: CraftBlueprintDataTool[]
+	result: CraftBlueprintResult
+}
+
+export interface CraftBlueprintProps {
+	materialFactory: CraftMaterialFactory
+	toolFactory: CraftToolFactory
+	item: CraftBlueprintItem
 }
 
 class CraftBlueprint {
 	public readonly id: number
 	public readonly category: string
-	public readonly materials: CraftBlueprintItem[]
-	public readonly result: CraftBlueprintData
+	public readonly materials: CraftBlueprintMaterial[]
+	public readonly tools: CraftTool[]
+	public readonly result: CraftBlueprintResult
 
 	private materialFactory: CraftMaterialFactory
+	private toolFactory: CraftToolFactory
 
-	constructor(materialFactory: CraftMaterialFactory, props: CraftBlueprintProps) {
-		this.id = props.id
-		this.category = props.category
-		this.result = props.result
+	constructor(props: CraftBlueprintProps) {
+		this.id = props.item.id
+		this.category = props.item.category
+		this.result = props.item.result
 		this.materials = []
-		this.materialFactory = materialFactory
+		this.tools = []
+		this.materialFactory = props.materialFactory
+		this.toolFactory = props.toolFactory
 
-		this.initMaterials(props.materials)
+		this.initMaterials(props.item.materials)
+		this.initTools(props.item.tools)
 	}
 
-	private initMaterials(materials: CraftBlueprintData[]) {
+	private initMaterials(materials: CraftBlueprintDataMaterial[]) {
 		for (let {id, quantity} of materials) {
 			const material = this.materialFactory.getMaterial(id)
 			this.materials.push({material, quantity})
+		}
+	}
+
+	private initTools(tools: CraftBlueprintDataTool[]) {
+		for (let {id} of tools) {
+			const tool = this.toolFactory.getTool(id)
+			this.tools.push(tool)
 		}
 	}
 
@@ -48,6 +78,10 @@ class CraftBlueprint {
 
 		for (let {material, quantity} of this.materials) {
 			if (!material.isAvailable(quantity)) available = false
+		}
+
+		for (let tool of this.tools) {
+			if (!tool.isAvailable()) available = false
 		}
 
 		return available

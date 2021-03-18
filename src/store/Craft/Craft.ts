@@ -4,6 +4,7 @@ import ItemsFactory from "../ItemsFactory"
 import PlayerInventory from "../PlayerInventory"
 import CraftBlueprint from "../CraftBlueprint"
 import CraftMaterialFactory from "../CraftMaterialFactory"
+import CraftToolFactory from "../CraftToolFactory"
 
 import data from "./data"
 
@@ -11,12 +12,14 @@ class Craft {
 	private readonly itemsFactory: ItemsFactory
 	private readonly inventory: PlayerInventory
 	private readonly materialFactory: CraftMaterialFactory
+	private readonly toolFactory: CraftToolFactory
 	private readonly blueprints: CraftBlueprint[]
 
 	constructor(inventory: PlayerInventory) {
 		this.blueprints = []
 		this.inventory = inventory
 		this.materialFactory = new CraftMaterialFactory(this.inventory)
+		this.toolFactory = new CraftToolFactory(this.inventory)
 		this.itemsFactory = new ItemsFactory()
 
 		this.initBlueprints()
@@ -26,7 +29,11 @@ class Craft {
 
 	private initBlueprints() {
 		for (let item of data) {
-			const blueprint = new CraftBlueprint(this.materialFactory, item)
+			const blueprint = new CraftBlueprint({
+				materialFactory: this.materialFactory,
+				toolFactory: this.toolFactory,
+				item: item
+			})
 			this.blueprints.push(blueprint)
 		}
 	}
