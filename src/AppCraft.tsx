@@ -9,7 +9,7 @@ import { usePlayerStore } from "./contexts/playerStoreContext"
 const itemsFactory = new ItemsFactory()
 
 
-const AppCraftBlueprintMaterial = (props: {id: number, quantity: number, available: boolean}) => {
+const AppCraftBlueprintMaterial = observer((props: {id: number, quantity: number, available: boolean}) => {
 	const {id, quantity, available} = props
 
 	const data = itemsFactory.getItemData(id)
@@ -18,9 +18,9 @@ const AppCraftBlueprintMaterial = (props: {id: number, quantity: number, availab
 	return (
 		<span style={{opacity}}>{data.name} x{quantity}</span>
 	)
-}
+})
 
-const AppCraftBlueprintTool = (props: {id: number, available: boolean}) => {
+const AppCraftBlueprintTool = observer((props: {id: number, available: boolean}) => {
 	const {id, available} = props
 
 	const data = itemsFactory.getItemData(id)
@@ -29,7 +29,7 @@ const AppCraftBlueprintTool = (props: {id: number, available: boolean}) => {
 	return (
 		<span style={{opacity}}>{data.name}</span>
 	)
-}
+})
 
 interface BlueprintProps {
 	id: CraftBlueprint["id"]
@@ -39,7 +39,7 @@ interface BlueprintProps {
 	available: boolean
 }
 
-const AppCraftBlueprint = (props: BlueprintProps) => {
+const AppCraftBlueprint = observer((props: BlueprintProps) => {
 	const craft = useCraftStore()
 	const {id, materials, tools, result, available} = props
 
@@ -82,13 +82,13 @@ const AppCraftBlueprint = (props: BlueprintProps) => {
 			<button onClick={onCraft} disabled={!available}>Craft this shit!</button>
 		</li>
 	)
-}
+})
 
 const AppCraft = () => {
 	const player = usePlayerStore()
 	const craft = useCraftStore()
 
-	const [blueprints, setBlueprints] = useState(craft.getBlueprints())
+	const [category, setCategory] = useState('all')
 
 	const addCommonHammer = () => {
 		player.inventory.addItem(itemsFactory.create(301), 1)
@@ -112,7 +112,7 @@ const AppCraft = () => {
 
 	const changeHandler = (event: React.SyntheticEvent) => {
 		let target = event.target as HTMLInputElement
-		setBlueprints(craft.getBlueprints(target.value))
+		setCategory(target.value)
 	}
 
 	return (
@@ -128,15 +128,15 @@ const AppCraft = () => {
 			</div>
 
 			<div>
-				<select onChange={changeHandler}>
-					<option value="all" selected>All</option>
+				<select value={category} onChange={changeHandler}>
+					<option value="all">All</option>
 					<option value="smithing">Smithing</option>
 					<option value="alchemy">Alchemy</option>
 				</select>
 			</div>
 
 			<ul>
-				{blueprints.map((item, i) => (
+				{craft.getBlueprints(category).map((item, i) => (
 					<AppCraftBlueprint
 						key={i}
 						id={item.id}
