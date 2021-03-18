@@ -31,7 +31,10 @@ class Craft {
 		}
 	}
 
-	public getBlueprints(): CraftBlueprint[] {
+	public getBlueprints(category?: string): CraftBlueprint[] {
+		if (category && category !== 'all') {
+			return this.blueprints.filter((x) => x.category === category)
+		}
 		return this.blueprints
 	}
 

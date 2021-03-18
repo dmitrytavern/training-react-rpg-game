@@ -1,8 +1,9 @@
-import { observer } from 'mobx-react-lite'
+import React, {useState} from "react"
 import ItemsFactory from "./store/ItemsFactory"
 import CraftBlueprint from "./store/CraftBlueprint"
-import {useCraftStore} from "./contexts/craftStoreContext"
-import {usePlayerStore} from "./contexts/playerStoreContext";
+import { observer } from 'mobx-react-lite'
+import { useCraftStore } from "./contexts/craftStoreContext"
+import { usePlayerStore } from "./contexts/playerStoreContext"
 
 
 const itemsFactory = new ItemsFactory()
@@ -60,12 +61,27 @@ const AppCraft = () => {
 	const player = usePlayerStore()
 	const craft = useCraftStore()
 
+	const [blueprints, setBlueprints] = useState(craft.getBlueprints())
+
 	const addCommonWood = () => {
 		player.inventory.addItem(itemsFactory.create(101), 1)
 	}
 
 	const addCommonIron = () => {
 		player.inventory.addItem(itemsFactory.create(102), 1)
+	}
+
+	const addCommonMandrake = () => {
+		player.inventory.addItem(itemsFactory.create(103), 1)
+	}
+
+	const addCommonCelandine = () => {
+		player.inventory.addItem(itemsFactory.create(104), 1)
+	}
+
+	const changeHandler = (event: React.SyntheticEvent) => {
+		let target = event.target as HTMLInputElement
+		setBlueprints(craft.getBlueprints(target.value))
 	}
 
 	return (
@@ -75,10 +91,20 @@ const AppCraft = () => {
 			<div>
 				<button onClick={addCommonWood}>Add 1 Common Wood</button>
 				<button onClick={addCommonIron}>Add 1 Common Iron</button>
+				<button onClick={addCommonMandrake}>Add 1 Common Mandrake</button>
+				<button onClick={addCommonCelandine}>Add 1 Common Celandine</button>
+			</div>
+
+			<div>
+				<select onChange={changeHandler}>
+					<option value="all" selected>All</option>
+					<option value="smithing">Smithing</option>
+					<option value="alchemy">Alchemy</option>
+				</select>
 			</div>
 
 			<ul>
-				{craft.getBlueprints().map((item, i) => (
+				{blueprints.map((item, i) => (
 					<AppCraftBlueprint
 						key={i}
 						id={item.id}

@@ -15,6 +15,20 @@ const materials: ItemMaterialProps[] = [
 		category: 'Material:Iron',
 		quality: 'common'
 	},
+	{
+		id: 103,
+		name: 'Common Mandrake',
+		type: 'material',
+		category: 'Material:Herb',
+		quality: 'common'
+	},
+	{
+		id: 104,
+		name: 'Common Celandine',
+		type: 'material',
+		category: 'Material:Herb',
+		quality: 'common'
+	},
 ]
 
 export default materials
