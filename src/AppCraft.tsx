@@ -1,15 +1,13 @@
 import React, {useState} from "react"
-import ItemsFactory from "./store/ItemsFactory"
 import CraftBlueprint from "./store/CraftBlueprint"
 import { observer } from 'mobx-react-lite'
 import { useCraftStore } from "./contexts/craftStoreContext"
 import { usePlayerStore } from "./contexts/playerStoreContext"
-
-
-const itemsFactory = new ItemsFactory()
-
+import { useItemsFactoryStore } from "./contexts/itemsFactoryStoreContext";
 
 const AppCraftBlueprintMaterial = observer((props: {id: number, quantity: number, available: boolean}) => {
+	const itemsFactory = useItemsFactoryStore()
+
 	const {id, quantity, available} = props
 
 	const data = itemsFactory.getItemData(id)
@@ -21,6 +19,8 @@ const AppCraftBlueprintMaterial = observer((props: {id: number, quantity: number
 })
 
 const AppCraftBlueprintTool = observer((props: {id: number, available: boolean}) => {
+	const itemsFactory = useItemsFactoryStore()
+
 	const {id, available} = props
 
 	const data = itemsFactory.getItemData(id)
@@ -40,6 +40,7 @@ interface BlueprintProps {
 }
 
 const AppCraftBlueprint = observer((props: BlueprintProps) => {
+	const itemsFactory = useItemsFactoryStore()
 	const craft = useCraftStore()
 	const {id, materials, tools, result, available} = props
 
@@ -91,23 +92,23 @@ const AppCraft = () => {
 	const [category, setCategory] = useState('all')
 
 	const addCommonHammer = () => {
-		player.inventory.addItem(itemsFactory.create(301), 1)
+		player.inventory.addItem(301, 1)
 	}
 
 	const addCommonWood = () => {
-		player.inventory.addItem(itemsFactory.create(101), 1)
+		player.inventory.addItem(101, 1)
 	}
 
 	const addCommonIron = () => {
-		player.inventory.addItem(itemsFactory.create(102), 1)
+		player.inventory.addItem(102, 1)
 	}
 
 	const addCommonMandrake = () => {
-		player.inventory.addItem(itemsFactory.create(103), 1)
+		player.inventory.addItem(103, 1)
 	}
 
 	const addCommonCelandine = () => {
-		player.inventory.addItem(itemsFactory.create(104), 1)
+		player.inventory.addItem(104, 1)
 	}
 
 	const changeHandler = (event: React.SyntheticEvent) => {

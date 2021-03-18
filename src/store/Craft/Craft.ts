@@ -20,7 +20,7 @@ class Craft {
 		this.inventory = inventory
 		this.materialFactory = new CraftMaterialFactory(this.inventory)
 		this.toolFactory = new CraftToolFactory(this.inventory)
-		this.itemsFactory = new ItemsFactory()
+		this.itemsFactory = ItemsFactory.newInstance()
 
 		this.initBlueprints()
 

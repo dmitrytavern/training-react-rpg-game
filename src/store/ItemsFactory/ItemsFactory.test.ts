@@ -2,7 +2,7 @@ import ItemsFactory from "./ItemsFactory"
 import data from "./data"
 
 describe('Check create functions' , () => {
-	const itemsFactory = new ItemsFactory()
+	const itemsFactory = ItemsFactory.newInstance()
 
 	it('Create exists item', () => {
 		const item = itemsFactory.create(1)

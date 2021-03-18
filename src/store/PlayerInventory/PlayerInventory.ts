@@ -1,11 +1,14 @@
 import {makeAutoObservable} from 'mobx'
 import PlayerInventoryItem from "../PlayerInventoryItem"
+import ItemsFactory from "../ItemsFactory"
 
 class PlayerInventory {
 	private readonly inventory: Map<number, PlayerInventoryItem>
+	private readonly itemsFactory: ItemsFactory | undefined
 
 	constructor() {
 		this.inventory = new Map()
+		this.itemsFactory = ItemsFactory.newInstance()
 
 		makeAutoObservable(this)
 	}
@@ -18,13 +21,13 @@ class PlayerInventory {
 		return this.inventory.get(itemId)
 	}
 
-	public addItem(newItem: any, quantity: number): void {
-		const item = this.getItem(newItem.id)
+	public addItem(itemId: number, quantity: number): void {
+		const item = this.getItem(itemId)
 
 		if (item) {
 			item.incrementQuantity(quantity)
 		} else {
-			this._addInventoryItem(newItem, quantity)
+			this._addInventoryItem(itemId, quantity)
 		}
 	}
 
@@ -51,7 +54,12 @@ class PlayerInventory {
 	}
 
 
-	private _addInventoryItem(item: any, quantity: number): void {
+	private _addInventoryItem(itemId: number, quantity: number): void {
+		if (!this.itemsFactory) {
+			throw new Error('ItemsFactory in PlayerInventory is not defined')
+		}
+
+		const item = this.itemsFactory.create(itemId)
 		const newInventoryItem = new PlayerInventoryItem({
 			item,
 			quantity

@@ -6,9 +6,13 @@ import reportWebVitals from './reportWebVitals'
 
 import Player from "./store/Player"
 import Craft from "./store/Craft"
+import ItemsFactory from "./store/ItemsFactory"
 
 import { PlayerContext } from "./contexts/playerStoreContext"
 import { CraftContext } from "./contexts/craftStoreContext"
+import { ItemsFactoryContext } from "./contexts/itemsFactoryStoreContext"
+
+const itemsFactory = ItemsFactory.newInstance()
 
 const player = new Player()
 const craft = new Craft(player.inventory)
@@ -17,8 +21,10 @@ ReactDOM.render(
   <React.StrictMode>
     <PlayerContext.Provider value={player}>
       <CraftContext.Provider value={craft}>
-        <App />
-        <AppCraft />
+        <ItemsFactoryContext.Provider value={itemsFactory}>
+          <App />
+          <AppCraft />
+        </ItemsFactoryContext.Provider>
       </CraftContext.Provider>
     </PlayerContext.Provider>
   </React.StrictMode>,

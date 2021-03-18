@@ -1,8 +1,9 @@
 import ItemsFactory from "../ItemsFactory"
 import PlayerInventoryItem from "./PlayerInventoryItem"
 
+const itemsFactory = ItemsFactory.newInstance()
+
 describe('Check default properties', () => {
-	const itemsFactory = new ItemsFactory()
 	const item = new PlayerInventoryItem({
 		item: itemsFactory.create(1),
 		quantity: 1
@@ -14,7 +15,6 @@ describe('Check default properties', () => {
 })
 
 describe('Check increment functions', () => {
-	const itemsFactory = new ItemsFactory()
 	const item = new PlayerInventoryItem({
 		item: itemsFactory.create(1),
 		quantity: 1
@@ -42,7 +42,6 @@ describe('Check increment functions', () => {
 })
 
 describe('Check decrement functions', () => {
-	const itemsFactory = new ItemsFactory()
 	const item = new PlayerInventoryItem({
 		item: itemsFactory.create(1),
 		quantity: 10

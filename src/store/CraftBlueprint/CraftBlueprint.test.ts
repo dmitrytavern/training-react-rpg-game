@@ -1,10 +1,7 @@
-import ItemsFactory from "../ItemsFactory"
 import PlayerInventory from "../PlayerInventory"
 import CraftMaterialFactory from "../CraftMaterialFactory"
 import CraftToolFactory from "../CraftToolFactory"
 import CraftBlueprint from "./CraftBlueprint"
-
-const itemsFactory = new ItemsFactory()
 
 const testData = {
 	id: 1,
@@ -51,7 +48,7 @@ it('Check available when one material not available', () => {
 		item: testData
 	})
 
-	inventory.addItem(itemsFactory.create(101), 1)
+	inventory.addItem(101, 1)
 
 	expect(blueprint.isAvailable()).toBeFalsy()
 })
@@ -66,8 +63,8 @@ it('Check available when materials is available', () => {
 		item: testData
 	})
 
-	inventory.addItem(itemsFactory.create(101), 1)
-	inventory.addItem(itemsFactory.create(102), 1)
+	inventory.addItem(101, 1)
+	inventory.addItem(102, 1)
 
 	expect(blueprint.isAvailable()).toBeTruthy()
 })
@@ -82,8 +79,8 @@ it('Check available without tool', () => {
 		item: testDataWithTools
 	})
 
-	inventory.addItem(itemsFactory.create(101), 1)
-	inventory.addItem(itemsFactory.create(102), 1)
+	inventory.addItem(101, 1)
+	inventory.addItem(102, 1)
 
 	expect(blueprint.isAvailable()).toBeFalsy()
 })
@@ -98,9 +95,9 @@ it('Check available with tool', () => {
 		item: testDataWithTools
 	})
 
-	inventory.addItem(itemsFactory.create(101), 1)
-	inventory.addItem(itemsFactory.create(102), 1)
-	inventory.addItem(itemsFactory.create(301), 1)
+	inventory.addItem(101, 1)
+	inventory.addItem(102, 1)
+	inventory.addItem(301, 1)
 
 	expect(blueprint.isAvailable()).toBeTruthy()
 })

@@ -1,9 +1,9 @@
 import { observer } from 'mobx-react-lite'
 import { usePlayerStore } from "./contexts/playerStoreContext"
-import ItemsFactory from "./store/ItemsFactory"
+import { useItemsFactoryStore } from "./contexts/itemsFactoryStoreContext";
 
-const itemsFactory = new ItemsFactory()
 const App = () => {
+	const itemsFactory = useItemsFactoryStore()
 	const player = usePlayerStore()
 
 	const level = player.level.getLevel()
@@ -68,8 +68,7 @@ const App = () => {
 	const inventory = player.inventory.getInventory()
 
 	const addItem = () => {
-		const item = itemsFactory.create(1)
-		player.inventory.addItem(item, 1)
+		player.inventory.addItem(1, 1)
 	}
 
 	const removeItem = () => {

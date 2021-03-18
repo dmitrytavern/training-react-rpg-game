@@ -2,7 +2,7 @@ import PlayerEquipment from "./PlayerEquipment"
 import ItemsFactory from "../ItemsFactory"
 
 describe('Check effect getting', () => {
-	const itemsFactory = new ItemsFactory()
+	const itemsFactory = ItemsFactory.newInstance()
 
 	const helmet = itemsFactory.create(4, 'armor')
 	const armor = itemsFactory.create(5, 'armor')

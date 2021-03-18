@@ -1,9 +1,9 @@
 import PlayerEquipmentSlot from "./PlayerEquipmentSlot"
 import ItemsFactory from "../ItemsFactory"
 
-describe('Check base functions', () => {
-	const itemsFactory = new ItemsFactory()
+const itemsFactory = ItemsFactory.newInstance()
 
+describe('Check base functions', () => {
 	it('Getting name', () => {
 		const equipmentSlot = new PlayerEquipmentSlot()
 		const item = itemsFactory.create(1, 'weapon')
@@ -56,8 +56,6 @@ describe('Check base functions', () => {
 })
 
 describe('Check change equip', () => {
-	const itemsFactory = new ItemsFactory()
-
 	it('Changing item1 on item2', () => {
 		const equipmentSlot = new PlayerEquipmentSlot()
 		const item1 = itemsFactory.create(1, 'weapon')
