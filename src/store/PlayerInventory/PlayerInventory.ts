@@ -38,8 +38,16 @@ class PlayerInventory {
 		if (item.getQuantity() <= 0) this.inventory.delete(itemId)
 	}
 
-	public existsItem(itemId: number): boolean {
-		return this.inventory.has(itemId)
+	public existsItem(itemId: number, quantity?: number): boolean {
+		const exists = this.inventory.has(itemId)
+		if (exists) {
+			if (!!quantity) {
+				const quantityItem = this.inventory.get(itemId)?.getQuantity() || 0
+				return quantityItem >= quantity
+			}
+			return true
+		}
+		return false
 	}
 
 

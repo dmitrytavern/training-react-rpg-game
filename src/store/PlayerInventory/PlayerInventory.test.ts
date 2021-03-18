@@ -54,4 +54,12 @@ describe('Check base function', () => {
 
 		expect(inventory.existsItem(item.id)).toBeFalsy()
 	})
+
+	it('Check exists item when lacks items', () => {
+		const inventory = new PlayerInventory()
+
+		inventory.addItem(item, 1)
+
+		expect(inventory.existsItem(item.id, 2)).toBeFalsy()
+	})
 })
