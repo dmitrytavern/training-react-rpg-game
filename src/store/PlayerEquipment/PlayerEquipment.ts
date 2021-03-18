@@ -14,14 +14,14 @@ class PlayerEquipment {
 	public feetSlot: PlayerEquipmentSlot<ItemArmor>
 
 	constructor() {
-		this.weapon = new PlayerEquipmentSlot()
-		this.leftRingSlot = new PlayerEquipmentSlot()
-		this.rightRingSlot = new PlayerEquipmentSlot()
-		this.waistSlot = new PlayerEquipmentSlot()
-		this.helmetSlot = new PlayerEquipmentSlot()
-		this.armorSlot = new PlayerEquipmentSlot()
-		this.armsSlot = new PlayerEquipmentSlot()
-		this.feetSlot = new PlayerEquipmentSlot()
+		this.weapon = new PlayerEquipmentSlot('weapon')
+		this.leftRingSlot = new PlayerEquipmentSlot('armor', 'Armor:Ring')
+		this.rightRingSlot = new PlayerEquipmentSlot('armor', 'Armor:Ring')
+		this.waistSlot = new PlayerEquipmentSlot('armor', 'Armor:Waist')
+		this.helmetSlot = new PlayerEquipmentSlot('armor', 'Armor:Helmet')
+		this.armorSlot = new PlayerEquipmentSlot('armor', 'Armor:Armor')
+		this.armsSlot = new PlayerEquipmentSlot('armor', 'Armor:Arms')
+		this.feetSlot = new PlayerEquipmentSlot('armor', 'Armor:Feet')
 	}
 
 	public getEffects(): Effect[] {
