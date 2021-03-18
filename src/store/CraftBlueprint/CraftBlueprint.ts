@@ -47,30 +47,32 @@ class CraftBlueprint {
 	private toolFactory: CraftToolFactory
 
 	constructor(props: CraftBlueprintProps) {
-		this.id = props.item.id
-		this.category = props.item.category
-		this.result = props.item.result
-		this.materials = []
-		this.tools = []
 		this.materialFactory = props.materialFactory
 		this.toolFactory = props.toolFactory
 
-		this.initMaterials(props.item.materials)
-		this.initTools(props.item.tools)
+		this.id = props.item.id
+		this.category = props.item.category
+		this.result = props.item.result
+		this.materials = this.initMaterials(props.item.materials)
+		this.tools = this.initTools(props.item.tools)
 	}
 
-	private initMaterials(materials: CraftBlueprintDataMaterial[]) {
+	private initMaterials(materials: CraftBlueprintDataMaterial[]): CraftBlueprintMaterial[] {
+		let arr = []
 		for (let {id, quantity} of materials) {
 			const material = this.materialFactory.getMaterial(id)
-			this.materials.push({material, quantity})
+			arr.push({material, quantity})
 		}
+		return arr
 	}
 
-	private initTools(tools: CraftBlueprintDataTool[]) {
+	private initTools(tools: CraftBlueprintDataTool[]): CraftTool[] {
+		let arr = []
 		for (let {id} of tools) {
 			const tool = this.toolFactory.getTool(id)
-			this.tools.push(tool)
+			arr.push(tool)
 		}
+		return arr
 	}
 
 	public isAvailable(): boolean {
