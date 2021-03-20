@@ -1,38 +1,45 @@
-interface QuestStepWatcher {
-	target: 'level' | 'inventory',
-	value: any
-}
+import { QuestPropsData } from "../../Quest"
 
-interface QuestStep {
-	name: string
-	title: string
-	watcher?: QuestStepWatcher
-}
-
-interface Quest {
-	id: number,
-	name: string,
-	title: string
-	steps: QuestStep[]
-}
-
-
-const data: Quest[] = [
+const data: QuestPropsData[] = [
 	{
 		id: 1,
 		name: "QUEST_ACT1_INVENTORY_TUTORIAL",
 		title: "Inventory tutorial",
+		content: 'Hello',
 		steps: [
 			{
 				name: "QUEST_ACT1_INVENTORY_TUTORIAL:STEP1",
 				title: 'Get sword',
-				watcher: {
-					target: 'inventory',
-					value: {
-						itemId: 1,
-						quantity: 1
+				description: 'Check',
+				rewards: null,
+				requirements: [
+					{
+						action: 'inventory:check_item',
+						payload: {
+							itemId: 1,
+							quantity: 1
+						}
 					}
-				}
+				]
+			},
+			{
+				name: "QUEST_ACT1_INVENTORY_TUTORIAL:STEP2",
+				title: 'Cool player!',
+				description: 'Get your rewards',
+				rewards: [
+					{
+						action: 'inventory:add_item',
+						payload: {
+							itemId: 1,
+							quantity: 1
+						}
+					},
+					{
+						action: 'level:add_experience',
+						payload: 40
+					}
+				],
+				requirements: null
 			}
 		]
 	}

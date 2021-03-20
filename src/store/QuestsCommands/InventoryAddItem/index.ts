@@ -1,1 +1,1 @@
-export { default } from './InventoryAddItem'
+export { InventoryAddItem } from './InventoryAddItem'

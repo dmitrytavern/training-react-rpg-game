@@ -1,4 +1,4 @@
-import QuestsActionCommand from "../../QuestsActionCommand"
+import QuestsCheckCommand from "../../QuestsCheckCommand"
 import PlayerInventory from "../../PlayerInventory"
 
 interface CommandPayload {
@@ -10,7 +10,7 @@ interface CommandProps {
 	inventory: PlayerInventory
 }
 
-export class InventoryRemoveItem extends QuestsActionCommand {
+export class InventoryCheckItem extends QuestsCheckCommand {
 	private readonly inventory: PlayerInventory
 
 	constructor(global: CommandProps) {
@@ -19,7 +19,7 @@ export class InventoryRemoveItem extends QuestsActionCommand {
 		this.inventory = global.inventory
 	}
 
-	public execute(payload: CommandPayload) {
-		this.inventory.removeItem(payload.itemId, payload.quantity)
+	public check(payload: CommandPayload) {
+		return this.inventory.existsItem(payload.itemId, payload.quantity)
 	}
 }

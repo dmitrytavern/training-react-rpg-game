@@ -1,4 +1,4 @@
-import QuestsCommand from "../QuestsCommand"
+import QuestsActionCommand from "../../QuestsActionCommand"
 import PlayerInventory from "../../PlayerInventory"
 
 interface CommandPayload {
@@ -10,7 +10,7 @@ interface CommandProps {
 	inventory: PlayerInventory
 }
 
-class InventoryAddItem extends QuestsCommand {
+export class InventoryAddItem extends QuestsActionCommand {
 	private readonly inventory: PlayerInventory
 
 	constructor(global: CommandProps) {
@@ -23,5 +23,3 @@ class InventoryAddItem extends QuestsCommand {
 		this.inventory.addItem(payload.itemId, payload.quantity)
 	}
 }
-
-export default InventoryAddItem

@@ -1,15 +1,11 @@
-import QuestsCommand from "../QuestsCommand"
+import QuestsActionCommand from "../../QuestsActionCommand"
 import PlayerLevel from "../../PlayerLevel"
-
-interface CommandPayload {
-	value: number
-}
 
 interface CommandProps {
 	level: PlayerLevel
 }
 
-class LevelAddExperience extends QuestsCommand {
+export class LevelAddExperience extends QuestsActionCommand {
 	private readonly level: PlayerLevel
 
 	constructor(global: CommandProps) {
@@ -18,10 +14,8 @@ class LevelAddExperience extends QuestsCommand {
 		this.level = global.level
 	}
 
-	public execute(payload: CommandPayload) {
-		this.level.addExperience(payload.value)
+	public execute(payload: number) {
+		this.level.addExperience(payload)
 		this.level.floatExperience()
 	}
 }
-
-export default LevelAddExperience

@@ -1,13 +1,12 @@
 import PlayerLevel from "../PlayerLevel"
 import PlayerInventory from "../PlayerInventory"
 
-import QuestsCommand from "../QuestsCommands/QuestsCommand"
-import InventoryAddItem from "../QuestsCommands/InventoryAddItem"
-import InventoryRemoveItem from "../QuestsCommands/InventoryRemoveItem"
-import LevelAddExperience from "../QuestsCommands/LevelAddExperience"
+import QuestsActionCommand from "../QuestsActionCommand"
+import QuestsCheckCommand from "../QuestsCheckCommand"
+import * as QuestsCommands from '../QuestsCommands'
 
-interface QuestsCommanderCommand {
-	[key: string]: QuestsCommand
+interface Commands<T> {
+	[key: string]: T
 }
 
 interface QuestsCommanderProps {
@@ -16,26 +15,27 @@ interface QuestsCommanderProps {
 }
 
 class QuestsCommander {
-	private readonly actions: QuestsCommanderCommand
-	private readonly subscribes: QuestsCommanderCommand
+	private readonly actions: Commands<QuestsActionCommand>
+	private readonly checkers: Commands<QuestsCheckCommand>
 
 	constructor(props: QuestsCommanderProps) {
 		this.actions = {}
-		this.subscribes = {}
+		this.checkers = {}
 		this.initActions(props)
-		this.initSubscribes(props)
+		this.initCheckers(props)
 	}
 
 	private initActions(props: QuestsCommanderProps) {
-		this.actions['inventory:add_item'] = new InventoryAddItem(props)
-		this.actions['inventory:remove_item'] = new InventoryRemoveItem(props)
-		this.actions['level:add_experience'] = new LevelAddExperience(props)
+		this.actions['inventory:add_item'] = new QuestsCommands.InventoryAddItem(props)
+		this.actions['inventory:remove_item'] = new QuestsCommands.InventoryRemoveItem(props)
+		this.actions['level:add_experience'] = new QuestsCommands.LevelAddExperience(props)
 	}
 
-	private initSubscribes(props: QuestsCommanderProps) {
+	private initCheckers(props: QuestsCommanderProps) {
+		this.checkers['inventory:check_item'] = new QuestsCommands.InventoryCheckItem(props)
 	}
 
-	public action(name: string, payload?: any) {
+	public action(name: string, payload?: any): void {
 		const action = this.actions[name]
 
 		if (!action) {
@@ -45,14 +45,14 @@ class QuestsCommander {
 		action.execute(payload)
 	}
 
-	public subscribe(name: string, callback: Function) {
-		const subscribe = this.subscribes[name]
+	public check(name: string, payload?: any): boolean {
+		const action = this.checkers[name]
 
-		if (!subscribe) {
-			throw new Error('Not found action: '+name)
+		if (!action) {
+			throw new Error('Not found checker: '+name)
 		}
 
-		subscribe.execute(callback)
+		return action.check(payload)
 	}
 }
 
