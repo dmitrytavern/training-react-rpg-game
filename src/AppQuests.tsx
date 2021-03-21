@@ -1,50 +1,56 @@
 import { observer } from 'mobx-react-lite'
 import { useQuestsStore } from "./contexts/questsStoreContext";
-import QuestStore from "./store/Quest"
+import QuestsGroupStore from "./store/QuestsGroup"
 
-const Quest = observer((props: { quest: QuestStore }) => {
-	const { quest } = props
-	const activeStep = quest.steps.getActiveStep()
+const QuestList = observer((props: {quests: QuestsGroupStore['quests']}) => {
+	const { quests } = props
+	const array = []
 
-	const nextStep = () => {
-		quest.steps.toNextStep()
+	for (let i = 0; i < quests.length; i++) {
+		const quest = quests[i]
 
-		if (quest.canBeFinished()) quest.toFinish()
+		array.push(
+			<li key={i}>{quest.meta.title}</li>
+		)
+
+		if (quest.isCompleted()) continue
+		break
 	}
 
-	let status = 'not active'
-	if (quest.isCompleted()) status = 'completed'
-	if (quest.isActive()) status = 'active'
+	return (
+		<ul>{array}</ul>
+	)
+})
+
+const QuestGroup = observer((props: { group: QuestsGroupStore }) => {
+	const { group } = props
+	const quests = useQuestsStore()
+	const activeQuest = group.getActiveQuest()
 
 	return (
 		<div>
-			<h4>{quest.title}</h4>
-			<p>{quest.content}</p>
-			<p>Status: {status}</p>
+			<h4>{group.meta.title}</h4>
+			<p>{group.meta.description}</p>
 
 			Steps:
-			<ul>
-				{quest.steps.getOpenedSteps().map((step, i) => (
-					<li key={i}>{step.title}</li>
-				))}
-			</ul>
+			<QuestList quests={group.quests}/>
 
-			{activeStep && (
+			{activeQuest && (
 				<div>
-					{activeStep.description}
+					{activeQuest.meta.description}
 
-					{activeStep.rewards && (
+					{activeQuest.rewards && (
 						<div>
 							Your rewards:
 							<ul>
-								{activeStep.rewards.map((reward, i) => (
+								{activeQuest.rewards.map((reward, i) => (
 									<div key={i}>{reward.action} {JSON.stringify(reward.payload)}</div>
 								))}
 							</ul>
 						</div>
 					)}
 
-					<button onClick={nextStep} disabled={!quest.steps.canGoToNextStep()}>Complete step</button>
+					<button onClick={() => quests.toFinishQuest(activeQuest.name)} disabled={!activeQuest.checkCompletionRequirements()}>Complete step</button>
 				</div>
 			)}
 		</div>
@@ -53,7 +59,7 @@ const Quest = observer((props: { quest: QuestStore }) => {
 
 const AppQuests = () => {
 	const quests = useQuestsStore()
-	const testQuest = quests.getQuest(1)
+	const testQuest = quests.getQuestGroup('QUEST_GROUP_INVENTORY_TUTORIAL')
 
 	const activateQuest = () => {
 		quests.toActivateQuestGroup('QUEST_GROUP_INVENTORY_TUTORIAL')
@@ -71,16 +77,16 @@ const AppQuests = () => {
 			<h3>Active quests:</h3>
 
 			<div>
-				{quests.getActiveQuests().map((quest: QuestStore, i) => (
-						<Quest key={i} quest={quest} />
+				{quests.getActiveQuestGroups().map((quest: QuestsGroupStore, i) => (
+					<QuestGroup key={i} group={quest} />
 				))}
 			</div>
 
 			<h3>Completed quests:</h3>
 
 			<div>
-				{quests.getFinishedQuests().map((quest: QuestStore, i) => (
-					<div key={i}>{quest.title}</div>
+				{quests.getCompletedQuestGroups().map((quest: QuestsGroupStore, i) => (
+					<div key={i}>{quest.meta.title}</div>
 				))}
 			</div>
 		</div>

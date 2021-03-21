@@ -36,7 +36,7 @@ class QuestsCommander {
 	private initCheckers(props: QuestsCommanderProps) {
 		this.checkers['inventory:check_item'] = new QuestsCommands.InventoryCheckItem(props)
 		this.checkers['quest:check_group_started'] = new QuestsCommands.QuestsCheckGroupStarted(props)
-		this.checkers['quest:check_quest_completed'] = new QuestsCommands.QuestsCheckGroupStarted(props)
+		this.checkers['quest:check_quest_completed'] = new QuestsCommands.QuestsCheckQuestCompleted(props)
 	}
 
 	public action(name: string, payload?: any): void {

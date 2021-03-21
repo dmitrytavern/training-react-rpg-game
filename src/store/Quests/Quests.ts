@@ -28,6 +28,10 @@ class Quests {
 		this.questsFactory = questsFactory
 	}
 
+	public getQuestGroup(name: string) {
+		return this.questsFactory.getGroup(name)
+	}
+
 	public getActiveQuestGroups(): QuestsGroup[] {
 		return this.questsFactory.getActiveGroups()
 	}
@@ -44,6 +48,22 @@ class Quests {
 		}
 
 		group.toActivate()
+	}
+
+	public toFinishQuest(name: string) {
+		const quest = this.questsFactory.getQuest(name)
+
+		if (!quest.checkCompletionRequirements()) {
+			throw new Error('Quest cannot be finished: '+name)
+		}
+
+		quest.toFinish()
+
+		if (quest.next) {
+			this.questsFactory.getQuest(quest.next).toActivate()
+		} else {
+			this.questsFactory.getGroup(quest.group).toFinish()
+		}
 	}
 }
 

@@ -12,7 +12,9 @@ interface QuestMeta {
 }
 
 export interface QuestPropsData {
+	group: string
 	name: string
+	next: string | null
 	meta: QuestMeta
 	requirements: QuestAction[]
 	completionRequirements: QuestAction[]
@@ -25,7 +27,9 @@ export interface QuestProps {
 }
 
 class Quest {
+	public readonly group: string
 	public readonly name: string
+	public readonly next: string | null
 	public readonly meta: QuestMeta
 	public readonly requirements: QuestAction[]
 	public readonly completionRequirements: QuestAction[]
@@ -38,7 +42,9 @@ class Quest {
 	constructor(props: QuestProps) {
 		const { data, questsCommander } = props
 
+		this.group = data.group
 		this.name = data.name
+		this.next = data.next
 		this.meta = data.meta
 		this.requirements = data.requirements
 		this.completionRequirements = data.completionRequirements
@@ -83,6 +89,7 @@ class Quest {
 
 		this.completed = true
 		this.active = false
+		this._getRewards()
 	}
 
 	public checkRequirements(): boolean {
@@ -93,6 +100,12 @@ class Quest {
 		return this._checkRequirements(this.completionRequirements)
 	}
 
+
+	private _getRewards() {
+		for (let {action, payload} of this.rewards) {
+			this.commands.action(action, payload)
+		}
+	}
 
 	private _checkRequirements(requirements: QuestAction[]) {
 		for (const {action, payload} of requirements) {

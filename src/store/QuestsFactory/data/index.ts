@@ -22,7 +22,9 @@ export const groups: QuestsGroup[] = [
 
 export const quests: QuestPropsData[] = [
 	{
+		group: 'QUEST_GROUP_INVENTORY_TUTORIAL',
 		name: 'QUEST_GROUP_INVENTORY_TUTORIAL:QUEST1',
+		next: 'QUEST_GROUP_INVENTORY_TUTORIAL:QUEST2',
 		meta: {
 			title: 'Get sword',
 			description: 'You can buy sword in shop'
@@ -38,14 +40,16 @@ export const quests: QuestPropsData[] = [
 		],
 		rewards: [
 			{
-				action: 'inventory:add_item',
+				action: 'inventory:remove_item',
 				payload: {itemId: 1, quantity: 1}
 			}
 		]
 	},
 
 	{
+		group: 'QUEST_GROUP_INVENTORY_TUTORIAL',
 		name: 'QUEST_GROUP_INVENTORY_TUTORIAL:QUEST2',
+		next: null,
 		meta: {
 			title: 'End quest',
 			description: 'You got sword. Now you need to end quest and get your rewards.'
@@ -56,8 +60,12 @@ export const quests: QuestPropsData[] = [
 		completionRequirements: [],
 		rewards: [
 			{
+				action: 'level:add_experience',
+				payload: 15000
+			},
+			{
 				action: 'inventory:add_item',
-				payload: {itemId: 1, quantity: 1}
+				payload: {itemId: 201, quantity: 10}
 			}
 		]
 	}

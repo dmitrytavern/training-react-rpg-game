@@ -1,3 +1,5 @@
+import { makeAutoObservable } from "mobx"
+
 import Quest from "../Quest"
 import QuestsCommander from "../QuestsCommander"
 
@@ -24,14 +26,16 @@ export interface QuestsGroupProps {
 }
 
 class QuestsGroup {
+	private readonly commands: QuestsCommander
+
 	public readonly name: string
 	public readonly meta: QuestsGroupMeta
 	public readonly requirements: QuestsGroupAction[]
-	private readonly quests: Quest[]
+	public readonly quests: Quest[]
 
-	private readonly commands: QuestsCommander
 	private completed: boolean
 	private active: boolean
+	private currentQuestIndex: number
 
 	constructor(props: QuestsGroupProps) {
 		const { data, questsCommander } = props
@@ -43,8 +47,15 @@ class QuestsGroup {
 
 		this.completed = false
 		this.active = false
+		this.currentQuestIndex = 0
 
 		this.commands = questsCommander
+
+		makeAutoObservable(this)
+	}
+
+	public getActiveQuest(): Quest | undefined {
+		return this.quests.find((x) => x.isActive())
 	}
 
 	public isCompleted(): boolean {

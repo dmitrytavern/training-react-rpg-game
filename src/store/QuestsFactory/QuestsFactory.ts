@@ -61,7 +61,7 @@ class QuestsFactory {
 	public getQuest(name: string): Quest {
 		const quest = this.quests.find((quest) => quest.name === name)
 		if (!quest) {
-			throw new Error('Quest group not found: '+name)
+			throw new Error('Quest not found: '+name)
 		}
 		return quest
 	}
