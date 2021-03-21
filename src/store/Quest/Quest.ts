@@ -1,14 +1,22 @@
 import { makeAutoObservable } from "mobx"
-import { StepPropsData } from "../QuestStep"
 import QuestsCommander from "../QuestsCommander"
-import QuestSteps from "../QuestSteps"
+
+interface QuestAction {
+	action: string
+	payload: any
+}
+
+interface QuestMeta {
+	title: string
+	description: string
+}
 
 export interface QuestPropsData {
-	id: number
 	name: string
-	title: string
-	content: string
-	steps: StepPropsData[]
+	meta: QuestMeta
+	requirements: QuestAction[]
+	completionRequirements: QuestAction[]
+	rewards: QuestAction[]
 }
 
 export interface QuestProps {
@@ -17,27 +25,29 @@ export interface QuestProps {
 }
 
 class Quest {
-	public readonly id: number
 	public readonly name: string
-	public readonly title: string
-	public readonly content: string
-	public readonly steps: QuestSteps
+	public readonly meta: QuestMeta
+	public readonly requirements: QuestAction[]
+	public readonly completionRequirements: QuestAction[]
+	public readonly rewards: QuestAction[]
 
+	private commands: QuestsCommander
 	private completed: boolean
 	private active: boolean
 
 	constructor(props: QuestProps) {
-		this.id = props.data.id
-		this.name = props.data.name
-		this.title = props.data.title
-		this.content = props.data.content
-		this.steps = new QuestSteps({
-			data: props.data.steps,
-			questsCommander: props.questsCommander
-		})
+		const { data, questsCommander } = props
+
+		this.name = data.name
+		this.meta = data.meta
+		this.requirements = data.requirements
+		this.completionRequirements = data.completionRequirements
+		this.rewards = data.rewards
 
 		this.completed = false
 		this.active = false
+
+		this.commands = questsCommander
 
 		makeAutoObservable(this)
 	}
@@ -50,40 +60,47 @@ class Quest {
 		return this.active
 	}
 
-	public canBeActivate(): boolean {
-		return !this.completed && !this.active
-	}
-
-	public canBeFinished(): boolean {
-		let bool = true
-
-		if (this.isCompleted() || !this.isActive()) return false
-
-		for (let step of this.steps.getAllSteps()) {
-			if (!step.isCompleted()) {
-				bool = false
-			}
+	public toActivate() {
+		if (this.isActive()) {
+			throw new Error('Quest already activated: '+this.name)
 		}
 
-		return bool
-	}
-
-	public toActivate() {
-		if (!this.canBeActivate()) {
+		if (!this.checkRequirements()) {
 			throw new Error('Cannot activate quest: '+this.name)
 		}
 
 		this.active = true
-		this.steps.toActivateFirstStep()
 	}
 
 	public toFinish() {
-		if (!this.canBeFinished()) {
-			throw new Error('Cannot finished quest: '+this.name)
+		if (this.isCompleted()) {
+			throw new Error('Quest already finished: '+this.name)
+		}
+
+		if (!this.checkCompletionRequirements()) {
+			throw new Error('Cannot activate quest: '+this.name)
 		}
 
 		this.completed = true
 		this.active = false
+	}
+
+	public checkRequirements(): boolean {
+		return this._checkRequirements(this.requirements)
+	}
+
+	public checkCompletionRequirements(): boolean {
+		return this._checkRequirements(this.completionRequirements)
+	}
+
+
+	private _checkRequirements(requirements: QuestAction[]) {
+		for (const {action, payload} of requirements) {
+			const result = this.commands.check(action, payload)
+			if (!result) return false
+		}
+
+		return true
 	}
 }
 

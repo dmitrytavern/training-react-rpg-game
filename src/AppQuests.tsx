@@ -56,7 +56,7 @@ const AppQuests = () => {
 	const testQuest = quests.getQuest(1)
 
 	const activateQuest = () => {
-		quests.toActivateQuest(1)
+		quests.toActivateQuestGroup('QUEST_GROUP_INVENTORY_TUTORIAL')
 	}
 
 	const disabledActivateButton = testQuest.isActive() || testQuest.isCompleted()

@@ -1,9 +1,9 @@
-import Quest from "../Quest"
+import QuestsFactory from "../QuestsFactory"
 import QuestsCommander from "../QuestsCommander"
+import QuestsGroup from "../QuestsGroup"
 import PlayerLevel from "../PlayerLevel"
 import PlayerInventory from "../PlayerInventory"
 
-import data from "./data"
 
 interface QuestsProps {
 	playerLevel: PlayerLevel
@@ -11,56 +11,39 @@ interface QuestsProps {
 }
 
 class Quests {
-	private readonly questsCommander: QuestsCommander
-	private readonly quests: Quest[]
+	private readonly questsFactory: QuestsFactory
 
 	constructor(props: QuestsProps) {
-		this.questsCommander = new QuestsCommander({
+		const questsFactory = new QuestsFactory()
+
+		const questsCommander = new QuestsCommander({
 			level: props.playerLevel,
-			inventory: props.playerInventory
+			inventory: props.playerInventory,
+			questsFactory
 		})
 
-		this.quests = this.initQuests()
+		questsFactory.setCommander(questsCommander)
+		questsFactory.init()
+
+		this.questsFactory = questsFactory
 	}
 
-	private initQuests(): Quest[] {
-		const arr = []
-		for (let questData of data) {
-			const quest = new Quest({
-				data: questData,
-				questsCommander: this.questsCommander
-			})
-			arr.push(quest)
-		}
-		return arr
+	public getActiveQuestGroups(): QuestsGroup[] {
+		return this.questsFactory.getActiveGroups()
 	}
 
-	public getQuest(questId: number): Quest {
-		const quest = this.quests.find((quest) => quest.id === questId)
-		if (!quest) throw new Error('Quest not found! Id: '+questId)
-		return quest
+	public getCompletedQuestGroups(): QuestsGroup[] {
+		return this.questsFactory.getCompletedGroups()
 	}
 
-	public getActiveQuests(): Quest[] {
-		return this.quests.filter((quest) => quest.isActive())
-	}
+	public toActivateQuestGroup(name: string) {
+		const group = this.questsFactory.getGroup(name)
 
-	public getFinishedQuests(): Quest[] {
-		return this.quests.filter((quest) => quest.isCompleted())
-	}
-
-	public toActivateQuest(questId: number) {
-		const quest = this.quests.find((quest) => quest.id === questId)
-
-		if (quest === undefined) {
-			throw new Error('Quest not found: '+questId)
+		if (!group.checkRequirements()) {
+			throw new Error('Quest cannot be activated: '+name)
 		}
 
-		if (!quest.canBeActivate()) {
-			throw new Error('Quest cannot be activated: '+questId)
-		}
-
-		quest.toActivate()
+		group.toActivate()
 	}
 }
 

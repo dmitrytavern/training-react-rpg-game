@@ -4,6 +4,7 @@ import PlayerInventory from "../PlayerInventory"
 import QuestsActionCommand from "../QuestsActionCommand"
 import QuestsCheckCommand from "../QuestsCheckCommand"
 import * as QuestsCommands from '../QuestsCommands'
+import QuestsFactory from "../QuestsFactory";
 
 interface Commands<T> {
 	[key: string]: T
@@ -12,6 +13,7 @@ interface Commands<T> {
 interface QuestsCommanderProps {
 	level: PlayerLevel,
 	inventory: PlayerInventory
+	questsFactory?: QuestsFactory
 }
 
 class QuestsCommander {
@@ -33,6 +35,8 @@ class QuestsCommander {
 
 	private initCheckers(props: QuestsCommanderProps) {
 		this.checkers['inventory:check_item'] = new QuestsCommands.InventoryCheckItem(props)
+		this.checkers['quest:check_group_started'] = new QuestsCommands.QuestsCheckGroupStarted(props)
+		this.checkers['quest:check_quest_completed'] = new QuestsCommands.QuestsCheckGroupStarted(props)
 	}
 
 	public action(name: string, payload?: any): void {

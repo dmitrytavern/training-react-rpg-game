@@ -3,7 +3,7 @@ import PlayerInventory from "../PlayerInventory"
 import QuestsCommander from "../QuestsCommander"
 import Quest from "./Quest"
 
-import data from "../Quests/data"
+import * as data from '../QuestsFactory/data'
 
 const inventory = new PlayerInventory()
 const level = new PlayerLevel(1, 0)
@@ -12,27 +12,32 @@ const questsCommander = new QuestsCommander({
 	level
 })
 
+const questData = {
+	...data.quests[0],
+	requirements: []
+}
+
 it('Checking base properties', () => {
-	const quest = new Quest({questsCommander, data: data[0]})
+	const quest = new Quest({questsCommander, data: questData})
 
 	expect(quest.isActive()).toBeFalsy()
 	expect(quest.isCompleted()).toBeFalsy()
-	expect(quest.canBeFinished()).toBeFalsy()
-	expect(quest.canBeActivate()).toBeTruthy()
+	expect(quest.checkRequirements()).toBeTruthy()
+	expect(quest.checkCompletionRequirements()).toBeFalsy()
 })
 
 it('Checking toActivate function', () => {
-	const quest = new Quest({questsCommander, data: data[0]})
+	const quest = new Quest({questsCommander, data: questData})
 
-	expect(quest.canBeActivate()).toBeTruthy()
+	expect(quest.isActive()).toBeFalsy()
 
 	quest.toActivate()
 
-	expect(quest.canBeActivate()).toBeFalsy()
+	expect(quest.isActive()).toBeTruthy()
 })
 
 it('Checking toFinish function', () => {
-	const quest = new Quest({questsCommander, data: data[0]})
+	const quest = new Quest({questsCommander, data: questData})
 
 	expect(() => quest.toFinish()).toThrow()
 
@@ -42,19 +47,8 @@ it('Checking toFinish function', () => {
 
 	inventory.addItem(1, 1)
 
-	for (let step of quest.steps.getAllSteps()) {
-		if (!step.isActive()) {
-			step.toActivate()
-		}
-		step.toFinish()
-	}
-
-	expect(quest.canBeFinished()).toBeTruthy()
-
 	quest.toFinish()
 
 	expect(quest.isActive()).toBeFalsy()
 	expect(quest.isCompleted()).toBeTruthy()
-	expect(quest.canBeFinished()).toBeFalsy()
-	expect(quest.canBeActivate()).toBeFalsy()
 })
