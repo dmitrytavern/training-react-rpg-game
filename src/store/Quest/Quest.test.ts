@@ -42,8 +42,10 @@ it('Checking toFinish function', () => {
 
 	inventory.addItem(1, 1)
 
-	for (let step of quest.steps) {
-		step.toActivate()
+	for (let step of quest.getAllSteps()) {
+		if (!step.isActive()) {
+			step.toActivate()
+		}
 		step.toFinish()
 	}
 

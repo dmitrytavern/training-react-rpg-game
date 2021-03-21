@@ -1,3 +1,4 @@
+import {makeAutoObservable} from "mobx"
 import QuestsCommander from "../QuestsCommander"
 
 interface StepRequirements {
@@ -5,7 +6,7 @@ interface StepRequirements {
 	readonly payload: any
 }
 
-interface StepReward {
+export interface StepReward {
 	readonly action: string,
 	readonly payload: any
 }
@@ -45,6 +46,8 @@ class QuestStep {
 
 		this.completed = false
 		this.active = false
+
+		makeAutoObservable(this)
 	}
 
 	public isCompleted(): boolean {

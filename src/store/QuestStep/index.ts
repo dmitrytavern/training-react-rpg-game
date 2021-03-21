@@ -1,2 +1,2 @@
 export { default } from './QuestStep'
-export type { StepProps, StepPropsData } from './QuestStep'
+export type { StepProps, StepPropsData, StepReward } from './QuestStep'

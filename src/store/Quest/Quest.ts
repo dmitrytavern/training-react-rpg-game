@@ -1,3 +1,4 @@
+import {makeAutoObservable} from "mobx"
 import QuestStep, {StepPropsData} from "../QuestStep"
 import QuestsCommander from "../QuestsCommander"
 
@@ -19,7 +20,7 @@ class Quest {
 	public readonly name: string
 	public readonly title: string
 	public readonly content: string
-	public readonly steps: QuestStep[]
+	private readonly steps: QuestStep[]
 
 	private readonly questsCommander: QuestsCommander
 	private completed: boolean
@@ -36,6 +37,8 @@ class Quest {
 
 		this.completed = false
 		this.active = false
+
+		makeAutoObservable(this)
 	}
 
 	private initSteps(stepsData: StepPropsData[]): QuestStep[] {
@@ -48,6 +51,35 @@ class Quest {
 			arr.push(step)
 		}
 		return arr
+	}
+
+	public getOpenedSteps(): QuestStep[] {
+		const steps = this.steps
+		let arr = []
+
+		for (let i = 0; i < steps.length; i++) {
+			const step = steps[i]
+			const active = step.isActive()
+			const finished = step.isCompleted()
+
+			if (finished) {
+				arr.push(step)
+				continue
+			}
+
+			if (active) arr.push(step)
+			break
+		}
+
+		return arr
+	}
+
+	public getAllSteps(): QuestStep[] {
+		return this.steps
+	}
+
+	public getActiveStep(): QuestStep | undefined {
+		return this.steps.find((step) => step.isActive())
 	}
 
 	public isCompleted(): boolean {
@@ -82,6 +114,7 @@ class Quest {
 		}
 
 		this.active = true
+		this.steps[0].toActivate()
 	}
 
 	public toFinish() {
@@ -91,6 +124,21 @@ class Quest {
 
 		this.completed = true
 		this.active = false
+	}
+
+	public toNextStep() {
+		const steps = this.steps
+
+		for (let i = 0; i < steps.length; i++) {
+			const step = steps[i]
+
+			if (step.isActive()) {
+				const nextStep = steps[i+1]
+				steps[i].toFinish()
+				if (nextStep) nextStep.toActivate()
+				break
+			}
+		}
 	}
 }
 

@@ -35,16 +35,32 @@ class Quests {
 		return arr
 	}
 
-	public getActiveQuest() {
-
+	public getQuest(questId: number): Quest {
+		const quest = this.quests.find((quest) => quest.id === questId)
+		if (!quest) throw new Error('Quest not found! Id: '+questId)
+		return quest
 	}
 
-	public startQuest() {
-
+	public getActiveQuests(): Quest[] {
+		return this.quests.filter((quest) => quest.isActive())
 	}
 
-	public completeQuests() {
+	public getFinishedQuests(): Quest[] {
+		return this.quests.filter((quest) => quest.isCompleted())
+	}
 
+	public toActivateQuest(questId: number) {
+		const quest = this.quests.find((quest) => quest.id === questId)
+
+		if (quest === undefined) {
+			throw new Error('Quest not found: '+questId)
+		}
+
+		if (!quest.canBeActivate()) {
+			throw new Error('Quest cannot be activated: '+questId)
+		}
+
+		quest.toActivate()
 	}
 }
 
