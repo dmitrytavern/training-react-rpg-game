@@ -1,1 +1,1 @@
-export { InventoryCheckItem } from './InventoryCheckItem'
+export { inventoryCheckItem } from './InventoryCheckItem'

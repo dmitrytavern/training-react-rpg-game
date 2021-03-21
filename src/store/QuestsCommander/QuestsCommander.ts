@@ -1,42 +1,37 @@
 import PlayerLevel from "../PlayerLevel"
 import PlayerInventory from "../PlayerInventory"
-
-import QuestsActionCommand from "../QuestsActionCommand"
-import QuestsCheckCommand from "../QuestsCheckCommand"
 import * as QuestsCommands from '../QuestsCommands'
-import QuestsFactory from "../QuestsFactory";
 
 interface Commands<T> {
-	[key: string]: T
+	[key: string]: (context: QuestsCommanderContext, payload: any) => T
 }
 
-interface QuestsCommanderProps {
-	level: PlayerLevel,
-	inventory: PlayerInventory
-	questsFactory?: QuestsFactory
+interface QuestsCommanderContext {
+	level?: PlayerLevel,
+	inventory?: PlayerInventory
 }
 
 class QuestsCommander {
-	private readonly actions: Commands<QuestsActionCommand>
-	private readonly checkers: Commands<QuestsCheckCommand>
+	private readonly context: QuestsCommanderContext
+	private readonly actions: Commands<void>
+	private readonly checkers: Commands<boolean>
 
-	constructor(props: QuestsCommanderProps) {
+	constructor(props: QuestsCommanderContext) {
+		this.context = props
 		this.actions = {}
 		this.checkers = {}
-		this.initActions(props)
-		this.initCheckers(props)
+		this.initActions()
+		this.initCheckers()
 	}
 
-	private initActions(props: QuestsCommanderProps) {
-		this.actions['inventory:add_item'] = new QuestsCommands.InventoryAddItem(props)
-		this.actions['inventory:remove_item'] = new QuestsCommands.InventoryRemoveItem(props)
-		this.actions['level:add_experience'] = new QuestsCommands.LevelAddExperience(props)
+	private initActions() {
+		this.actions['inventory:add_item'] = QuestsCommands.inventoryAddItem
+		this.actions['inventory:remove_item'] = QuestsCommands.inventoryRemoveItem
+		this.actions['level:add_experience'] = QuestsCommands.levelAddExperience
 	}
 
-	private initCheckers(props: QuestsCommanderProps) {
-		this.checkers['inventory:check_item'] = new QuestsCommands.InventoryCheckItem(props)
-		this.checkers['quest:check_group_started'] = new QuestsCommands.QuestsCheckGroupStarted(props)
-		this.checkers['quest:check_quest_completed'] = new QuestsCommands.QuestsCheckQuestCompleted(props)
+	private initCheckers() {
+		this.checkers['inventory:check_item'] = QuestsCommands.inventoryCheckItem
 	}
 
 	public action(name: string, payload?: any): void {
@@ -46,7 +41,7 @@ class QuestsCommander {
 			throw new Error('Not found action: '+name)
 		}
 
-		action.execute(payload)
+		action.call(null, this.context, payload)
 	}
 
 	public check(name: string, payload?: any): boolean {
@@ -56,7 +51,7 @@ class QuestsCommander {
 			throw new Error('Not found checker: '+name)
 		}
 
-		return action.check(payload)
+		return action.call(null, this.context, payload)
 	}
 }
 

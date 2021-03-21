@@ -1,1 +1,1 @@
-export { InventoryAddItem } from './InventoryAddItem'
+export { inventoryAddItem } from './InventoryAddItem'

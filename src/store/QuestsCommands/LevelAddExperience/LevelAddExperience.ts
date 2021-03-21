@@ -1,21 +1,16 @@
-import QuestsActionCommand from "../../QuestsActionCommand"
 import PlayerLevel from "../../PlayerLevel"
 
-interface CommandProps {
-	level: PlayerLevel
+interface CommandContext {
+	level?: PlayerLevel
 }
 
-export class LevelAddExperience extends QuestsActionCommand {
-	private readonly level: PlayerLevel
+export const levelAddExperience = (context: CommandContext, payload: number) => {
+	const level = context.level
 
-	constructor(global: CommandProps) {
-		super()
-
-		this.level = global.level
+	if (!level) {
+		throw new Error('Level is undefined')
 	}
 
-	public execute(payload: number) {
-		this.level.addExperience(payload)
-		this.level.floatExperience()
-	}
+	level.addExperience(payload)
+	level.floatExperience()
 }

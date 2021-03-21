@@ -3,30 +3,19 @@ import Quest from "../Quest"
 import QuestsGroup from "../QuestsGroup"
 import QuestsCommander from "../QuestsCommander"
 
-const ERROR_QUESTS_COMMANDER = 'Quests commander not defined'
-
 class QuestsFactory {
-	private questsCommander: QuestsCommander | undefined
+	private readonly questsCommander: QuestsCommander
 	private groups: QuestsGroup[]
 	private quests: Quest[]
 
-	constructor() {
-		this.quests = []
-		this.groups = []
-	}
-
-	public setCommander(questsCommander: QuestsCommander) {
+	constructor(questsCommander: QuestsCommander) {
 		this.questsCommander = questsCommander
-	}
 
-	public init() {
 		this.quests = this.initQuests()
 		this.groups = this.initQuestGroups()
 	}
 
 	private initQuests(): Quest[] {
-		if (!this.questsCommander) throw new Error(ERROR_QUESTS_COMMANDER)
-
 		const arr = []
 		for (let questData of data.quests) {
 			const quest = new Quest({
@@ -39,8 +28,6 @@ class QuestsFactory {
 	}
 
 	private initQuestGroups(): QuestsGroup[] {
-		if (!this.questsCommander) throw new Error(ERROR_QUESTS_COMMANDER)
-
 		const arr = []
 		for (let groupData of data.groups) {
 			const quests = groupData.quests.map((name) => this.getQuest(name))

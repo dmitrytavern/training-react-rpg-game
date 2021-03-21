@@ -1,4 +1,3 @@
-import QuestsCheckCommand from "../../QuestsCheckCommand"
 import PlayerInventory from "../../PlayerInventory"
 
 interface CommandPayload {
@@ -6,20 +5,16 @@ interface CommandPayload {
 	quantity: number
 }
 
-interface CommandProps {
-	inventory: PlayerInventory
+interface CommandContext {
+	inventory?: PlayerInventory
 }
 
-export class InventoryCheckItem extends QuestsCheckCommand {
-	private readonly inventory: PlayerInventory
+export const inventoryCheckItem = (context: CommandContext, payload: CommandPayload): boolean => {
+	const inventory = context.inventory
 
-	constructor(global: CommandProps) {
-		super()
-
-		this.inventory = global.inventory
+	if (!inventory) {
+		throw new Error('Inventory is undefined')
 	}
 
-	public check(payload: CommandPayload) {
-		return this.inventory.existsItem(payload.itemId, payload.quantity)
-	}
+	return inventory.existsItem(payload.itemId, payload.quantity)
 }

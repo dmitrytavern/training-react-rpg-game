@@ -29,9 +29,7 @@ export const quests: QuestPropsData[] = [
 			title: 'Get sword',
 			description: 'You can buy sword in shop'
 		},
-		requirements: [
-			{action: 'quest:check_group_started', payload: 'QUEST_GROUP_INVENTORY_TUTORIAL'}
-		],
+		requirements: [],
 		completionRequirements: [
 			{
 				action: 'inventory:check_item',
@@ -54,9 +52,7 @@ export const quests: QuestPropsData[] = [
 			title: 'End quest',
 			description: 'You got sword. Now you need to end quest and get your rewards.'
 		},
-		requirements: [
-			{action: 'quest:check_quest_completed', payload: 'QUEST_GROUP_INVENTORY_TUTORIAL:QUEST1'}
-		],
+		requirements: [],
 		completionRequirements: [],
 		rewards: [
 			{

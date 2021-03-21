@@ -14,18 +14,12 @@ class Quests {
 	private readonly questsFactory: QuestsFactory
 
 	constructor(props: QuestsProps) {
-		const questsFactory = new QuestsFactory()
-
 		const questsCommander = new QuestsCommander({
 			level: props.playerLevel,
 			inventory: props.playerInventory,
-			questsFactory
 		})
 
-		questsFactory.setCommander(questsCommander)
-		questsFactory.init()
-
-		this.questsFactory = questsFactory
+		this.questsFactory = new QuestsFactory(questsCommander)
 	}
 
 	public getQuestGroup(name: string) {
