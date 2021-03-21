@@ -1,6 +1,7 @@
-import {makeAutoObservable} from "mobx"
-import QuestStep, {StepPropsData} from "../QuestStep"
+import { makeAutoObservable } from "mobx"
+import { StepPropsData } from "../QuestStep"
 import QuestsCommander from "../QuestsCommander"
+import QuestSteps from "../QuestSteps"
 
 export interface QuestPropsData {
 	id: number
@@ -20,66 +21,25 @@ class Quest {
 	public readonly name: string
 	public readonly title: string
 	public readonly content: string
-	private readonly steps: QuestStep[]
+	public readonly steps: QuestSteps
 
-	private readonly questsCommander: QuestsCommander
 	private completed: boolean
 	private active: boolean
 
 	constructor(props: QuestProps) {
-		this.questsCommander = props.questsCommander
-
 		this.id = props.data.id
 		this.name = props.data.name
 		this.title = props.data.title
 		this.content = props.data.content
-		this.steps = this.initSteps(props.data.steps)
+		this.steps = new QuestSteps({
+			data: props.data.steps,
+			questsCommander: props.questsCommander
+		})
 
 		this.completed = false
 		this.active = false
 
 		makeAutoObservable(this)
-	}
-
-	private initSteps(stepsData: StepPropsData[]): QuestStep[] {
-		const arr = []
-		for (let stepData of stepsData) {
-			const step = new QuestStep({
-				data: stepData,
-				questsCommander: this.questsCommander
-			})
-			arr.push(step)
-		}
-		return arr
-	}
-
-	public getOpenedSteps(): QuestStep[] {
-		const steps = this.steps
-		let arr = []
-
-		for (let i = 0; i < steps.length; i++) {
-			const step = steps[i]
-			const active = step.isActive()
-			const finished = step.isCompleted()
-
-			if (finished) {
-				arr.push(step)
-				continue
-			}
-
-			if (active) arr.push(step)
-			break
-		}
-
-		return arr
-	}
-
-	public getAllSteps(): QuestStep[] {
-		return this.steps
-	}
-
-	public getActiveStep(): QuestStep | undefined {
-		return this.steps.find((step) => step.isActive())
 	}
 
 	public isCompleted(): boolean {
@@ -99,7 +59,7 @@ class Quest {
 
 		if (this.isCompleted() || !this.isActive()) return false
 
-		for (let step of this.steps) {
+		for (let step of this.steps.getAllSteps()) {
 			if (!step.isCompleted()) {
 				bool = false
 			}
@@ -114,7 +74,7 @@ class Quest {
 		}
 
 		this.active = true
-		this.steps[0].toActivate()
+		this.steps.toActivateFirstStep()
 	}
 
 	public toFinish() {
@@ -124,21 +84,6 @@ class Quest {
 
 		this.completed = true
 		this.active = false
-	}
-
-	public toNextStep() {
-		const steps = this.steps
-
-		for (let i = 0; i < steps.length; i++) {
-			const step = steps[i]
-
-			if (step.isActive()) {
-				const nextStep = steps[i+1]
-				steps[i].toFinish()
-				if (nextStep) nextStep.toActivate()
-				break
-			}
-		}
 	}
 }
 

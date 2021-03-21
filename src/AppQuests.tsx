@@ -4,10 +4,10 @@ import QuestStore from "./store/Quest"
 
 const Quest = observer((props: { quest: QuestStore }) => {
 	const { quest } = props
-	const activeStep = quest.getActiveStep()
+	const activeStep = quest.steps.getActiveStep()
 
 	const nextStep = () => {
-		quest.toNextStep()
+		quest.steps.toNextStep()
 
 		if (quest.canBeFinished()) quest.toFinish()
 	}
@@ -24,7 +24,7 @@ const Quest = observer((props: { quest: QuestStore }) => {
 
 			Steps:
 			<ul>
-				{quest.getOpenedSteps().map((step, i) => (
+				{quest.steps.getOpenedSteps().map((step, i) => (
 					<li key={i}>{step.title}</li>
 				))}
 			</ul>
@@ -44,7 +44,7 @@ const Quest = observer((props: { quest: QuestStore }) => {
 						</div>
 					)}
 
-					<button onClick={nextStep} disabled={!activeStep.canBeFinished()}>Complete step</button>
+					<button onClick={nextStep} disabled={!quest.steps.canGoToNextStep()}>Complete step</button>
 				</div>
 			)}
 		</div>
