@@ -1,5 +1,6 @@
 import PlayerLevel from "../PlayerLevel"
 import PlayerInventory from "../PlayerInventory"
+import PlayerBalance from "../PlayerBalance"
 import * as QuestsCommands from '../QuestsCommands'
 
 interface Actions<T> {
@@ -11,8 +12,9 @@ interface Subscribe<T> {
 }
 
 interface QuestsCommanderContext {
-	level?: PlayerLevel,
+	level?: PlayerLevel
 	inventory?: PlayerInventory
+	balance?: PlayerBalance
 }
 
 class QuestsCommander {
@@ -36,6 +38,9 @@ class QuestsCommander {
 
 	public initSubscribes() {
 		this.subscribes['inventory:check_item'] = QuestsCommands.inventoryCheckItem
+		this.subscribes['balance:check_money_balance'] = QuestsCommands.balanceCheckMoney
+		this.subscribes['balance:check_money_getting'] = QuestsCommands.balanceCheckMoneyGetting
+		this.subscribes['level:check_level'] = QuestsCommands.levelCheckLevel
 	}
 
 	public action(name: string, payload?: any): void {

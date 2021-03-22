@@ -21,7 +21,8 @@ const player = new Player()
 const craft = new Craft(player.inventory)
 const quests = new Quests({
   playerLevel: player.level,
-  playerInventory: player.inventory
+  playerInventory: player.inventory,
+  playerBalance: player.balance
 })
 
 ReactDOM.render(

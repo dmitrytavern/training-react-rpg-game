@@ -3,11 +3,12 @@ import QuestsCommander from "../QuestsCommander"
 import QuestsGroup from "../QuestsGroup"
 import PlayerLevel from "../PlayerLevel"
 import PlayerInventory from "../PlayerInventory"
-
+import PlayerBalance from "../PlayerBalance"
 
 interface QuestsProps {
 	playerLevel: PlayerLevel
 	playerInventory: PlayerInventory
+	playerBalance: PlayerBalance
 }
 
 class Quests {
@@ -17,6 +18,7 @@ class Quests {
 		const questsCommander = new QuestsCommander({
 			level: props.playerLevel,
 			inventory: props.playerInventory,
+			balance: props.playerBalance,
 		})
 
 		this.questsFactory = new QuestsFactory(questsCommander)
