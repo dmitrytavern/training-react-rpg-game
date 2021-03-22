@@ -10,6 +10,8 @@ interface QuestAction {
 interface QuestRequirementsProps {
 	requirements: QuestAction[]
 	questsCommander: QuestsCommander
+	autocomplete?: boolean
+	autocompleteFunction?: Function
 }
 
 class QuestsRequirements {
@@ -19,17 +21,19 @@ class QuestsRequirements {
 	private reactionDisposers: IReactionDisposer[]
 	private requirementsState: boolean[]
 
+	private readonly autocomplete: boolean
+	private readonly autocompleteFunction?: Function
 	private canBeFinished: boolean
 	private subscribed: boolean
 
 	constructor(props: QuestRequirementsProps) {
-		const { requirements, questsCommander } = props
-
-		this.commands = questsCommander
-		this.requirements = requirements
+		this.commands = props.questsCommander
+		this.requirements = props.requirements
 		this.reactionDisposers = []
 		this.requirementsState = []
 
+		this.autocomplete = props.autocomplete || false
+		this.autocompleteFunction = props.autocompleteFunction
 		this.canBeFinished = false
 		this.subscribed = false
 
@@ -80,6 +84,13 @@ class QuestsRequirements {
 		}
 
 		this.canBeFinished = true
+		if (this.autocomplete) {
+			if (this.autocompleteFunction) {
+				this.autocompleteFunction()
+			} else {
+				throw new Error('Autocomplete function is undefined')
+			}
+		}
 	}
 }
 

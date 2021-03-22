@@ -59,19 +59,26 @@ const QuestGroup = observer((props: { group: QuestsGroupStore }) => {
 
 const AppQuests = () => {
 	const quests = useQuestsStore()
-	const testQuest = quests.getQuestGroup('QUEST_GROUP_INVENTORY_TUTORIAL')
+	const inventoryQuest = quests.getQuestGroup('QUEST_GROUP_INVENTORY_TUTORIAL')
+	const playerQuest = quests.getQuestGroup('QUEST_GROUP_PLAYER_TUTORIAL')
 
-	const activateQuest = () => {
+	const activateInventoryQuest = () => {
 		quests.toActivateQuestGroup('QUEST_GROUP_INVENTORY_TUTORIAL')
 	}
 
-	const disabledActivateButton = testQuest.isActive() || testQuest.isCompleted()
+	const activatePlayerQuest = () => {
+		quests.toActivateQuestGroup('QUEST_GROUP_PLAYER_TUTORIAL')
+	}
+
+	const disabledActivateButtonInventory = inventoryQuest.isActive() || inventoryQuest.isCompleted() || !inventoryQuest.requirements.check()
+	const disabledActivateButtonPlayer = playerQuest.isActive() || playerQuest.isCompleted() || !playerQuest.requirements.check()
 	return (
 		<div>
 			<h2>Quests</h2>
 
 			<div>
-				<button onClick={activateQuest} disabled={disabledActivateButton}>Activate quest</button>
+				<button onClick={activateInventoryQuest} disabled={disabledActivateButtonInventory}>Activate quest INVENTORY_TUTORIAL</button>
+				<button onClick={activatePlayerQuest} disabled={disabledActivateButtonPlayer}>Activate quest PLAYER_TUTORIAL</button>
 			</div>
 
 			<h3>Active quests:</h3>

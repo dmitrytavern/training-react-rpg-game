@@ -20,6 +20,8 @@ export interface QuestPropsData {
 	requirements: QuestAction[]
 	completionRequirements: QuestAction[]
 	rewards: QuestAction[]
+
+	autocomplete?: boolean
 }
 
 export interface QuestProps {
@@ -35,6 +37,7 @@ class Quest {
 	public readonly requirements: QuestsRequirements
 	public readonly completionRequirements: QuestsRequirements
 	public readonly rewards: QuestAction[]
+	public readonly autocomplete: boolean
 
 	private readonly commands: QuestsCommander
 	private completed: boolean
@@ -55,12 +58,15 @@ class Quest {
 		})
 
 		this.completionRequirements = new QuestsRequirements({
+			autocomplete: data.autocomplete || false,
+			autocompleteFunction: this.toFinish.bind(this),
 			requirements: data.completionRequirements,
 			questsCommander: this.commands
 		})
 
 		this.rewards = data.rewards
 
+		this.autocomplete = data.autocomplete || false
 		this.completed = false
 		this.active = false
 

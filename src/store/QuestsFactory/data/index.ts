@@ -17,10 +17,25 @@ export const groups: QuestsGroup[] = [
 			'QUEST_GROUP_INVENTORY_TUTORIAL:QUEST1',
 			'QUEST_GROUP_INVENTORY_TUTORIAL:QUEST2',
 		]
+	},
+	{
+		name: 'QUEST_GROUP_PLAYER_TUTORIAL',
+		meta: {
+			title: 'Player tutorial',
+			description: 'Learn working with player'
+		},
+		requirements: [
+			{action: 'level:check_level', payload: 51}
+		],
+		quests: [
+			'QUEST_GROUP_PLAYER_TUTORIAL:QUEST1',
+			'QUEST_GROUP_PLAYER_TUTORIAL:QUEST2',
+		]
 	}
 ]
 
 export const quests: QuestPropsData[] = [
+	// QUEST_GROUP_INVENTORY_TUTORIAL
 	{
 		group: 'QUEST_GROUP_INVENTORY_TUTORIAL',
 		name: 'QUEST_GROUP_INVENTORY_TUTORIAL:QUEST1',
@@ -43,7 +58,6 @@ export const quests: QuestPropsData[] = [
 			}
 		]
 	},
-
 	{
 		group: 'QUEST_GROUP_INVENTORY_TUTORIAL',
 		name: 'QUEST_GROUP_INVENTORY_TUTORIAL:QUEST2',
@@ -64,5 +78,49 @@ export const quests: QuestPropsData[] = [
 				payload: {itemId: 201, quantity: 10}
 			}
 		]
+	},
+
+
+	// QUEST_GROUP_PLAYER_TUTORIAL
+	{
+		group: 'QUEST_GROUP_PLAYER_TUTORIAL',
+		name: 'QUEST_GROUP_PLAYER_TUTORIAL:QUEST1',
+		next: 'QUEST_GROUP_PLAYER_TUTORIAL:QUEST2',
+		meta: {
+			title: 'Have 1 copper',
+			description: 'You need have 1 copper. You should learn, how getting money'
+		},
+		requirements: [],
+		completionRequirements: [
+			{action: 'balance:check_money_balance', payload: 1}
+		],
+		rewards: []
+	},
+	{
+		group: 'QUEST_GROUP_PLAYER_TUTORIAL',
+		name: 'QUEST_GROUP_PLAYER_TUTORIAL:QUEST2',
+		next: null,
+		autocomplete: true,
+		meta: {
+			title: 'Get 1 copper',
+			description: 'You need get copper. You should learn, how getting money'
+		},
+		requirements: [],
+		completionRequirements: [
+			{action: 'balance:check_money_getting', payload: 1}
+		],
+		rewards: []
+	},
+	{
+		group: 'QUEST_GROUP_PLAYER_TUTORIAL',
+		name: 'QUEST_GROUP_PLAYER_TUTORIAL:QUEST2',
+		next: null,
+		meta: {
+			title: 'End quest',
+			description: 'You are cool!'
+		},
+		requirements: [],
+		completionRequirements: [],
+		rewards: []
 	}
 ]

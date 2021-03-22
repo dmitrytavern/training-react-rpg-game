@@ -1,4 +1,4 @@
-import { makeAutoObservable } from "mobx"
+import { makeAutoObservable, reaction } from "mobx"
 
 import Quest from "../Quest"
 import QuestsCommander from "../QuestsCommander"
@@ -34,7 +34,6 @@ class QuestsGroup {
 
 	private completed: boolean
 	private active: boolean
-	private currentQuestIndex: number
 
 	constructor(props: QuestsGroupProps) {
 		const { data, questsCommander } = props
@@ -50,11 +49,27 @@ class QuestsGroup {
 
 		this.completed = false
 		this.active = false
-		this.currentQuestIndex = 0
 
 		this.requirements.subscribe()
 
+		this.initLastQuestReaction()
+
 		makeAutoObservable(this)
+	}
+
+	private initLastQuestReaction() {
+		const lastQuest = this.quests[this.quests.length - 1]
+		if (!lastQuest.autocomplete) return
+
+		const disposer = reaction(
+			() => lastQuest.isCompleted(),
+			(isCompleted) => {
+				if (isCompleted) {
+					this.toFinish()
+					disposer()
+				}
+			}
+		)
 	}
 
 	public getActiveQuest(): Quest | undefined {
