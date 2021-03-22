@@ -37,7 +37,7 @@ class Quests {
 	public toActivateQuestGroup(name: string) {
 		const group = this.questsFactory.getGroup(name)
 
-		if (!group.checkRequirements()) {
+		if (!group.requirements.check()) {
 			throw new Error('Quest cannot be activated: '+name)
 		}
 
@@ -47,7 +47,7 @@ class Quests {
 	public toFinishQuest(name: string) {
 		const quest = this.questsFactory.getQuest(name)
 
-		if (!quest.checkCompletionRequirements()) {
+		if (!quest.completionRequirements.check()) {
 			throw new Error('Quest cannot be finished: '+name)
 		}
 

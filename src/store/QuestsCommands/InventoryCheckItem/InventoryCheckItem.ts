@@ -1,4 +1,5 @@
 import PlayerInventory from "../../PlayerInventory"
+import {reaction} from "mobx"
 
 interface CommandPayload {
 	itemId: number
@@ -9,12 +10,19 @@ interface CommandContext {
 	inventory?: PlayerInventory
 }
 
-export const inventoryCheckItem = (context: CommandContext, payload: CommandPayload): boolean => {
+export const inventoryCheckItem = (context: CommandContext, payload: CommandPayload, callback: Function): void => {
 	const inventory = context.inventory
 
 	if (!inventory) {
 		throw new Error('Inventory is undefined')
 	}
 
-	return inventory.existsItem(payload.itemId, payload.quantity)
+	const exists = () => inventory.existsItem(payload.itemId, payload.quantity)
+
+	const reactionDisposer = reaction(
+		() => exists(),
+		isExists => {callback(isExists, reactionDisposer)}
+	)
+
+	callback(exists(), reactionDisposer)
 }

@@ -50,7 +50,7 @@ const QuestGroup = observer((props: { group: QuestsGroupStore }) => {
 						</div>
 					)}
 
-					<button onClick={() => quests.toFinishQuest(activeQuest.name)} disabled={!activeQuest.checkCompletionRequirements()}>Complete step</button>
+					<button onClick={() => quests.toFinishQuest(activeQuest.name)} disabled={!activeQuest.completionRequirements.check()}>Complete step</button>
 				</div>
 			)}
 		</div>

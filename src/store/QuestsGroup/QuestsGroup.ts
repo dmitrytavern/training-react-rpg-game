@@ -2,6 +2,7 @@ import { makeAutoObservable } from "mobx"
 
 import Quest from "../Quest"
 import QuestsCommander from "../QuestsCommander"
+import QuestsRequirements from "../QuestsRequirements"
 
 interface QuestsGroupAction {
 	action: string
@@ -26,11 +27,9 @@ export interface QuestsGroupProps {
 }
 
 class QuestsGroup {
-	private readonly commands: QuestsCommander
-
 	public readonly name: string
 	public readonly meta: QuestsGroupMeta
-	public readonly requirements: QuestsGroupAction[]
+	public readonly requirements: QuestsRequirements
 	public readonly quests: Quest[]
 
 	private completed: boolean
@@ -43,13 +42,17 @@ class QuestsGroup {
 		this.name = data.name
 		this.meta = data.meta
 		this.quests = data.quests
-		this.requirements = data.requirements
+
+		this.requirements = new QuestsRequirements({
+			requirements: data.requirements,
+			questsCommander
+		})
 
 		this.completed = false
 		this.active = false
 		this.currentQuestIndex = 0
 
-		this.commands = questsCommander
+		this.requirements.subscribe()
 
 		makeAutoObservable(this)
 	}
@@ -67,12 +70,13 @@ class QuestsGroup {
 	}
 
 	public toActivate() {
-		if (!this.checkRequirements()) {
+		if (!this.requirements.check()) {
 			throw new Error('Cannot activate group: '+this.name)
 		}
 
 		this.active = true
 		this.quests[0].toActivate()
+		this.requirements.unsubscribe()
 	}
 
 	public toFinish() {
@@ -82,15 +86,6 @@ class QuestsGroup {
 
 		this.completed = true
 		this.active = false
-	}
-
-	public checkRequirements(): boolean {
-		for (const {action, payload} of this.requirements) {
-			const result = this.commands.check(action, payload)
-			if (!result) return false
-		}
-
-		return true
 	}
 
 	public checkQuestsCompletion(): boolean {

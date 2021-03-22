@@ -22,8 +22,8 @@ it('Checking base properties', () => {
 
 	expect(quest.isActive()).toBeFalsy()
 	expect(quest.isCompleted()).toBeFalsy()
-	expect(quest.checkRequirements()).toBeTruthy()
-	expect(quest.checkCompletionRequirements()).toBeFalsy()
+	expect(quest.requirements.check()).toBeTruthy()
+	expect(quest.completionRequirements.check()).toBeFalsy()
 })
 
 it('Checking toActivate function', () => {

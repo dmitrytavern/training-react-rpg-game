@@ -2,8 +2,12 @@ import PlayerLevel from "../PlayerLevel"
 import PlayerInventory from "../PlayerInventory"
 import * as QuestsCommands from '../QuestsCommands'
 
-interface Commands<T> {
+interface Actions<T> {
 	[key: string]: (context: QuestsCommanderContext, payload: any) => T
+}
+
+interface Subscribe<T> {
+	[key: string]: (context: QuestsCommanderContext, payload: any, callback: Function) => T
 }
 
 interface QuestsCommanderContext {
@@ -13,15 +17,15 @@ interface QuestsCommanderContext {
 
 class QuestsCommander {
 	private readonly context: QuestsCommanderContext
-	private readonly actions: Commands<void>
-	private readonly checkers: Commands<boolean>
+	private readonly actions: Actions<void>
+	private readonly subscribes: Subscribe<void>
 
 	constructor(props: QuestsCommanderContext) {
 		this.context = props
 		this.actions = {}
-		this.checkers = {}
+		this.subscribes = {}
 		this.initActions()
-		this.initCheckers()
+		this.initSubscribes()
 	}
 
 	private initActions() {
@@ -30,8 +34,8 @@ class QuestsCommander {
 		this.actions['level:add_experience'] = QuestsCommands.levelAddExperience
 	}
 
-	private initCheckers() {
-		this.checkers['inventory:check_item'] = QuestsCommands.inventoryCheckItem
+	public initSubscribes() {
+		this.subscribes['inventory:check_item'] = QuestsCommands.inventoryCheckItem
 	}
 
 	public action(name: string, payload?: any): void {
@@ -44,14 +48,14 @@ class QuestsCommander {
 		action.call(null, this.context, payload)
 	}
 
-	public check(name: string, payload?: any): boolean {
-		const action = this.checkers[name]
+	public subscribe(name: string, payload: any, callback: Function) {
+		const subscribe = this.subscribes[name]
 
-		if (!action) {
-			throw new Error('Not found checker: '+name)
+		if (!subscribe) {
+			throw new Error('Not found subscribes: '+name)
 		}
 
-		return action.call(null, this.context, payload)
+		subscribe.apply(null, [this.context, payload, callback])
 	}
 }
 
