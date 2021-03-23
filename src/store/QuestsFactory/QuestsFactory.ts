@@ -1,72 +1,68 @@
-import * as data from "./data"
-import Quest from "../Quest"
+import data from "./data"
+import Quest, {QuestProps} from "../Quest"
 import QuestsGroup from "../QuestsGroup"
-import QuestsCommander from "../QuestsCommander"
 
 class QuestsFactory {
-	private readonly questsCommander: QuestsCommander
 	private groups: QuestsGroup[]
-	private quests: Quest[]
 
-	constructor(questsCommander: QuestsCommander) {
-		this.questsCommander = questsCommander
-
-		this.quests = this.initQuests()
-		this.groups = this.initQuestGroups()
+	constructor() {
+		this.groups = QuestsFactory.initQuestGroups()
 	}
 
-	private initQuests(): Quest[] {
-		const arr = []
-		for (let questData of data.quests) {
-			const quest = new Quest({
-				data: questData,
-				questsCommander: this.questsCommander
-			})
-			arr.push(quest)
-		}
-		return arr
-	}
-
-	private initQuestGroups(): QuestsGroup[] {
-		const arr = []
-		for (let groupData of data.groups) {
-			const quests = groupData.quests.map((name) => this.getQuest(name))
-
-			const group = new QuestsGroup({
-				data: {
-					...groupData,
-					quests
-				},
-				questsCommander: this.questsCommander
-			})
-			arr.push(group)
-		}
-		return arr
-	}
-
-
-	public getQuest(name: string): Quest {
-		const quest = this.quests.find((quest) => quest.name === name)
-		if (!quest) {
-			throw new Error('Quest not found: '+name)
-		}
-		return quest
-	}
-
-	public getGroup(name: string): QuestsGroup {
-		const group = this.groups.find((group) => group.name === name)
+	public getGroup(id: number): QuestsGroup {
+		const group = this.groups.find((group) => group.id === id)
 		if (!group) {
-			throw new Error('Quest group not found: '+name)
+			throw new Error('Quest group not found: '+id)
 		}
 		return group
 	}
 
 	public getActiveGroups(): QuestsGroup[] {
-		return this.groups.filter((group) => group.isActive())
+		return this.groups.filter((group) => group.getStatus() === 'active')
 	}
 
 	public getCompletedGroups(): QuestsGroup[] {
-		return this.groups.filter((group) => group.isCompleted())
+		return this.groups.filter((group) => group.getStatus() === 'completed')
+	}
+
+	public getDoneGroups(): QuestsGroup[] {
+		return this.groups.filter((group) => group.getStatus() === 'done')
+	}
+
+	public getQuest(groupId: number, questId: number): Quest {
+		const group = this.getGroup(groupId)
+		const quest = group.quests.find((quest) => quest.id === questId)
+
+		if (!quest) {
+			throw new Error('Quest not found!')
+		}
+
+		return quest
+	}
+
+	public existsQuest(groupId: number, questId: number): boolean {
+		const group = this.getGroup(groupId)
+		return !!group.quests.find((quest) => quest.id === questId)
+	}
+
+
+	private static initQuestGroups(): QuestsGroup[] {
+		const arr = []
+		for (let groupData of data) {
+			const quests = QuestsFactory.initQuests(groupData.quests)
+			const group = new QuestsGroup({...groupData, quests})
+			arr.push(group)
+		}
+		return arr
+	}
+
+	private static initQuests(quests: QuestProps[]): Quest[] {
+		const arr = []
+		for (let questData of quests) {
+			const quest = new Quest(questData)
+			arr.push(quest)
+		}
+		return arr
 	}
 }
 

@@ -20,14 +20,17 @@ interface QuestsCommanderContext {
 class QuestsCommander {
 	private readonly context: QuestsCommanderContext
 	private readonly actions: Actions<void>
+	private readonly checkers: Actions<boolean>
 	private readonly subscribes: Subscribe<void>
 
 	constructor(props: QuestsCommanderContext) {
 		this.context = props
 		this.actions = {}
+		this.checkers = {}
 		this.subscribes = {}
 		this.initActions()
 		this.initSubscribes()
+		this.initCheckers()
 	}
 
 	private initActions() {
@@ -36,11 +39,16 @@ class QuestsCommander {
 		this.actions['level:add_experience'] = QuestsCommands.levelAddExperience
 	}
 
-	public initSubscribes() {
-		this.subscribes['inventory:check_item'] = QuestsCommands.inventoryCheckItem
+	private initSubscribes() {
+		this.subscribes['inventory:check_item'] = QuestsCommands.inventorySubscribeCheckItem
 		this.subscribes['balance:check_money_balance'] = QuestsCommands.balanceCheckMoney
 		this.subscribes['balance:check_money_getting'] = QuestsCommands.balanceCheckMoneyGetting
-		this.subscribes['level:check_level'] = QuestsCommands.levelCheckLevel
+		this.subscribes['level:check_level'] = QuestsCommands.levelSubscribeCheckLevel
+	}
+
+	private initCheckers() {
+		this.checkers['inventory:check_item'] = QuestsCommands.inventoryCheckItem
+		this.checkers['level:check_level'] = QuestsCommands.levelCheckLevel
 	}
 
 	public action(name: string, payload?: any): void {
@@ -61,6 +69,16 @@ class QuestsCommander {
 		}
 
 		subscribe.apply(null, [this.context, payload, callback])
+	}
+
+	public check(name: string, payload: any): boolean {
+		const checker = this.checkers[name]
+
+		if (!checker) {
+			throw new Error('Not found checker: '+name)
+		}
+
+		return checker.call(null, this.context, payload)
 	}
 }
 

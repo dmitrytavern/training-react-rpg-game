@@ -1,5 +1,7 @@
 import QuestsFactory from "../QuestsFactory"
 import QuestsCommander from "../QuestsCommander"
+import QuestsRequirements from "../QuestsRequirements"
+import QuestsRewards from "../QuestsRewards"
 import QuestsGroup from "../QuestsGroup"
 import PlayerLevel from "../PlayerLevel"
 import PlayerInventory from "../PlayerInventory"
@@ -13,6 +15,8 @@ interface QuestsProps {
 
 class Quests {
 	private readonly questsFactory: QuestsFactory
+	private readonly questsRequirements: QuestsRequirements
+	private readonly questsRewards: QuestsRewards
 
 	constructor(props: QuestsProps) {
 		const questsCommander = new QuestsCommander({
@@ -21,11 +25,13 @@ class Quests {
 			balance: props.playerBalance,
 		})
 
-		this.questsFactory = new QuestsFactory(questsCommander)
+		this.questsFactory = new QuestsFactory()
+		this.questsRequirements = new QuestsRequirements(questsCommander)
+		this.questsRewards = new QuestsRewards(questsCommander)
 	}
 
-	public getQuestGroup(name: string) {
-		return this.questsFactory.getGroup(name)
+	public getQuestGroup(id: number) {
+		return this.questsFactory.getGroup(id)
 	}
 
 	public getActiveQuestGroups(): QuestsGroup[] {
@@ -36,29 +42,44 @@ class Quests {
 		return this.questsFactory.getCompletedGroups()
 	}
 
-	public toActivateQuestGroup(name: string) {
-		const group = this.questsFactory.getGroup(name)
-
-		if (!group.requirements.check()) {
-			throw new Error('Quest cannot be activated: '+name)
-		}
-
-		group.toActivate()
+	public getDoneQuestGroups(): QuestsGroup[] {
+		return this.questsFactory.getDoneGroups()
 	}
 
-	public toFinishQuest(name: string) {
-		const quest = this.questsFactory.getQuest(name)
+	public checkQuestGroup(id: number): boolean {
+		const quest = this.questsFactory.getQuest(id, 1)
+		return this.questsRequirements.checkRequirements(quest.requirements)
+	}
 
-		if (!quest.completionRequirements.check()) {
-			throw new Error('Quest cannot be finished: '+name)
-		}
 
-		quest.toFinish()
+	public toActivateQuest(groupId: number, questId: number) {
+		const quest = this.questsFactory.getQuest(groupId, questId)
 
-		if (quest.next) {
-			this.questsFactory.getQuest(quest.next).toActivate()
-		} else {
-			this.questsFactory.getGroup(quest.group).toFinish()
+		quest.toActivate()
+
+		const _id = `${groupId}:${quest.id}`
+		const _req = quest.completionRequirements
+		this.questsRequirements.subscribe(_id, _req, (value: boolean) => {
+			if (value) {
+				quest.toComplete()
+			} else {
+				if (quest.getStatus() !== 'active') quest.toActivate()
+			}
+		})
+	}
+
+	public toDoQuest(groupId: number, questId: number) {
+		const quest = this.questsFactory.getQuest(groupId, questId)
+		const nextQuestExists = this.questsFactory.existsQuest(groupId, questId + 1)
+
+		quest.toDo()
+
+		const _id = `${groupId}:${quest.id}`
+		this.questsRequirements.unsubscribe(_id)
+		this.questsRewards.getRewards(quest.rewards)
+
+		if (nextQuestExists) {
+			this.toActivateQuest(groupId, questId + 1)
 		}
 	}
 }

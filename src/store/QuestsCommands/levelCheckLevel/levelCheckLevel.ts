@@ -5,7 +5,17 @@ interface CommandContext {
 	level?: PlayerLevel
 }
 
-export const levelCheckLevel = (context: CommandContext, payload: number, callback: Function): void => {
+export const levelCheckLevel = (context: CommandContext, payload: number): boolean => {
+	const level = context.level
+
+	if (!level) {
+		throw new Error('Inventory is undefined')
+	}
+
+	return level.getLevel() >= payload
+}
+
+export const levelSubscribeCheckLevel = (context: CommandContext, payload: number, callback: Function): void => {
 	const level = context.level
 
 	if (!level) {

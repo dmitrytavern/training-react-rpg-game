@@ -1,2 +1,2 @@
 export { default } from './Quest'
-export type { QuestPropsData } from './Quest'
+export type { QuestProps } from './Quest'

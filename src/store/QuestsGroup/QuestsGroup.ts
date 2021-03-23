@@ -1,114 +1,72 @@
 import { makeAutoObservable, reaction } from "mobx"
 
 import Quest from "../Quest"
-import QuestsCommander from "../QuestsCommander"
-import QuestsRequirements from "../QuestsRequirements"
 
-interface QuestsGroupAction {
-	action: string
-	payload: any
-}
+type QuestsGroupStatus = 'unlocked' | 'active' | 'completed' | 'done'
 
 interface QuestsGroupMeta {
 	title: string,
 	description: string
 }
 
-export interface QuestsGroupData {
-	name: string,
+export interface QuestsGroupProps {
+	id: number,
 	meta: QuestsGroupMeta,
-	requirements: QuestsGroupAction[]
 	quests: Quest[]
 }
 
-export interface QuestsGroupProps {
-	data: QuestsGroupData
-	questsCommander: QuestsCommander
-}
-
 class QuestsGroup {
-	public readonly name: string
+	public readonly id: number
 	public readonly meta: QuestsGroupMeta
-	public readonly requirements: QuestsRequirements
 	public readonly quests: Quest[]
+	private status: QuestsGroupStatus
 
-	private completed: boolean
-	private active: boolean
-
-	constructor(props: QuestsGroupProps) {
-		const { data, questsCommander } = props
-
-		this.name = data.name
+	constructor(data: QuestsGroupProps) {
+		this.id = data.id
 		this.meta = data.meta
 		this.quests = data.quests
+		this.status = "unlocked"
 
-		this.requirements = new QuestsRequirements({
-			requirements: data.requirements,
-			questsCommander
-		})
-
-		this.completed = false
-		this.active = false
-
-		this.requirements.subscribe()
-
-		this.initLastQuestReaction()
-
+		this.initReactions()
 		makeAutoObservable(this)
 	}
 
-	private initLastQuestReaction() {
-		const lastQuest = this.quests[this.quests.length - 1]
-		if (!lastQuest.autocomplete) return
+	private initReactions() {
+		const quests = this.quests
 
-		const disposer = reaction(
-			() => lastQuest.isCompleted(),
-			(isCompleted) => {
-				if (isCompleted) {
-					this.toFinish()
-					disposer()
+		const disposerFirstQuest = reaction(
+			() => quests[0].getStatus() === 'active',
+			(result) => {
+				if (result) {
+					this.setStatus('active')
+					disposerFirstQuest()
+				}
+			}
+		)
+
+		const disposerLastQuest = reaction(
+			() => quests[quests.length-1].getStatus(),
+			(result) => {
+				if (result === 'active') this.setStatus('active')
+				if (result === 'completed') this.setStatus('completed')
+				if (result === 'done') {
+					this.setStatus('done')
+					disposerLastQuest()
 				}
 			}
 		)
 	}
 
+	private setStatus(name: QuestsGroupStatus) {
+		this.status = name
+	}
+
+	public getStatus(): string {
+		return this.status
+	}
+
 	public getActiveQuest(): Quest | undefined {
-		return this.quests.find((x) => x.isActive())
-	}
-
-	public isCompleted(): boolean {
-		return this.completed
-	}
-
-	public isActive(): boolean {
-		return this.active
-	}
-
-	public toActivate() {
-		if (!this.requirements.check()) {
-			throw new Error('Cannot activate group: '+this.name)
-		}
-
-		this.active = true
-		this.quests[0].toActivate()
-		this.requirements.unsubscribe()
-	}
-
-	public toFinish() {
-		if (!this.checkQuestsCompletion()) {
-			throw new Error('Cannot finish group: '+this.name)
-		}
-
-		this.completed = true
-		this.active = false
-	}
-
-	public checkQuestsCompletion(): boolean {
-		for (const quest of this.quests) {
-			if (!quest.isCompleted()) return false
-		}
-
-		return true
+		return this.quests.find((x) => x.getStatus() === 'active' || x.getStatus() === 'completed')
 	}
 }
 

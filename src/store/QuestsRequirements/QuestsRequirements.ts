@@ -7,90 +7,72 @@ interface QuestAction {
 	payload: any
 }
 
-interface QuestRequirementsProps {
-	requirements: QuestAction[]
-	questsCommander: QuestsCommander
-	autocomplete?: boolean
-	autocompleteFunction?: Function
+interface QuestsRequirementsData {
+	[key: string]: {
+		values: boolean[]
+		disposers: IReactionDisposer[]
+	}
 }
 
 class QuestsRequirements {
-	public readonly requirements: QuestAction[]
-
 	private readonly commands: QuestsCommander
-	private reactionDisposers: IReactionDisposer[]
-	private requirementsState: boolean[]
+	private readonly data: QuestsRequirementsData
 
-	private readonly autocomplete: boolean
-	private readonly autocompleteFunction?: Function
-	private canBeFinished: boolean
-	private subscribed: boolean
-
-	constructor(props: QuestRequirementsProps) {
-		this.commands = props.questsCommander
-		this.requirements = props.requirements
-		this.reactionDisposers = []
-		this.requirementsState = []
-
-		this.autocomplete = props.autocomplete || false
-		this.autocompleteFunction = props.autocompleteFunction
-		this.canBeFinished = false
-		this.subscribed = false
+	constructor(questsCommander: QuestsCommander) {
+		this.commands = questsCommander
+		this.data = {}
 
 		makeAutoObservable(this)
 	}
 
-	public check(): boolean {
-		return this.canBeFinished
-	}
+	public subscribe(name: string, requirements: QuestAction[], callback: Function) {
+		this.data[name] = {
+			values: [],
+			disposers: []
+		}
 
-	public isSubscribed(): boolean {
-		return this.subscribed
-	}
+		const data = this.data[name]
+		for (let i = 0; i < requirements.length; i++) {
+			const {action, payload} = requirements[i]
 
-	public subscribe() {
-		if (this.subscribed) throw new Error('Already subscribed!')
-
-		for (let i = 0; i < this.requirements.length; i++) {
-			const {action, payload} = this.requirements[i]
-
-			this.requirementsState.push(false)
+			data.values.push(false)
 
 			this.commands.subscribe(action, payload, (value: boolean, disposer: IReactionDisposer) => {
-				this.requirementsState.splice(i, 1, value)
-				this.reactionDisposers.splice(i, 1, disposer)
-				this._check()
+				data.values.splice(i, 1, value)
+				data.disposers.splice(i, 1, disposer)
+				callback(this.check(name))
 			})
 		}
 
-		if (this.requirementsState.length === 0) this._check()
-		this.subscribed = true
+		if (data.values.length === 0) callback(true)
 	}
 
-	public unsubscribe() {
-		if (!this.subscribed) throw new Error('Not subscribe!')
-
-		this.reactionDisposers.map((disposer) => disposer())
-
-		this.subscribed = false
-		this.canBeFinished = false
-		this.requirementsState = []
-		this.reactionDisposers = []
+	public unsubscribe(name: string) {
+		this.data[name].disposers.map((disposer) => disposer())
+		delete this.data[name]
 	}
 
-	private _check() {
-		for (let value of this.requirementsState) {
-			if (!value) return this.canBeFinished = false
+	public checkRequirements(requirements: QuestAction[]): boolean {
+		for (let i = 0; i < requirements.length; i++) {
+			const {action, payload} = requirements[i]
+			const res = this.commands.check(action, payload)
+			if (!res) return false
+		}
+		return true
+	}
+
+	private check(name: string): boolean {
+		const data = this.data[name]
+
+		if (!data) {
+			throw new Error('Data not found: '+name)
 		}
 
-		this.canBeFinished = true
-		if (this.autocomplete) {
-			if (this.autocompleteFunction) {
-				this.autocompleteFunction()
-			} else {
-				throw new Error('Autocomplete function is undefined')
-			}
+		const arr = data.values
+		for (let i = 0; i < arr.length; i++) {
+			if (!arr[i]) return false
 		}
+		return true
 	}
 }
 

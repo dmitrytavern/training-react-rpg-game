@@ -36,3 +36,19 @@ it('Checking subscribe function with default value', () => {
 		disposer()
 	})
 })
+
+it('Checking checker function', () => {
+	const inventory = new PlayerInventory()
+	const commander = new QuestsCommander({inventory})
+	const data = {itemId: 1, quantity: 1}
+
+	expect(commander.check('inventory:check_item', data)).toBeFalsy()
+
+	inventory.addItem(1, 1)
+
+	expect(commander.check('inventory:check_item', data)).toBeTruthy()
+
+	inventory.addItem(1, 1)
+
+	expect(commander.check('inventory:check_item', data)).toBeTruthy()
+})

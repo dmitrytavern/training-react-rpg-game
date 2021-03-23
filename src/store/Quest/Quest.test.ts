@@ -1,54 +1,47 @@
-import PlayerLevel from "../PlayerLevel"
-import PlayerInventory from "../PlayerInventory"
-import QuestsCommander from "../QuestsCommander"
 import Quest from "./Quest"
 
-import * as data from '../QuestsFactory/data'
-
-const inventory = new PlayerInventory()
-const level = new PlayerLevel(1, 0)
-const questsCommander = new QuestsCommander({
-	inventory,
-	level
-})
+import data from '../QuestsFactory/data'
 
 const questData = {
-	...data.quests[0],
+	...data[0].quests[0],
 	requirements: []
 }
 
 it('Checking base properties', () => {
-	const quest = new Quest({questsCommander, data: questData})
+	const quest = new Quest(questData)
 
-	expect(quest.isActive()).toBeFalsy()
-	expect(quest.isCompleted()).toBeFalsy()
-	expect(quest.requirements.check()).toBeTruthy()
-	expect(quest.completionRequirements.check()).toBeFalsy()
+	expect(quest.getStatus() === 'unlocked').toBeTruthy()
+	expect(quest.getStatus() === 'active').toBeFalsy()
+	expect(quest.getStatus() === 'completed').toBeFalsy()
+	expect(quest.getStatus() === 'done').toBeFalsy()
 })
 
 it('Checking toActivate function', () => {
-	const quest = new Quest({questsCommander, data: questData})
+	const quest = new Quest(questData)
 
-	expect(quest.isActive()).toBeFalsy()
+	expect(quest.getStatus() === 'active').toBeFalsy()
 
 	quest.toActivate()
 
-	expect(quest.isActive()).toBeTruthy()
+	expect(quest.getStatus() === 'active').toBeTruthy()
 })
 
-it('Checking toFinish function', () => {
-	const quest = new Quest({questsCommander, data: questData})
+it('Checking toComplete function', () => {
+	const quest = new Quest(questData)
 
-	expect(() => quest.toFinish()).toThrow()
+	expect(quest.getStatus() === 'completed').toBeFalsy()
 
-	quest.toActivate()
+	quest.toComplete()
 
-	expect(() => quest.toFinish()).toThrow()
+	expect(quest.getStatus() === 'completed').toBeTruthy()
+})
 
-	inventory.addItem(1, 1)
+it('Checking toDo function', () => {
+	const quest = new Quest(questData)
 
-	quest.toFinish()
+	expect(quest.getStatus() === 'done').toBeFalsy()
 
-	expect(quest.isActive()).toBeFalsy()
-	expect(quest.isCompleted()).toBeTruthy()
+	quest.toDo()
+
+	expect(quest.getStatus() === 'done').toBeTruthy()
 })

@@ -10,7 +10,17 @@ interface CommandContext {
 	inventory?: PlayerInventory
 }
 
-export const inventoryCheckItem = (context: CommandContext, payload: CommandPayload, callback: Function): void => {
+export const inventoryCheckItem = (context: CommandContext, payload: CommandPayload): boolean => {
+	const inventory = context.inventory
+
+	if (!inventory) {
+		throw new Error('Inventory is undefined')
+	}
+
+	return inventory.existsItem(payload.itemId, payload.quantity)
+}
+
+export const inventorySubscribeCheckItem = (context: CommandContext, payload: CommandPayload, callback: Function): void => {
 	const inventory = context.inventory
 
 	if (!inventory) {

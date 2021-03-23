@@ -1,1 +1,1 @@
-export { levelCheckLevel } from './levelCheckLevel'
+export { levelCheckLevel, levelSubscribeCheckLevel } from './levelCheckLevel'
