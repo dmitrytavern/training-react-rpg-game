@@ -1,1 +1,0 @@
-export { checkMoneyGetting } from './checkMoneyGetting'

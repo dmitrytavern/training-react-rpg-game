@@ -8,12 +8,6 @@ export const actions = {
 	...Level.actions
 }
 
-export const subscribes = {
-	...Balance.subscribes,
-	...Inventory.subscribes,
-	...Level.subscribes
-}
-
 export const checkers = {
 	...Balance.checkers,
 	...Inventory.checkers,

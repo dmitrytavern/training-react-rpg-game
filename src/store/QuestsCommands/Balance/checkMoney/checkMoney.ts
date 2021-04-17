@@ -1,23 +1,15 @@
-import {reaction} from "mobx"
 import PlayerBalance from "../../../PlayerBalance"
 
 interface CommandContext {
 	balance?: PlayerBalance
 }
 
-export const checkMoney = (context: CommandContext, payload: number, callback: Function) => {
+export const checkMoney = (context: CommandContext, payload: number) => {
 	const balance = context.balance
 
 	if (!balance) {
 		throw new Error('Inventory is undefined')
 	}
 
-	const money = () => balance.money.getMoneyInCoppers() >= payload
-
-	const reactionDisposer = reaction(
-		() => money(),
-		isExists => {callback(isExists, reactionDisposer)}
-	)
-
-	callback(money(), reactionDisposer)
+	return balance.money.getMoneyInCoppers() >= payload
 }

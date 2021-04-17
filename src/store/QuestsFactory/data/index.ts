@@ -54,17 +54,7 @@ const groups: QuestsGroup[] = [
 				requirements: [{action: 'level:check_level', payload: 51}],
 				completionRequirements: [{action: 'balance:check_money_balance', payload: 1}],
 				rewards: []
-			},
-			{
-				id: 2,
-				meta: {
-					title: 'Get 1 copper',
-					description: 'You need get copper. You should learn, how getting money'
-				},
-				requirements: [],
-				completionRequirements: [{action: 'balance:check_money_getting', payload: 1}],
-				rewards: []
-			},
+			}
 		]
 	}
 ]

@@ -1,1 +1,1 @@
-export { checkItem, subscribeCheckItem } from './checkItem'
+export { checkItem } from './checkItem'

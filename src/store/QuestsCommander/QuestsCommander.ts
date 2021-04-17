@@ -1,3 +1,4 @@
+import { reaction } from "mobx"
 import PlayerLevel from "../PlayerLevel"
 import PlayerInventory from "../PlayerInventory"
 import PlayerBalance from "../PlayerBalance"
@@ -5,10 +6,6 @@ import * as QuestsCommands from '../QuestsCommands'
 
 interface Actions<T> {
 	[key: string]: (context: QuestsCommanderContext, payload: any) => T
-}
-
-interface Subscribe<T> {
-	[key: string]: (context: QuestsCommanderContext, payload: any, callback: Function) => T
 }
 
 interface QuestsCommanderContext {
@@ -21,13 +18,11 @@ class QuestsCommander {
 	private readonly context: QuestsCommanderContext
 	private readonly actions: Actions<void>
 	private readonly checkers: Actions<boolean>
-	private readonly subscribes: Subscribe<void>
 
 	constructor(props: QuestsCommanderContext) {
 		this.context = props
 		this.actions = QuestsCommands.actions
 		this.checkers = QuestsCommands.checkers
-		this.subscribes = QuestsCommands.subscribes
 	}
 
 	public action(name: string, payload?: any): void {
@@ -41,13 +36,14 @@ class QuestsCommander {
 	}
 
 	public subscribe(name: string, payload: any, callback: Function) {
-		const subscribe = this.subscribes[name]
+		const fn = () => this.check(name, payload)
 
-		if (!subscribe) {
-			throw new Error('Not found subscribes: '+name)
-		}
+		const reactionDisposer = reaction(
+			() => fn(),
+			isExists => {callback(isExists, reactionDisposer)}
+		)
 
-		subscribe.apply(null, [this.context, payload, callback])
+		callback(fn(), reactionDisposer)
 	}
 
 	public check(name: string, payload: any): boolean {
