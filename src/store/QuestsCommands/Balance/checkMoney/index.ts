@@ -1,0 +1,1 @@
+export { checkMoney } from './checkMoney'

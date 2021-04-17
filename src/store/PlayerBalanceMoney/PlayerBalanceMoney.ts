@@ -15,6 +15,10 @@ class PlayerBalanceMoney {
 		makeAutoObservable(this)
 	}
 
+	public getMoneyInCoppers(): number {
+		return this.money
+	}
+
 	public getMoney(): Money {
 		let gold = 0
 		let silver = 0
