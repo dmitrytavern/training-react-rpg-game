@@ -1,4 +1,4 @@
-import PlayerInventory from "../../PlayerInventory"
+import PlayerInventory from "../../../PlayerInventory"
 
 interface CommandPayload {
 	itemId: number
@@ -9,12 +9,12 @@ interface CommandContext {
 	inventory?: PlayerInventory
 }
 
-export const inventoryRemoveItem = (context: CommandContext, payload: CommandPayload) => {
+export const addItem = (context: CommandContext, payload: CommandPayload) => {
 	const inventory = context.inventory
 
 	if (!inventory) {
 		throw new Error('Inventory is undefined')
 	}
 
-	inventory.removeItem(payload.itemId, payload.quantity)
+	inventory.addItem(payload.itemId, payload.quantity)
 }

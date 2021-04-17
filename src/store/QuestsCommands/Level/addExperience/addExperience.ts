@@ -1,10 +1,10 @@
-import PlayerLevel from "../../PlayerLevel"
+import PlayerLevel from "../../../PlayerLevel"
 
 interface CommandContext {
 	level?: PlayerLevel
 }
 
-export const levelAddExperience = (context: CommandContext, payload: number) => {
+export const addExperience = (context: CommandContext, payload: number) => {
 	const level = context.level
 
 	if (!level) {

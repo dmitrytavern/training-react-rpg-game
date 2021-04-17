@@ -25,30 +25,9 @@ class QuestsCommander {
 
 	constructor(props: QuestsCommanderContext) {
 		this.context = props
-		this.actions = {}
-		this.checkers = {}
-		this.subscribes = {}
-		this.initActions()
-		this.initSubscribes()
-		this.initCheckers()
-	}
-
-	private initActions() {
-		this.actions['inventory:add_item'] = QuestsCommands.inventoryAddItem
-		this.actions['inventory:remove_item'] = QuestsCommands.inventoryRemoveItem
-		this.actions['level:add_experience'] = QuestsCommands.levelAddExperience
-	}
-
-	private initSubscribes() {
-		this.subscribes['inventory:check_item'] = QuestsCommands.inventorySubscribeCheckItem
-		this.subscribes['balance:check_money_balance'] = QuestsCommands.balanceCheckMoney
-		this.subscribes['balance:check_money_getting'] = QuestsCommands.balanceCheckMoneyGetting
-		this.subscribes['level:check_level'] = QuestsCommands.levelSubscribeCheckLevel
-	}
-
-	private initCheckers() {
-		this.checkers['inventory:check_item'] = QuestsCommands.inventoryCheckItem
-		this.checkers['level:check_level'] = QuestsCommands.levelCheckLevel
+		this.actions = QuestsCommands.actions
+		this.checkers = QuestsCommands.checkers
+		this.subscribes = QuestsCommands.subscribes
 	}
 
 	public action(name: string, payload?: any): void {

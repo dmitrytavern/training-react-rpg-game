@@ -1,11 +1,11 @@
-import PlayerLevel from "../../PlayerLevel"
+import PlayerLevel from "../../../PlayerLevel"
 import {reaction} from "mobx"
 
 interface CommandContext {
 	level?: PlayerLevel
 }
 
-export const levelCheckLevel = (context: CommandContext, payload: number): boolean => {
+export const checkLevel = (context: CommandContext, payload: number): boolean => {
 	const level = context.level
 
 	if (!level) {
@@ -15,7 +15,7 @@ export const levelCheckLevel = (context: CommandContext, payload: number): boole
 	return level.getLevel() >= payload
 }
 
-export const levelSubscribeCheckLevel = (context: CommandContext, payload: number, callback: Function): void => {
+export const subscribeCheckLevel = (context: CommandContext, payload: number, callback: Function): void => {
 	const level = context.level
 
 	if (!level) {

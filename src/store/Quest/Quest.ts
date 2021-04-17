@@ -55,7 +55,7 @@ class Quest {
 
 	public toComplete() {
 		if (this.getStatus() === 'completed') {
-			throw new Error('Quest already done: '+this.id)
+			throw new Error('Quest already completed: '+this.id)
 		}
 
 		this.status = 'completed'

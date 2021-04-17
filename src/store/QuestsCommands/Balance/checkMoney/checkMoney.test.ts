@@ -1,10 +1,10 @@
-import PlayerBalance from "../../PlayerBalance"
-import {balanceCheckMoney} from "./balanceCheckMoney"
+import PlayerBalance from "../../../PlayerBalance"
+import { checkMoney } from "./checkMoney"
 
 it('Checking subscribe function', () => {
 	const balance = new PlayerBalance({money: 0})
 
-	balanceCheckMoney({balance}, 1, (value: boolean, disposer: Function) => {
+	checkMoney({balance}, 1, (value: boolean, disposer: Function) => {
 		expect(value).toBeFalsy()
 		disposer()
 	})
@@ -15,7 +15,7 @@ it('Checking subscribe function with default value', () => {
 
 	balance.money.incrementMoney(1)
 
-	balanceCheckMoney({balance}, 1, (value: boolean, disposer: Function) => {
+	checkMoney({balance}, 1, (value: boolean, disposer: Function) => {
 		expect(value).toBeTruthy()
 		disposer()
 	})

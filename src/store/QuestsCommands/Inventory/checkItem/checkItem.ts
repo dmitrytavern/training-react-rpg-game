@@ -1,4 +1,4 @@
-import PlayerInventory from "../../PlayerInventory"
+import PlayerInventory from "../../../PlayerInventory"
 import {reaction} from "mobx"
 
 interface CommandPayload {
@@ -10,7 +10,7 @@ interface CommandContext {
 	inventory?: PlayerInventory
 }
 
-export const inventoryCheckItem = (context: CommandContext, payload: CommandPayload): boolean => {
+export const checkItem = (context: CommandContext, payload: CommandPayload): boolean => {
 	const inventory = context.inventory
 
 	if (!inventory) {
@@ -20,7 +20,7 @@ export const inventoryCheckItem = (context: CommandContext, payload: CommandPayl
 	return inventory.existsItem(payload.itemId, payload.quantity)
 }
 
-export const inventorySubscribeCheckItem = (context: CommandContext, payload: CommandPayload, callback: Function): void => {
+export const subscribeCheckItem = (context: CommandContext, payload: CommandPayload, callback: Function): void => {
 	const inventory = context.inventory
 
 	if (!inventory) {

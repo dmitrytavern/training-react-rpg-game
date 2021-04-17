@@ -1,0 +1,1 @@
+export { checkMoneyGetting } from './checkMoneyGetting'

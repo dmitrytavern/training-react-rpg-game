@@ -1,11 +1,11 @@
 import {reaction} from "mobx"
-import PlayerBalance from "../../PlayerBalance"
+import PlayerBalance from "../../../PlayerBalance"
 
 interface CommandContext {
 	balance?: PlayerBalance
 }
 
-export const balanceCheckMoney = (context: CommandContext, payload: number, callback: Function) => {
+export const checkMoney = (context: CommandContext, payload: number, callback: Function) => {
 	const balance = context.balance
 
 	if (!balance) {
