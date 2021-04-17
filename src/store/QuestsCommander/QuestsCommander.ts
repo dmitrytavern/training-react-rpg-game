@@ -25,7 +25,12 @@ class QuestsCommander {
   }
 
   public subscribe(name: string, payload: any, callback: Function) {
+    const checker = this.checkers[name]
     const fn = () => this.check(name, payload)
+
+    if (!checker) {
+      throw new Error('Not found checker: ' + name)
+    }
 
     const reactionDisposer = reaction(
       () => fn(),
