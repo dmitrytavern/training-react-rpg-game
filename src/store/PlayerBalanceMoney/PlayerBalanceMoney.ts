@@ -2,49 +2,49 @@ import { makeAutoObservable } from 'mobx'
 import { Money } from './types'
 
 class PlayerBalanceMoney {
-	private money: number
+  private money: number
 
-	constructor(startValue: number) {
-		this.money = startValue
+  constructor(startValue: number) {
+    this.money = startValue
 
-		makeAutoObservable(this)
-	}
+    makeAutoObservable(this)
+  }
 
-	public getMoneyInCoppers(): number {
-		return this.money
-	}
+  public getMoneyInCoppers(): number {
+    return this.money
+  }
 
-	public getMoney(): Money {
-		let gold = 0
-		let silver = 0
-		let copper = this.money
+  public getMoney(): Money {
+    let gold = 0
+    let silver = 0
+    let copper = this.money
 
-		while (copper >= 100) {
-			copper -= 100
-			silver++
+    while (copper >= 100) {
+      copper -= 100
+      silver++
 
-			if (silver >= 100) {
-				silver -= 100
-				gold++
-			}
-		}
+      if (silver >= 100) {
+        silver -= 100
+        gold++
+      }
+    }
 
-		return {
-			gold,
-			silver,
-			copper
-		}
-	}
+    return {
+      gold,
+      silver,
+      copper,
+    }
+  }
 
-	public incrementMoney(count: number) {
-		this.money += count
-	}
+  public incrementMoney(count: number) {
+    this.money += count
+  }
 
-	public decrementMoney(count: number) {
-		let _val = this.money - count
-		if (_val < 0) _val = 0
-		this.money = _val
-	}
+  public decrementMoney(count: number) {
+    let _val = this.money - count
+    if (_val < 0) _val = 0
+    this.money = _val
+  }
 }
 
 export default PlayerBalanceMoney

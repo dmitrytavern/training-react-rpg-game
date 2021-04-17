@@ -1,72 +1,69 @@
-import { makeAutoObservable, IReactionDisposer } from "mobx"
+import { makeAutoObservable, IReactionDisposer } from 'mobx'
 
-import QuestsCommander from "../QuestsCommander"
+import QuestsCommander from '../QuestsCommander'
 
-import {
-	QuestAction,
-	QuestsRequirementsData
-} from './types'
+import { QuestAction, QuestsRequirementsData } from './types'
 
 class QuestsRequirements {
-	private readonly commands: QuestsCommander
-	private readonly data: QuestsRequirementsData
+  private readonly commands: QuestsCommander
+  private readonly data: QuestsRequirementsData
 
-	constructor(questsCommander: QuestsCommander) {
-		this.commands = questsCommander
-		this.data = {}
+  constructor(questsCommander: QuestsCommander) {
+    this.commands = questsCommander
+    this.data = {}
 
-		makeAutoObservable(this)
-	}
+    makeAutoObservable(this)
+  }
 
-	public subscribe(name: string, requirements: QuestAction[], callback: Function) {
-		this.data[name] = {
-			values: [],
-			disposers: []
-		}
+  public subscribe(name: string, requirements: QuestAction[], callback: Function) {
+    this.data[name] = {
+      values: [],
+      disposers: [],
+    }
 
-		const data = this.data[name]
-		for (let i = 0; i < requirements.length; i++) {
-			const {action, payload} = requirements[i]
+    const data = this.data[name]
+    for (let i = 0; i < requirements.length; i++) {
+      const { action, payload } = requirements[i]
 
-			data.values.push(false)
+      data.values.push(false)
 
-			this.commands.subscribe(action, payload, (value: boolean, disposer: IReactionDisposer) => {
-				data.values.splice(i, 1, value)
-				data.disposers.splice(i, 1, disposer)
-				callback(this.check(name))
-			})
-		}
+      this.commands.subscribe(action, payload, (value: boolean, disposer: IReactionDisposer) => {
+        data.values.splice(i, 1, value)
+        data.disposers.splice(i, 1, disposer)
+        callback(this.check(name))
+      })
+    }
 
-		if (data.values.length === 0) callback(true)
-	}
+    if (data.values.length === 0) callback(true)
+  }
 
-	public unsubscribe(name: string) {
-		this.data[name].disposers.map((disposer) => disposer())
-		delete this.data[name]
-	}
+  public unsubscribe(name: string) {
+    this.data[name].disposers.map((disposer) => disposer())
+    delete this.data[name]
+  }
 
-	public checkRequirements(requirements: QuestAction[]): boolean {
-		for (let i = 0; i < requirements.length; i++) {
-			const {action, payload} = requirements[i]
-			const res = this.commands.check(action, payload)
-			if (!res) return false
-		}
-		return true
-	}
+  public checkRequirements(requirements: QuestAction[]): boolean {
+    for (let i = 0; i < requirements.length; i++) {
+      const { action, payload } = requirements[i]
+      const res = this.commands.check(action, payload)
+      if (!res) return false
+    }
+    return true
+  }
 
-	private check(name: string): boolean {
-		const data = this.data[name]
+  private check(name: string): boolean {
+    const data = this.data[name]
 
-		if (!data) {
-			throw new Error('Data not found: '+name)
-		}
+    if (!data) {
+      throw new Error('Data not found: ' + name)
+    }
 
-		const arr = data.values
-		for (let i = 0; i < arr.length; i++) {
-			if (!arr[i]) return false
-		}
-		return true
-	}
+    const arr = data.values
+    for (let i = 0; i < arr.length; i++) {
+      if (!arr[i]) return false
+    }
+    return true
+  }
 }
 
 export default QuestsRequirements

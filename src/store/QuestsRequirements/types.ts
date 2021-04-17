@@ -1,13 +1,13 @@
-import {IReactionDisposer} from "mobx"
+import { IReactionDisposer } from 'mobx'
 
 export interface QuestAction {
-	action: string
-	payload: any
+  action: string
+  payload: any
 }
 
 export interface QuestsRequirementsData {
-	[key: string]: {
-		values: boolean[]
-		disposers: IReactionDisposer[]
-	}
+  [key: string]: {
+    values: boolean[]
+    disposers: IReactionDisposer[]
+  }
 }

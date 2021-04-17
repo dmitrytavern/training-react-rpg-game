@@ -3,6 +3,7 @@
 Main class. Contains player's parameters and mechanics.
 
 ### Parameters:
+
 - Level
 - Health
 - Energy
@@ -10,6 +11,7 @@ Main class. Contains player's parameters and mechanics.
 - Defense
 
 ### Mechanics:
+
 - Balance
 - Favorites
 - Inventory

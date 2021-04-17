@@ -1,12 +1,12 @@
-import PlayerBalanceMoney from "../PlayerBalanceMoney"
+import PlayerBalanceMoney from '../PlayerBalanceMoney'
 import { PlayerBalanceProps } from './types'
 
 class PlayerBalance {
-	public money: PlayerBalanceMoney
+  public money: PlayerBalanceMoney
 
-	constructor(props: PlayerBalanceProps) {
-		this.money = new PlayerBalanceMoney(props.money)
-	}
+  constructor(props: PlayerBalanceProps) {
+    this.money = new PlayerBalanceMoney(props.money)
+  }
 }
 
 export default PlayerBalance

@@ -3,11 +3,11 @@ export type PlayerLevelFunction = () => number
 
 export type ComputedNames = keyof ComputedFunctions
 export type ComputedFunctions = {
-	level: PlayerLevelFunction
+  level: PlayerLevelFunction
 }
 
 export interface Characteristics {
-	strength: number
-	endurance: number
-	intelligence: number
+  strength: number
+  endurance: number
+  intelligence: number
 }

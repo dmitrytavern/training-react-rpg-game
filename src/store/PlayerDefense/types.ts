@@ -5,7 +5,7 @@ export type StrengthFunction = () => number
 
 export type ComputedNames = keyof ComputedFunctions
 export type ComputedFunctions = {
-	level: PlayerLevelFunction
-	effects: EffectsFunction
-	strength: StrengthFunction
+  level: PlayerLevelFunction
+  effects: EffectsFunction
+  strength: StrengthFunction
 }

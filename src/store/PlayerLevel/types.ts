@@ -3,5 +3,5 @@ export type IntelligenceFunction = () => number
 
 export type ComputedNames = keyof ComputedFunctions
 export type ComputedFunctions = {
-	intelligence: IntelligenceFunction
+  intelligence: IntelligenceFunction
 }

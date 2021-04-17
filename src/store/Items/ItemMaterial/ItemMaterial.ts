@@ -1,9 +1,7 @@
-import Item, {ItemProps} from "../Item"
+import Item, { ItemProps } from '../Item'
 
-export interface ItemMaterialProps extends ItemProps {
-}
+export interface ItemMaterialProps extends ItemProps {}
 
-class ItemMaterial extends Item {
-}
+class ItemMaterial extends Item {}
 
 export default ItemMaterial

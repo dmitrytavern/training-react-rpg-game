@@ -1,4 +1,4 @@
 export interface QuestAction {
-	action: string
-	payload: any
+  action: string
+  payload: any
 }

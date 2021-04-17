@@ -1,8 +1,7 @@
-import { checkMoney } from "./checkMoney"
+import { checkMoney } from './checkMoney'
 
-export const actions = {
-}
+export const actions = {}
 
 export const checkers = {
-	'balance:check_money_balance': checkMoney,
+  'balance:check_money_balance': checkMoney,
 }

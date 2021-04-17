@@ -1,4 +1,4 @@
-import {ItemProps} from "../../Items/Item"
+import { ItemProps } from '../../Items/Item'
 
 import Weapon from './Weapons'
 import Armors from './Armors'
@@ -7,13 +7,6 @@ import Materials from './Materials'
 import Tools from './Tools'
 import Trash from './Trash'
 
-const data: ItemProps[] = [
-	...Weapon,
-	...Armors,
-	...Potions,
-	...Materials,
-	...Tools,
-	...Trash
-]
+const data: ItemProps[] = [...Weapon, ...Armors, ...Potions, ...Materials, ...Tools, ...Trash]
 
 export default data

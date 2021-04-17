@@ -1,15 +1,15 @@
-import PlayerBalance from "../../../PlayerBalance"
+import PlayerBalance from '../../../PlayerBalance'
 
 interface CommandContext {
-	balance?: PlayerBalance
+  balance?: PlayerBalance
 }
 
 export const checkMoney = (context: CommandContext, payload: number) => {
-	const balance = context.balance
+  const balance = context.balance
 
-	if (!balance) {
-		throw new Error('Inventory is undefined')
-	}
+  if (!balance) {
+    throw new Error('Inventory is undefined')
+  }
 
-	return balance.money.getMoneyInCoppers() >= payload
+  return balance.money.getMoneyInCoppers() >= payload
 }

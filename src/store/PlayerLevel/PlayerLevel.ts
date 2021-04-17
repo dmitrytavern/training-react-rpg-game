@@ -1,77 +1,74 @@
-import {makeAutoObservable} from 'mobx'
-import {
-	ComputedProperties,
-	IntelligenceFunction,
-	ComputedNames,
-	ComputedFunctions
-} from './types'
+import { makeAutoObservable } from 'mobx'
+import { ComputedProperties, IntelligenceFunction, ComputedNames, ComputedFunctions } from './types'
 
 class PlayerLevel {
-	private level: number
-	private experience: number
-	private experienceForLevelUp: number
-	private getIntelligenceCharacteristic: IntelligenceFunction
+  private level: number
+  private experience: number
+  private experienceForLevelUp: number
+  private getIntelligenceCharacteristic: IntelligenceFunction
 
-	constructor(startLevel: number, startExp: number) {
-		this.level = startLevel
-		this.experience = startExp
-		this.experienceForLevelUp = this._calcExperienceForLevelUp()
-		this.getIntelligenceCharacteristic = () => 1
+  constructor(startLevel: number, startExp: number) {
+    this.level = startLevel
+    this.experience = startExp
+    this.experienceForLevelUp = this._calcExperienceForLevelUp()
+    this.getIntelligenceCharacteristic = () => 1
 
-		this.floatExperience()
+    this.floatExperience()
 
-		makeAutoObservable<PlayerLevel, ComputedProperties>(this, {
-			getIntelligenceCharacteristic: false
-		})
-	}
+    makeAutoObservable<PlayerLevel, ComputedProperties>(this, {
+      getIntelligenceCharacteristic: false,
+    })
+  }
 
-	public setComputedFunction(name: ComputedNames, computed: ComputedFunctions[ComputedNames]) {
-		if (typeof computed !== 'function') return
-		switch (name) {
-			case "intelligence": this.getIntelligenceCharacteristic = computed; break;
-		}
-	}
+  public setComputedFunction(name: ComputedNames, computed: ComputedFunctions[ComputedNames]) {
+    if (typeof computed !== 'function') return
+    switch (name) {
+      case 'intelligence':
+        this.getIntelligenceCharacteristic = computed
+        break
+    }
+  }
 
-	public getLevel(): number {
-		return this.level
-	}
+  public getLevel(): number {
+    return this.level
+  }
 
-	public getExperience(): number {
-		return this.experience
-	}
+  public getExperience(): number {
+    return this.experience
+  }
 
-	public getExperienceForLevelUp(): number {
-		return this.experienceForLevelUp
-	}
+  public getExperienceForLevelUp(): number {
+    return this.experienceForLevelUp
+  }
 
-	public addExperience(exp: number): void {
-		this.experience += exp
-	}
+  public addExperience(exp: number): void {
+    this.experience += exp
+  }
 
-	public calculateExperience(exp: number): number {
-		const percent = this.getIntelligenceCharacteristic() * 5
+  public calculateExperience(exp: number): number {
+    const percent = this.getIntelligenceCharacteristic() * 5
 
-		return exp + (exp / 100 * percent)
-	}
+    return exp + (exp / 100) * percent
+  }
 
-	public floatExperience(): void {
-		while (this.experience >= this.experienceForLevelUp) {
-			this._toLevelUp()
-		}
-	}
+  public floatExperience(): void {
+    while (this.experience >= this.experienceForLevelUp) {
+      this._toLevelUp()
+    }
+  }
 
+  private _toLevelUp(): void {
+    if (this.experience < this.experienceForLevelUp)
+      throw new Error('Level up for player is impossible!')
 
-	private _toLevelUp(): void {
-		if (this.experience < this.experienceForLevelUp) throw new Error('Level up for player is impossible!')
+    this.experience -= this.experienceForLevelUp
+    this.level += 1
+    this.experienceForLevelUp = this._calcExperienceForLevelUp()
+  }
 
-		this.experience -= this.experienceForLevelUp
-		this.level += 1
-		this.experienceForLevelUp = this._calcExperienceForLevelUp()
-	}
-
-	private _calcExperienceForLevelUp(): number {
-		return this.level * 100
-	}
+  private _calcExperienceForLevelUp(): number {
+    return this.level * 100
+  }
 }
 
 export default PlayerLevel

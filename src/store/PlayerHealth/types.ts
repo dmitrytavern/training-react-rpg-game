@@ -6,7 +6,7 @@ export type EnduranceFunction = () => number
 
 export type ComputedNames = keyof ComputedFunctions
 export type ComputedFunctions = {
-	level: PlayerLevelFunction
-	effects: EffectsFunction
-	endurance: EnduranceFunction
+  level: PlayerLevelFunction
+  effects: EffectsFunction
+  endurance: EnduranceFunction
 }

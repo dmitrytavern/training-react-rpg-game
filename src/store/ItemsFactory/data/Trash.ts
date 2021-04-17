@@ -1,6 +1,5 @@
-import {ItemTrashProps} from "../../Items/ItemTrash"
+import { ItemTrashProps } from '../../Items/ItemTrash'
 
-const data: ItemTrashProps[] = [
-]
+const data: ItemTrashProps[] = []
 
 export default data

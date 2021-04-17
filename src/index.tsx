@@ -1,19 +1,19 @@
 import React from 'react'
 import ReactDOM from 'react-dom'
 import App from './App'
-import AppCraft from "./AppCraft"
-import AppQuests from "./AppQuests"
+import AppCraft from './AppCraft'
+import AppQuests from './AppQuests'
 import reportWebVitals from './reportWebVitals'
 
-import Player from "./store/Player"
-import Craft from "./store/Craft"
-import Quests from "./store/Quests"
-import ItemsFactory from "./store/ItemsFactory"
+import Player from './store/Player'
+import Craft from './store/Craft'
+import Quests from './store/Quests'
+import ItemsFactory from './store/ItemsFactory'
 
-import { PlayerContext } from "./contexts/playerStoreContext"
-import { CraftContext } from "./contexts/craftStoreContext"
-import { ItemsFactoryContext } from "./contexts/itemsFactoryStoreContext"
-import { QuestsContext } from "./contexts/questsStoreContext"
+import { PlayerContext } from './contexts/playerStoreContext'
+import { CraftContext } from './contexts/craftStoreContext'
+import { ItemsFactoryContext } from './contexts/itemsFactoryStoreContext'
+import { QuestsContext } from './contexts/questsStoreContext'
 
 const itemsFactory = ItemsFactory.newInstance()
 
@@ -22,7 +22,7 @@ const craft = new Craft(player.inventory)
 const quests = new Quests({
   playerLevel: player.level,
   playerInventory: player.inventory,
-  playerBalance: player.balance
+  playerBalance: player.balance,
 })
 
 ReactDOM.render(

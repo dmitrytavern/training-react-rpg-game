@@ -1,5 +1,5 @@
 export interface Money {
-	gold: number
-	silver: number
-	copper: number
+  gold: number
+  silver: number
+  copper: number
 }

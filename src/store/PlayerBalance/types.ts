@@ -1,3 +1,3 @@
 export interface PlayerBalanceProps {
-	money: number
+  money: number
 }
