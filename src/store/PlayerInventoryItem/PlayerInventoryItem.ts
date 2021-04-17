@@ -1,10 +1,6 @@
 import {makeAutoObservable} from 'mobx'
 import Item from "../Items/Item"
-
-interface InventoryItemConstructor {
-	item: Item,
-	quantity: number
-}
+import { InventoryItemConstructor } from './types'
 
 class PlayerInventoryItem {
 	public id: number

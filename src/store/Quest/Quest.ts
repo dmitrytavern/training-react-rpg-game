@@ -1,24 +1,10 @@
 import { makeAutoObservable } from "mobx"
-
-type QuestStatus = 'unlocked' | 'active' | 'completed' | 'done'
-
-interface QuestAction {
-	action: string
-	payload: any
-}
-
-interface QuestMeta {
-	title: string
-	description: string
-}
-
-export interface QuestProps {
-	id: number
-	meta: QuestMeta
-	requirements: QuestAction[]
-	completionRequirements: QuestAction[]
-	rewards: QuestAction[]
-}
+import {
+	QuestStatus,
+	QuestAction,
+	QuestMeta,
+	QuestProps
+} from './types'
 
 class Quest {
 	public readonly id: number

@@ -1,9 +1,7 @@
 import QuestsCommander from "../QuestsCommander"
-
-interface QuestAction {
-	action: string
-	payload: any
-}
+import {
+	QuestAction
+} from './types'
 
 class QuestsRewards {
 	private readonly commands: QuestsCommander

@@ -1,8 +1,5 @@
 import PlayerBalanceMoney from "../PlayerBalanceMoney"
-
-interface PlayerBalanceProps {
-	money: number
-}
+import { PlayerBalanceProps } from './types'
 
 class PlayerBalance {
 	public money: PlayerBalanceMoney

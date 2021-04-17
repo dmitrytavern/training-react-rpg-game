@@ -1,16 +1,12 @@
-import {makeAutoObservable} from 'mobx'
-
-type ComputedProperties = 'getPlayerLevel' | 'getEffects' | 'getStrengthCharacteristic'
-type PlayerLevelFunction = () => number
-type EffectsFunction = () => number
-type StrengthFunction = () => number
-
-type ComputedNames = keyof ComputedFunctions
-type ComputedFunctions = {
-	level: PlayerLevelFunction
-	effects: EffectsFunction
-	strength: StrengthFunction
-}
+import { makeAutoObservable } from 'mobx'
+import {
+	ComputedProperties,
+	PlayerLevelFunction,
+	EffectsFunction,
+	StrengthFunction,
+	ComputedNames,
+	ComputedFunctions
+} from './types'
 
 class PlayerDefense {
 	private getPlayerLevel: PlayerLevelFunction

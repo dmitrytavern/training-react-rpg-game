@@ -1,18 +1,10 @@
 import { reaction } from "mobx"
-import PlayerLevel from "../PlayerLevel"
-import PlayerInventory from "../PlayerInventory"
-import PlayerBalance from "../PlayerBalance"
 import * as QuestsCommands from '../QuestsCommands'
 
-interface Actions<T> {
-	[key: string]: (context: QuestsCommanderContext, payload: any) => T
-}
-
-interface QuestsCommanderContext {
-	level?: PlayerLevel
-	inventory?: PlayerInventory
-	balance?: PlayerBalance
-}
+import {
+	Actions,
+	QuestsCommanderContext
+} from './types'
 
 class QuestsCommander {
 	private readonly context: QuestsCommanderContext

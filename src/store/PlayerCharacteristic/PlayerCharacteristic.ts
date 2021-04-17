@@ -1,18 +1,12 @@
 import {makeAutoObservable} from "mobx"
 
-type ComputedProperties = 'getPlayerLevel'
-type PlayerLevelFunction = () => number
-
-type ComputedNames = keyof ComputedFunctions
-type ComputedFunctions = {
-	level: PlayerLevelFunction
-}
-
-interface Characteristics {
-	strength: number
-	endurance: number
-	intelligence: number
-}
+import {
+	ComputedProperties,
+	PlayerLevelFunction,
+	ComputedNames,
+	ComputedFunctions,
+	Characteristics
+} from './types'
 
 const defaultCharacteristics = {
 	strength: 1,

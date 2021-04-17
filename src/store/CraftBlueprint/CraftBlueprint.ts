@@ -1,40 +1,14 @@
-import CraftMaterial from "../CraftMaterial"
 import CraftMaterialFactory from "../CraftMaterialFactory"
 import CraftTool from "../CraftTool"
 import CraftToolFactory from "../CraftToolFactory"
 
-interface CraftBlueprintDataMaterial {
-	readonly id: number
-	readonly quantity: number
-}
-
-interface CraftBlueprintDataTool {
-	readonly id: number
-}
-
-interface CraftBlueprintResult {
-	readonly id: number
-	readonly quantity: number
-}
-
-interface CraftBlueprintMaterial {
-	readonly material: CraftMaterial
-	readonly quantity: number
-}
-
-export interface CraftBlueprintItem {
-	id: number
-	category: string
-	materials: CraftBlueprintDataMaterial[]
-	tools: CraftBlueprintDataTool[]
-	result: CraftBlueprintResult
-}
-
-export interface CraftBlueprintProps {
-	materialFactory: CraftMaterialFactory
-	toolFactory: CraftToolFactory
-	item: CraftBlueprintItem
-}
+import {
+	CraftBlueprintDataMaterial,
+	CraftBlueprintDataTool,
+	CraftBlueprintResult,
+	CraftBlueprintMaterial,
+	CraftBlueprintProps
+} from './types'
 
 class CraftBlueprint {
 	public readonly id: number

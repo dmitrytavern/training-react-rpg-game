@@ -1,16 +1,12 @@
-import {makeAutoObservable} from 'mobx'
-
-type ComputedProperties = 'getPlayerLevel' | 'getEffects' | 'getEnduranceCharacteristic'
-type PlayerLevelFunction = () => number
-type EffectsFunction = () => number
-type EnduranceFunction = () => number
-
-type ComputedNames = keyof ComputedFunctions
-type ComputedFunctions = {
-	level: PlayerLevelFunction
-	effects: EffectsFunction
-	endurance: EnduranceFunction
-}
+import { makeAutoObservable } from 'mobx'
+import {
+	ComputedProperties,
+	PlayerLevelFunction,
+	EffectsFunction,
+	EnduranceFunction,
+	ComputedNames,
+	ComputedFunctions
+} from './types'
 
 class PlayerEnergy {
 	private readonly maxEnergy: number

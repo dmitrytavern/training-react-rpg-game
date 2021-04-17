@@ -1,20 +1,16 @@
 import {makeAutoObservable} from 'mobx'
+import {
+	ComputedProperties,
+	PlayerLevelFunction,
+	EffectsFunction,
+	StrengthFunction,
+	ComputedNames,
+	ComputedFunctions
+} from './types'
 
 function randomInteger(min: number, max: number) {
 	let rand = min - 0.5 + Math.random() * (max - min + 1);
 	return Math.round(rand);
-}
-
-type ComputedProperties = 'getPlayerLevel' | 'getEffects' | 'getStrengthCharacteristic'
-type PlayerLevelFunction = () => number
-type EffectsFunction = () => number
-type StrengthFunction = () => number
-
-type ComputedNames = keyof ComputedFunctions
-type ComputedFunctions = {
-	level: PlayerLevelFunction
-	effects: EffectsFunction
-	strength: StrengthFunction
 }
 
 class PlayerDamage {

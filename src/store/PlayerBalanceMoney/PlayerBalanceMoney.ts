@@ -1,10 +1,5 @@
-import {makeAutoObservable} from 'mobx'
-
-interface Money {
-	gold: number
-	silver: number
-	copper: number
-}
+import { makeAutoObservable } from 'mobx'
+import { Money } from './types'
 
 class PlayerBalanceMoney {
 	private money: number

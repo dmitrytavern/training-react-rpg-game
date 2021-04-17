@@ -1,12 +1,10 @@
 import {makeAutoObservable} from 'mobx'
-
-type ComputedProperties = 'getIntelligenceCharacteristic'
-type IntelligenceFunction = () => number
-
-type ComputedNames = keyof ComputedFunctions
-type ComputedFunctions = {
-	intelligence: IntelligenceFunction
-}
+import {
+	ComputedProperties,
+	IntelligenceFunction,
+	ComputedNames,
+	ComputedFunctions
+} from './types'
 
 class PlayerLevel {
 	private level: number

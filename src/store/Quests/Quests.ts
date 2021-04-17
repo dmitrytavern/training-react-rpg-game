@@ -3,15 +3,10 @@ import QuestsCommander from "../QuestsCommander"
 import QuestsRequirements from "../QuestsRequirements"
 import QuestsRewards from "../QuestsRewards"
 import QuestsGroup from "../QuestsGroup"
-import PlayerLevel from "../PlayerLevel"
-import PlayerInventory from "../PlayerInventory"
-import PlayerBalance from "../PlayerBalance"
 
-interface QuestsProps {
-	playerLevel: PlayerLevel
-	playerInventory: PlayerInventory
-	playerBalance: PlayerBalance
-}
+import {
+	QuestsProps
+} from './types'
 
 class Quests {
 	private readonly questsFactory: QuestsFactory

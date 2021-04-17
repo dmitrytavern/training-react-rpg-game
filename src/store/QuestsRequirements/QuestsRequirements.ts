@@ -2,17 +2,10 @@ import { makeAutoObservable, IReactionDisposer } from "mobx"
 
 import QuestsCommander from "../QuestsCommander"
 
-interface QuestAction {
-	action: string
-	payload: any
-}
-
-interface QuestsRequirementsData {
-	[key: string]: {
-		values: boolean[]
-		disposers: IReactionDisposer[]
-	}
-}
+import {
+	QuestAction,
+	QuestsRequirementsData
+} from './types'
 
 class QuestsRequirements {
 	private readonly commands: QuestsCommander

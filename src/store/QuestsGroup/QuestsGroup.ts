@@ -1,19 +1,11 @@
 import { makeAutoObservable, reaction } from "mobx"
-
 import Quest from "../Quest"
 
-type QuestsGroupStatus = 'unlocked' | 'active' | 'completed' | 'done'
-
-interface QuestsGroupMeta {
-	title: string,
-	description: string
-}
-
-export interface QuestsGroupProps {
-	id: number,
-	meta: QuestsGroupMeta,
-	quests: Quest[]
-}
+import {
+	QuestsGroupStatus,
+	QuestsGroupMeta,
+	QuestsGroupProps
+} from './types'
 
 class QuestsGroup {
 	public readonly id: number
