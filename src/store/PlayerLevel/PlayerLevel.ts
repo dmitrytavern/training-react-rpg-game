@@ -9,11 +9,11 @@ class PlayerLevel {
 
   constructor(startLevel: number, startExp: number) {
     this.level = startLevel
-    this.experience = startExp
-    this.experienceForLevelUp = this._calcExperienceForLevelUp()
+    this.experience = 0
+    this.experienceForLevelUp = PlayerLevel._calcExperienceForLevelUp(startLevel)
     this.getIntelligenceCharacteristic = () => 1
 
-    this.floatExperience()
+    this.addExperience(startExp)
 
     makeAutoObservable<PlayerLevel, ComputedProperties>(this, {
       getIntelligenceCharacteristic: false,
@@ -42,7 +42,19 @@ class PlayerLevel {
   }
 
   public addExperience(exp: number): void {
-    this.experience += exp
+    let _level = this.level
+    let _exp = this.experience + exp
+    let _expLevelUp = this.experienceForLevelUp
+
+    while (_exp >= _expLevelUp) {
+      _exp -= _expLevelUp
+      _level += 1
+      _expLevelUp = PlayerLevel._calcExperienceForLevelUp(_level)
+    }
+
+    this.level = _level
+    this.experience = _exp
+    this.experienceForLevelUp = _expLevelUp
   }
 
   public calculateExperience(exp: number): number {
@@ -51,23 +63,8 @@ class PlayerLevel {
     return exp + (exp / 100) * percent
   }
 
-  public floatExperience(): void {
-    while (this.experience >= this.experienceForLevelUp) {
-      this._toLevelUp()
-    }
-  }
-
-  private _toLevelUp(): void {
-    if (this.experience < this.experienceForLevelUp)
-      throw new Error('Level up for player is impossible!')
-
-    this.experience -= this.experienceForLevelUp
-    this.level += 1
-    this.experienceForLevelUp = this._calcExperienceForLevelUp()
-  }
-
-  private _calcExperienceForLevelUp(): number {
-    return this.level * 100
+  public static _calcExperienceForLevelUp(lvl: number): number {
+    return lvl * 100
   }
 }
 

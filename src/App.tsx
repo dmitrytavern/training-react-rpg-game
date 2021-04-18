@@ -12,13 +12,11 @@ const App = () => {
 
   const addExp = () => {
     player.level.addExperience(50)
-    player.level.floatExperience()
   }
 
   const addExpWithCalc = () => {
     const exp = player.level.calculateExperience(50)
     player.level.addExperience(exp)
-    player.level.floatExperience()
   }
 
   const alive = player.health.alive

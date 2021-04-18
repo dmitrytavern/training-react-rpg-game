@@ -1,8 +1,6 @@
 import PlayerLevel from './PlayerLevel'
 
-const levelUpExpFormula = (lvl: number) => {
-  return lvl * 100
-}
+const levelUpExpFormula = PlayerLevel._calcExperienceForLevelUp
 
 const levelFormula = (lvl: number, exp: number) => {
   let newLvl = lvl
@@ -73,7 +71,6 @@ describe('Check adding experience', () => {
     const values = levelFormula(1, 50)
 
     module.addExperience(50)
-    module.floatExperience()
 
     expect(module.getLevel()).toBe(values.lvl)
     expect(module.getExperience()).toBe(values.exp)
@@ -85,7 +82,6 @@ describe('Check adding experience', () => {
     const values = levelFormula(1, 100)
 
     module.addExperience(100)
-    module.floatExperience()
 
     expect(module.getLevel()).toBe(values.lvl)
     expect(module.getExperience()).toBe(values.exp)
@@ -97,7 +93,6 @@ describe('Check adding experience', () => {
     const values = levelFormula(1, 300)
 
     module.addExperience(300)
-    module.floatExperience()
 
     expect(module.getLevel()).toBe(values.lvl)
     expect(module.getExperience()).toBe(values.exp)
@@ -109,7 +104,6 @@ describe('Check adding experience', () => {
     const values = levelFormula(1, 400)
 
     module.addExperience(400)
-    module.floatExperience()
 
     expect(module.getLevel()).toBe(values.lvl)
     expect(module.getExperience()).toBe(values.exp)

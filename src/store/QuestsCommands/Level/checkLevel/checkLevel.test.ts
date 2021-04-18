@@ -7,7 +7,6 @@ it('Checking checker function', () => {
   expect(checkLevel({ level }, 2)).toBeFalsy()
 
   level.addExperience(5000)
-  level.floatExperience()
 
   expect(checkLevel({ level }, 2)).toBeTruthy()
   expect(checkLevel({ level }, 3)).toBeTruthy()

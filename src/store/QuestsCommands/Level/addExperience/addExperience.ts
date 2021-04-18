@@ -12,5 +12,4 @@ export const addExperience = (context: CommandContext, payload: number) => {
   }
 
   level.addExperience(payload)
-  level.floatExperience()
 }
