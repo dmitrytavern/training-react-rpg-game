@@ -54,6 +54,8 @@ class PlayerEnergy {
     )
   }
 
+  // TODO: Whops... Need to rename this functions
+
   public incrementHealth(count: number): void {
     const max = this.getMaxEnergy()
     let _val = this.energy + count

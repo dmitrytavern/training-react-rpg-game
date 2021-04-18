@@ -1,21 +1,31 @@
 import { makeAutoObservable, IReactionDisposer } from 'mobx'
 
-import QuestsCommander from '../QuestsCommander'
+import Commander from '../Commander'
 
-import { QuestAction, QuestsRequirementsData } from './types'
+import { QuestsRequirementsData } from './types'
+import { commandTypes, commandAction } from '../Commander/types'
 
 class QuestsRequirements {
-  private readonly commands: QuestsCommander
   private readonly data: QuestsRequirementsData
+  private commands: Commander | undefined
 
-  constructor(questsCommander: QuestsCommander) {
-    this.commands = questsCommander
+  constructor() {
     this.data = {}
 
     makeAutoObservable(this)
   }
 
-  public subscribe(name: string, requirements: QuestAction[], callback: Function) {
+  public init(commander: Commander) {
+    this.commands = commander
+  }
+
+  public subscribe<T extends commandTypes>(
+    name: string,
+    requirements: commandAction<T>[],
+    callback: Function
+  ) {
+    if (!this.commands) throw new Error('Commander not found!')
+
     this.data[name] = {
       values: [],
       disposers: [],
@@ -42,10 +52,12 @@ class QuestsRequirements {
     delete this.data[name]
   }
 
-  public checkRequirements(requirements: QuestAction[]): boolean {
+  public checkRequirements<T extends commandTypes>(requirements: commandAction<T>[]): boolean {
+    if (!this.commands) throw new Error('Commander not found!')
+
     for (let i = 0; i < requirements.length; i++) {
       const { action, payload } = requirements[i]
-      const res = this.commands.check(action, payload)
+      const res = this.commands.execute(action, payload)
       if (!res) return false
     }
     return true

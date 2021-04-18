@@ -1,16 +1,18 @@
-import QuestsCommander from '../QuestsCommander'
-import { QuestAction } from './types'
+import Commander from '../Commander'
+import { commandTypes, commandAction } from '../Commander/types'
 
 class QuestsRewards {
-  private readonly commands: QuestsCommander
+  private commands: Commander | undefined
 
-  constructor(questsCommander: QuestsCommander) {
-    this.commands = questsCommander
+  public init(commander: Commander) {
+    this.commands = commander
   }
 
-  public getRewards(rewards: QuestAction[]) {
+  public getRewards<T extends commandTypes>(rewards: commandAction<T>[]) {
+    if (!this.commands) throw new Error('Commander not found!')
+
     for (let { action, payload } of rewards) {
-      this.commands.action(action, payload)
+      this.commands.execute(action, payload)
     }
   }
 }

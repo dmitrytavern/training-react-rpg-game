@@ -1,26 +1,23 @@
 import QuestsFactory from '../QuestsFactory'
-import QuestsCommander from '../QuestsCommander'
 import QuestsRequirements from '../QuestsRequirements'
 import QuestsRewards from '../QuestsRewards'
 import QuestsGroup from '../QuestsGroup'
-
-import { QuestsProps } from './types'
+import Commander from '../Commander'
 
 class Quests {
   private readonly questsFactory: QuestsFactory
   private readonly questsRequirements: QuestsRequirements
   private readonly questsRewards: QuestsRewards
 
-  constructor(props: QuestsProps) {
-    const questsCommander = new QuestsCommander({
-      level: props.playerLevel,
-      inventory: props.playerInventory,
-      balance: props.playerBalance,
-    })
-
+  constructor() {
     this.questsFactory = new QuestsFactory()
-    this.questsRequirements = new QuestsRequirements(questsCommander)
-    this.questsRewards = new QuestsRewards(questsCommander)
+    this.questsRequirements = new QuestsRequirements()
+    this.questsRewards = new QuestsRewards()
+  }
+
+  public init(commander: Commander) {
+    this.questsRequirements.init(commander)
+    this.questsRewards.init(commander)
   }
 
   public getQuestGroup(id: number) {

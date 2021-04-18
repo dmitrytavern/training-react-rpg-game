@@ -22,13 +22,13 @@ const groups: QuestsGroup[] = [
         requirements: [],
         completionRequirements: [
           {
-            action: 'inventory:check_item',
+            action: 'player_inventory:has_item',
             payload: { itemId: 1, quantity: 1 },
           },
         ],
         rewards: [
           {
-            action: 'inventory:remove_item',
+            action: 'player_inventory:remove_item',
             payload: { itemId: 1, quantity: 1 },
           },
         ],
@@ -42,9 +42,9 @@ const groups: QuestsGroup[] = [
         requirements: [],
         completionRequirements: [],
         rewards: [
-          { action: 'level:add_experience', payload: 15000 },
+          { action: 'player_level:add_experience', payload: 15000 },
           {
-            action: 'inventory:add_item',
+            action: 'player_inventory:add_item',
             payload: { itemId: 201, quantity: 10 },
           },
         ],
@@ -64,8 +64,8 @@ const groups: QuestsGroup[] = [
           title: 'Have 1 copper',
           description: 'You need have 1 copper. You should learn, how getting money',
         },
-        requirements: [{ action: 'level:check_level', payload: 51 }],
-        completionRequirements: [{ action: 'balance:check_money_balance', payload: 1 }],
+        requirements: [{ action: 'player_level:check_level', payload: 51 }],
+        completionRequirements: [{ action: 'player_balance:check_money_balance', payload: 1 }],
         rewards: [],
       },
     ],
