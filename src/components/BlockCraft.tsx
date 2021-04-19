@@ -1,11 +1,10 @@
 import React, { useState } from 'react'
-import CraftBlueprint from './store/CraftBlueprint'
+import CraftBlueprint from '../store/CraftBlueprint'
 import { observer } from 'mobx-react-lite'
-import { useCraftStore } from './contexts/craftStoreContext'
-import { usePlayerStore } from './contexts/playerStoreContext'
-import { useItemsFactoryStore } from './contexts/itemsFactoryStoreContext'
+import { useCommander } from '../contexts/commanderStoreContext'
+import { useItemsFactoryStore } from '../contexts/itemsFactoryStoreContext'
 
-const AppCraftBlueprintMaterial = observer(
+const CraftBlueprintMaterial = observer(
   (props: { id: number; quantity: number; available: boolean }) => {
     const itemsFactory = useItemsFactoryStore()
 
@@ -22,7 +21,7 @@ const AppCraftBlueprintMaterial = observer(
   }
 )
 
-const AppCraftBlueprintTool = observer((props: { id: number; available: boolean }) => {
+const CraftBlueprintTool = observer((props: { id: number; available: boolean }) => {
   const itemsFactory = useItemsFactoryStore()
 
   const { id, available } = props
@@ -42,14 +41,14 @@ interface BlueprintProps {
 }
 
 const AppCraftBlueprint = observer((props: BlueprintProps) => {
+  const app = useCommander()
   const itemsFactory = useItemsFactoryStore()
-  const craft = useCraftStore()
   const { id, materials, tools, result, available } = props
 
   const resultData = itemsFactory.getItemData(result.id)
 
   const onCraft = () => {
-    craft.craftBlueprint(id)
+    app.execute('craft:create', id)
   }
 
   const opacity = available ? 1 : 0.5
@@ -60,7 +59,7 @@ const AppCraftBlueprint = observer((props: BlueprintProps) => {
           {materials.map((item, i) => (
             <span key={i}>
               {i > 0 && ' X '}
-              <AppCraftBlueprintMaterial
+              <CraftBlueprintMaterial
                 id={item.material.id}
                 quantity={item.quantity}
                 available={item.material.isAvailable()}
@@ -80,7 +79,7 @@ const AppCraftBlueprint = observer((props: BlueprintProps) => {
             {tools.map((tool, i) => (
               <span key={i}>
                 {i > 0 && ', '}
-                <AppCraftBlueprintTool id={tool.id} available={tool.isAvailable()} />
+                <CraftBlueprintTool id={tool.id} available={tool.isAvailable()} />
               </span>
             ))}
           </div>
@@ -94,30 +93,31 @@ const AppCraftBlueprint = observer((props: BlueprintProps) => {
   )
 })
 
-const AppCraft = () => {
-  const player = usePlayerStore()
-  const craft = useCraftStore()
+const BlockCraft = () => {
+  const app = useCommander()
 
   const [category, setCategory] = useState('all')
 
+  const blueprints = app.execute('craft:get_blueprints', category)
+
   const addCommonHammer = () => {
-    player.inventory.addItem(301, 1)
+    app.execute('player_inventory:add_item', { itemId: 301, quantity: 1 })
   }
 
   const addCommonWood = () => {
-    player.inventory.addItem(101, 1)
+    app.execute('player_inventory:add_item', { itemId: 101, quantity: 1 })
   }
 
   const addCommonIron = () => {
-    player.inventory.addItem(102, 1)
+    app.execute('player_inventory:add_item', { itemId: 102, quantity: 1 })
   }
 
   const addCommonMandrake = () => {
-    player.inventory.addItem(103, 1)
+    app.execute('player_inventory:add_item', { itemId: 103, quantity: 1 })
   }
 
   const addCommonCelandine = () => {
-    player.inventory.addItem(104, 1)
+    app.execute('player_inventory:add_item', { itemId: 104, quantity: 1 })
   }
 
   const changeHandler = (event: React.SyntheticEvent) => {
@@ -146,7 +146,7 @@ const AppCraft = () => {
       </div>
 
       <ul>
-        {craft.getBlueprints(category).map((item, i) => (
+        {blueprints.map((item, i) => (
           <AppCraftBlueprint
             key={i}
             id={item.id}
@@ -161,4 +161,4 @@ const AppCraft = () => {
   )
 }
 
-export default observer(AppCraft)
+export default observer(BlockCraft)
