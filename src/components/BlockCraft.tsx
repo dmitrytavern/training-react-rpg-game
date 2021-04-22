@@ -1,5 +1,5 @@
 import React, { useState } from 'react'
-import CraftBlueprint from '../store/CraftBlueprint'
+import CraftBlueprint from '../store/models/CraftBlueprint'
 import { observer } from 'mobx-react-lite'
 import { useStore } from '../contexts/storeContext'
 

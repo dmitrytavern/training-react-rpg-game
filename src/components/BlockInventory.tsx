@@ -1,6 +1,6 @@
 import { observer } from 'mobx-react-lite'
 import { useStore } from '../contexts/storeContext'
-import PlayerInventoryItem from '../store/PlayerInventoryItem'
+import PlayerInventoryItem from '../store/models/PlayerInventoryItem'
 
 const Item = observer(({ item }: { item: PlayerInventoryItem }) => {
   const store = useStore()

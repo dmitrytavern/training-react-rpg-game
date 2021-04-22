@@ -1,37 +1,33 @@
-import PlayerLevel from '../PlayerLevel'
-import PlayerHealth from '../PlayerHealth'
-import PlayerDamage from '../PlayerDamage'
-import PlayerDefense from '../PlayerDefense'
-import PlayerEnergy from '../PlayerEnergy'
-import PlayerInventory from '../PlayerInventory'
-import PlayerBalance from '../PlayerBalance'
-import PlayerCharacteristic from '../PlayerCharacteristic'
-import PlayerFavorites from '../PlayerFavorites'
-import Craft from '../Craft'
-import Quests from '../Quests'
-import ItemsFactory from '../ItemsFactory'
-import commands from './commands'
+import { Controllers } from '../controllers/types'
 
-export interface CommanderContext {
-  playerLevel?: PlayerLevel
-  playerHealth?: PlayerHealth
-  playerDamage?: PlayerDamage
-  playerDefense?: PlayerDefense
-  playerEnergy?: PlayerEnergy
-  playerInventory?: PlayerInventory
-  playerBalance?: PlayerBalance
-  playerCharacteristic?: PlayerCharacteristic
-  playerFavorites?: PlayerFavorites
-  craft?: Craft
-  quests?: Quests
-  itemsFactory?: ItemsFactory
+import PlayerLevel from '../models/PlayerLevel'
+import PlayerHealth from '../models/PlayerHealth'
+import PlayerDamage from '../models/PlayerDamage'
+import PlayerDefense from '../models/PlayerDefense'
+import PlayerEnergy from '../models/PlayerEnergy'
+import PlayerInventory from '../models/PlayerInventory'
+import PlayerEquipment from '../models/PlayerEquipment'
+import PlayerBalance from '../models/PlayerBalance'
+import PlayerCharacteristic from '../models/PlayerCharacteristic'
+import PlayerFavorites from '../models/PlayerFavorites'
+import Craft from '../models/Craft'
+import Quests from '../models/Quests'
+import ItemsFactory from '../models/ItemsFactory'
+
+export interface StoreContext {
+  playerLevel: PlayerLevel
+  playerHealth: PlayerHealth
+  playerDamage: PlayerDamage
+  playerDefense: PlayerDefense
+  playerEnergy: PlayerEnergy
+  playerInventory: PlayerInventory
+  playerEquipment: PlayerEquipment
+  playerBalance: PlayerBalance
+  playerCharacteristic: PlayerCharacteristic
+  playerFavorites: PlayerFavorites
+  craft: Craft
+  quests: Quests
+  itemsFactor: ItemsFactory
 }
 
-export type commandTypes = keyof typeof commands
-export type commandTypePayload<T extends commandTypes> = Parameters<typeof commands[T]>[1]
-export type commandTypeReturn<T extends commandTypes> = ReturnType<typeof commands[T]>
-
-export interface commandAction<T extends commandTypes> {
-  action: T
-  payload: commandTypePayload<T>
-}
+export type StoreControllers = Controllers

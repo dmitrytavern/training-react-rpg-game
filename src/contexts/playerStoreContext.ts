@@ -1,5 +1,5 @@
 import { createContext, useContext } from 'react'
-import PlayerStore from '../store/Player'
+import PlayerStore from '../store/models/Player'
 
 export const PlayerContext = createContext<PlayerStore | undefined>(undefined)
 

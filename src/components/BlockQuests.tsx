@@ -1,6 +1,6 @@
 import { observer } from 'mobx-react-lite'
 import { useStore } from '../contexts/storeContext'
-import QuestsGroupStore from '../store/QuestsGroup'
+import QuestsGroupStore from '../store/models/QuestsGroup'
 
 const QuestList = observer((props: { quests: QuestsGroupStore['quests'] }) => {
   const { quests } = props

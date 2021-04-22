@@ -1,34 +1,79 @@
 import { reaction } from 'mobx'
-import { CommanderContext, commandTypes, commandTypePayload, commandTypeReturn } from './types'
+import { StoreContext, StoreControllers } from './types'
 
-import commands from './commands'
+import Craft from '../models/Craft'
+import Quests from '../models/Quests'
+import PlayerLevel from '../models/PlayerLevel'
+import PlayerHealth from '../models/PlayerHealth'
+import PlayerEnergy from '../models/PlayerEnergy'
+import PlayerDamage from '../models/PlayerDamage'
+import PlayerDefense from '../models/PlayerDefense'
+import PlayerInventory from '../models/PlayerInventory'
+import PlayerEquipment from '../models/PlayerEquipment'
+import PlayerFavorites from '../models/PlayerFavorites'
+import PlayerCharacteristic from '../models/PlayerCharacteristic'
+import PlayerBalance from '../models/PlayerBalance'
+import ItemsFactory from '../models/ItemsFactory'
+
+import PlayerLevelController from '../controllers/PlayerLevelController'
+import PlayerHealthController from '../controllers/PlayerHealthController'
+import PlayerEnergyController from '../controllers/PlayerEnergyController'
+import PlayerDamageController from '../controllers/PlayerDamageController'
+import PlayerDefenseController from '../controllers/PlayerDefenseController'
+import PlayerInventoryController from '../controllers/PlayerInventoryController'
+import PlayerEquipmentController from '../controllers/PlayerEquipmentController'
+import PlayerFavoritesController from '../controllers/PlayerFavoritesController'
+import PlayerCharacteristicController from '../controllers/PlayerCharacteristicController'
+import PlayerBalanceController from '../controllers/PlayerBalanceController'
+import CraftController from '../controllers/CraftController'
+import QuestsController from '../controllers/QuestsController'
 
 class Store {
-  private readonly context: CommanderContext
-  private readonly actions
+  private readonly controllers: StoreControllers
+  private readonly context: StoreContext
 
-  constructor(props: CommanderContext) {
-    this.context = props
-    this.actions = commands
+  constructor() {
+    this.context = {
+      playerLevel: new PlayerLevel(50, 10),
+      playerHealth: new PlayerHealth(5000, 100),
+      playerEnergy: new PlayerEnergy(50, 100),
+      playerDamage: new PlayerDamage(30, 50),
+      playerDefense: new PlayerDefense(),
+      playerInventory: new PlayerInventory(),
+      playerEquipment: new PlayerEquipment(),
+      playerFavorites: new PlayerFavorites(),
+      playerCharacteristic: new PlayerCharacteristic(),
+      playerBalance: new PlayerBalance({ money: 0 }),
+      craft: new Craft(),
+      quests: new Quests(),
+      itemsFactor: new ItemsFactory(),
+    }
+
+    const controllerContext = {
+      context: this.context,
+    }
+
+    this.controllers = {
+      playerLevel: new PlayerLevelController(controllerContext),
+      playerHealth: new PlayerHealthController(controllerContext),
+      playerEnergy: new PlayerEnergyController(controllerContext),
+      playerDamage: new PlayerDamageController(controllerContext),
+      playerDefense: new PlayerDefenseController(controllerContext),
+      playerInventory: new PlayerInventoryController(controllerContext),
+      playerEquipment: new PlayerEquipmentController(controllerContext),
+      playerFavorites: new PlayerFavoritesController(controllerContext),
+      playerCharacteristic: new PlayerCharacteristicController(controllerContext),
+      playerBalance: new PlayerBalanceController(controllerContext),
+      craft: new CraftController(controllerContext),
+      quests: new QuestsController(controllerContext),
+    }
   }
 
-  public execute<T extends commandTypes>(
-    name: T,
-    payload?: commandTypePayload<T>
-  ): commandTypeReturn<T> {
-    this.checkFunction(name)
-
-    // @ts-ignore
-    return this.actions[name](this.context, payload)
+  public execute(name: string, payload?: any): any {
+    return null
   }
 
-  public subscribe<T extends commandTypes>(
-    name: T,
-    payload: commandTypePayload<T>,
-    callback: Function
-  ) {
-    this.checkFunction(name)
-
+  public subscribe(name: string, payload: any, callback: Function): void {
     const fn = () => this.execute(name, payload)
 
     const reactionDisposer = reaction(fn, (isExists) => {
@@ -36,14 +81,6 @@ class Store {
     })
 
     callback(fn(), reactionDisposer)
-  }
-
-  private checkFunction(name: string) {
-    if (!this.actions.hasOwnProperty(name)) {
-      throw new Error('Not found action: ' + name)
-    }
-
-    this.execute('items:create', { id: 1, type: 'Weapon' })
   }
 }
 
