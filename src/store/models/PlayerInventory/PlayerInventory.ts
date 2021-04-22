@@ -1,68 +1,85 @@
 import { makeAutoObservable } from 'mobx'
-import PlayerInventoryItem from '../PlayerInventoryItem'
+import Item from '../Items/Item'
+import { InventoryReturn } from './types'
 
 class PlayerInventory {
-  private readonly inventory: Map<number, PlayerInventoryItem>
+  private readonly inventory: Item[]
 
   constructor() {
-    this.inventory = new Map()
-    this.itemsFactory = ItemsFactory.newInstance()
+    this.inventory = []
 
     makeAutoObservable(this)
   }
 
-  public getInventory(): PlayerInventoryItem[] {
-    return Array.from(this.inventory, ([_, value]) => value)
+  public getInventory(): InventoryReturn[] {
+    const obj: { [key: string]: InventoryReturn } = {}
+
+    for (const item of this.inventory) {
+      if (obj.hasOwnProperty(item.uuid)) {
+        obj[item.uuid][1] += 1
+      } else {
+        obj[item.uuid] = [item, 1]
+      }
+    }
+
+    return Object.values(obj)
   }
 
-  public getItem(itemId: number): PlayerInventoryItem | undefined {
-    return this.inventory.get(itemId)
+  public getItem(itemId: string): InventoryReturn | undefined {
+    let item = null
+    let quantity = 0
+
+    for (const _item of this.inventory) {
+      if (_item.uuid === itemId) {
+        if (!item) item = _item
+        quantity++
+      }
+    }
+
+    return item ? [item, quantity] : undefined
   }
 
-  public addItem(itemId: number, quantity: number): void {
-    const item = this.getItem(itemId)
-
-    if (item) {
-      item.incrementQuantity(quantity)
-    } else {
-      this._addInventoryItem(itemId, quantity)
+  public addItem(item: Item, quantity: number): void {
+    for (let i = 0; i < quantity; i++) {
+      this.inventory.push(item)
     }
   }
 
-  public removeItem(itemId: number, quantity: number): void {
-    const item = this.getItem(itemId)
+  public removeItem(itemId: string, quantity: number): void {
+    let _quantity = quantity
 
-    if (!item) throw new Error('Item not found!')
+    for (const key in this.inventory) {
+      if (_quantity === 0) break
 
-    item.decrementQuantity(quantity)
+      const item = this.inventory[key]
 
-    if (item.getQuantity() <= 0) this.inventory.delete(itemId)
+      if (_quantity > 0 && item.uuid === itemId) {
+        this.inventory.splice(+key, 1)
+        _quantity--
+      }
+    }
+
+    if (_quantity > 0) {
+      throw new Error('Not found more items!')
+    }
   }
 
-  public existsItem(itemId: number, quantity?: number): boolean {
-    const exists = this.inventory.has(itemId)
+  public existsItem(itemId: string, quantity?: number): boolean {
+    let exists = false
+
+    let _quantity = 0
+
+    for (const _item of this.inventory) {
+      if (_item.uuid === itemId) _quantity++
+    }
+
+    if (_quantity > 0) exists = true
+
     if (exists) {
-      if (!!quantity) {
-        const quantityItem = this.inventory.get(itemId)?.getQuantity() || 0
-        return quantityItem >= quantity
-      }
+      if (!!quantity) return _quantity >= quantity
       return true
     }
     return false
-  }
-
-  private _addInventoryItem(itemId: number, quantity: number): void {
-    if (!this.itemsFactory) {
-      throw new Error('ItemsFactory in PlayerInventory is not defined')
-    }
-
-    const item = this.itemsFactory.create(itemId)
-    const newInventoryItem = new PlayerInventoryItem({
-      item,
-      quantity,
-    })
-
-    this.inventory.set(item.id, newInventoryItem)
   }
 }
 
