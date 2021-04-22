@@ -1,18 +1,18 @@
 import { observer } from 'mobx-react-lite'
-import { useCommander } from '../contexts/commanderStoreContext'
+import { useStore } from '../contexts/storeContext'
 import PlayerInventoryItem from '../store/PlayerInventoryItem'
 
 const Item = observer(({ item }: { item: PlayerInventoryItem }) => {
-  const app = useCommander()
+  const store = useStore()
 
-  const favoriteExists = app.execute('player_favorites:has_item', item.id)
+  const favoriteExists = store.execute('player_favorites:has_item', item.id)
 
   const addItemToFavorite = () => {
-    app.execute('player_favorites:set_item', item.id)
+    store.execute('player_favorites:set_item', item.id)
   }
 
   const unsetItemFromFavorite = () => {
-    app.execute('player_favorites:unset_item', item.id)
+    store.execute('player_favorites:unset_item', item.id)
   }
 
   return (
@@ -32,19 +32,19 @@ const Item = observer(({ item }: { item: PlayerInventoryItem }) => {
 })
 
 const BlockInventory = () => {
-  const app = useCommander()
+  const store = useStore()
   const sword = { itemId: 1, quantity: 1 }
 
-  const inventory = app.execute('player_inventory:get_inventory')
+  const inventory = store.execute('player_inventory:get_inventory')
 
-  const disableSwordBtn = app.execute('player_inventory:has_item', sword)
+  const disableSwordBtn = store.execute('player_inventory:has_item', sword)
 
   const addItem = () => {
-    app.execute('player_inventory:add_item', sword)
+    store.execute('player_inventory:add_item', sword)
   }
 
   const removeItem = () => {
-    app.execute('player_inventory:remove_item', sword)
+    store.execute('player_inventory:remove_item', sword)
   }
 
   return (

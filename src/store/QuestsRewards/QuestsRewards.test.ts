@@ -1,6 +1,6 @@
 import PlayerInventory from '../PlayerInventory'
 import QuestsRewards from './QuestsRewards'
-import Commander from '../Commander'
+import Commander from '../Store'
 
 it('Checking getRewards function', () => {
   const inventory = new PlayerInventory()

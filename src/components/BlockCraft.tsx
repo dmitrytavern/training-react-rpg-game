@@ -1,16 +1,15 @@
 import React, { useState } from 'react'
 import CraftBlueprint from '../store/CraftBlueprint'
 import { observer } from 'mobx-react-lite'
-import { useCommander } from '../contexts/commanderStoreContext'
-import { useItemsFactoryStore } from '../contexts/itemsFactoryStoreContext'
+import { useStore } from '../contexts/storeContext'
 
 const CraftBlueprintMaterial = observer(
   (props: { id: number; quantity: number; available: boolean }) => {
-    const itemsFactory = useItemsFactoryStore()
+    const store = useStore()
 
     const { id, quantity, available } = props
 
-    const data = itemsFactory.getItemData(id)
+    const data = store.execute('items:get_data', id)
 
     const opacity = available ? 1 : 0.5
     return (
@@ -22,11 +21,11 @@ const CraftBlueprintMaterial = observer(
 )
 
 const CraftBlueprintTool = observer((props: { id: number; available: boolean }) => {
-  const itemsFactory = useItemsFactoryStore()
+  const store = useStore()
 
   const { id, available } = props
 
-  const data = itemsFactory.getItemData(id)
+  const data = store.execute('items:get_data', id)
 
   const opacity = available ? 1 : 0.5
   return <span style={{ opacity }}>{data.name}</span>
@@ -41,14 +40,13 @@ interface BlueprintProps {
 }
 
 const AppCraftBlueprint = observer((props: BlueprintProps) => {
-  const app = useCommander()
-  const itemsFactory = useItemsFactoryStore()
+  const store = useStore()
   const { id, materials, tools, result, available } = props
 
-  const resultData = itemsFactory.getItemData(result.id)
+  const resultData = store.execute('items:get_data', result.id)
 
   const onCraft = () => {
-    app.execute('craft:create', id)
+    store.execute('craft:create', id)
   }
 
   const opacity = available ? 1 : 0.5
@@ -94,30 +92,30 @@ const AppCraftBlueprint = observer((props: BlueprintProps) => {
 })
 
 const BlockCraft = () => {
-  const app = useCommander()
+  const store = useStore()
 
   const [category, setCategory] = useState('all')
 
-  const blueprints = app.execute('craft:get_blueprints', category)
+  const blueprints = store.execute('craft:get_blueprints', category)
 
   const addCommonHammer = () => {
-    app.execute('player_inventory:add_item', { itemId: 301, quantity: 1 })
+    store.execute('player_inventory:add_item', { itemId: 301, quantity: 1 })
   }
 
   const addCommonWood = () => {
-    app.execute('player_inventory:add_item', { itemId: 101, quantity: 1 })
+    store.execute('player_inventory:add_item', { itemId: 101, quantity: 1 })
   }
 
   const addCommonIron = () => {
-    app.execute('player_inventory:add_item', { itemId: 102, quantity: 1 })
+    store.execute('player_inventory:add_item', { itemId: 102, quantity: 1 })
   }
 
   const addCommonMandrake = () => {
-    app.execute('player_inventory:add_item', { itemId: 103, quantity: 1 })
+    store.execute('player_inventory:add_item', { itemId: 103, quantity: 1 })
   }
 
   const addCommonCelandine = () => {
-    app.execute('player_inventory:add_item', { itemId: 104, quantity: 1 })
+    store.execute('player_inventory:add_item', { itemId: 104, quantity: 1 })
   }
 
   const changeHandler = (event: React.SyntheticEvent) => {

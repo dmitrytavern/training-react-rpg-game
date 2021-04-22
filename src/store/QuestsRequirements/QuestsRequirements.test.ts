@@ -1,5 +1,5 @@
-import { commandAction } from '../Commander/types'
-import Commander from '../Commander'
+import { commandAction } from '../Store/types'
+import Commander from '../Store'
 import PlayerInventory from '../PlayerInventory'
 import QuestsCommander from '../QuestsCommander'
 import QuestsRequirements from './QuestsRequirements'

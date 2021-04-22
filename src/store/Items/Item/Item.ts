@@ -1,24 +1,16 @@
-export interface ItemProps {
-  readonly id: number
-  readonly name: string
-  readonly type: string
-  readonly category: string
-  readonly quality: string
-}
+import { ItemTypes, ItemTypeCategories, ItemProps } from './types'
 
-class Item {
+abstract class Item {
   public readonly id: number
-  public readonly name: string
-  public readonly type: string
-  public readonly category: string
-  public readonly quality: string
 
-  constructor(props: ItemProps) {
+  abstract readonly meta: any
+  abstract readonly type: ItemTypes
+  abstract readonly category: ItemTypeCategories
+
+  abstract get uuid(): string
+
+  protected constructor(props: ItemProps) {
     this.id = props.id
-    this.name = props.name
-    this.type = props.type
-    this.category = props.category
-    this.quality = props.quality
   }
 }
 

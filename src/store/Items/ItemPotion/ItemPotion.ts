@@ -1,17 +1,29 @@
-import Item, { ItemProps } from '../Item'
+import Item from '../Item'
+
+import { ItemPotionType, ItemPotionProps, ItemPotionCategories, ItemPotionMeta } from './types'
+
 import { Effect } from '../../../../types/Effect'
 
-export interface ItemPotionProps extends ItemProps {
-  readonly effects: Effect[]
-}
+import { uuidGenerator } from '../../../utils/uuidGenerator'
 
 class ItemPotion extends Item {
+  public readonly meta: ItemPotionMeta
+  public readonly type: ItemPotionType
+  public readonly category: ItemPotionCategories
   public readonly effects: Effect[]
 
   constructor(props: ItemPotionProps) {
+    const { category, effects, meta } = props
     super(props)
 
-    this.effects = props.effects
+    this.type = 'Potion'
+    this.meta = meta
+    this.category = category
+    this.effects = effects
+  }
+
+  get uuid(): string {
+    return uuidGenerator([['ID', this.id]])
   }
 }
 

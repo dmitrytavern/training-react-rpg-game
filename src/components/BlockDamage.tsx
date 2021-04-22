@@ -1,11 +1,11 @@
 import { observer } from 'mobx-react-lite'
-import { useCommander } from '../contexts/commanderStoreContext'
+import { useStore } from '../contexts/storeContext'
 
 const BlockDamage = () => {
-  const app = useCommander()
+  const store = useStore()
 
-  const minDamage = app.execute('player_damage:get_min_damage')
-  const maxDamage = app.execute('player_damage:get_max_damage')
+  const minDamage = store.execute('player_damage:get_min_damage')
+  const maxDamage = store.execute('player_damage:get_max_damage')
 
   return (
     <div>

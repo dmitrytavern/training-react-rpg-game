@@ -1,18 +1,23 @@
 import { observer } from 'mobx-react-lite'
-import { useItemsFactoryStore } from '../contexts/itemsFactoryStoreContext'
+import { useStore } from '../contexts/storeContext'
 import { usePlayerStore } from '../contexts/playerStoreContext'
 
 const BlockEquipment = () => {
+  const store = useStore()
   const player = usePlayerStore()
-  const itemsFactory = useItemsFactoryStore()
 
   const equipment = player.equipment
 
   const setWeapon = () => {
-    equipment.weapon.setEquipment(itemsFactory.create(1, 'weapon'))
+    store.execute('player_equipment:get', 'weapon')
   }
   const setHelmet = () => {
-    equipment.helmetSlot.setEquipment(itemsFactory.create(4, 'armor'))
+    equipment.helmetSlot.setEquipment(
+      store.execute('items:create', {
+        id: 4,
+        type: 'Tool',
+      })
+    )
   }
   const setArmor = () => {
     equipment.armorSlot.setEquipment(itemsFactory.create(5, 'armor'))

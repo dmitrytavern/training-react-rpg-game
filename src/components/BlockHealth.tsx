@@ -1,20 +1,20 @@
 import { observer } from 'mobx-react-lite'
-import { useCommander } from '../contexts/commanderStoreContext'
+import { useStore } from '../contexts/storeContext'
 
 const BlockHealth = () => {
-  const app = useCommander()
+  const store = useStore()
 
-  const alive = app.execute('player_health:get_alive')
-  const health = app.execute('player_health:get_health')
-  const maxHealth = app.execute('player_health:get_max_health')
+  const alive = store.execute('player_health:get_alive')
+  const health = store.execute('player_health:get_health')
+  const maxHealth = store.execute('player_health:get_max_health')
 
   const addHealth = () => {
-    app.execute('player_health:increment', 500)
+    store.execute('player_health:increment', 500)
   }
 
   const getHit = () => {
-    const damage = app.execute('player_defense:calculate_damaging', 500)
-    app.execute('player_health:decrement', damage)
+    const damage = store.execute('player_defense:calculate_damaging', 500)
+    store.execute('player_health:decrement', damage)
   }
 
   return (

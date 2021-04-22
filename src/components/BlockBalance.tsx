@@ -1,17 +1,17 @@
 import { observer } from 'mobx-react-lite'
-import { useCommander } from '../contexts/commanderStoreContext'
+import { useStore } from '../contexts/storeContext'
 
 const BlockBalance = () => {
-  const app = useCommander()
+  const store = useStore()
 
-  const balanceMoney = app.execute('player_balance:get_money')
+  const balanceMoney = store.execute('player_balance:get_money')
 
   const addMoney = (count: number) => {
-    app.execute('player_balance:increment_money', count)
+    store.execute('player_balance:increment_money', count)
   }
 
   const removeMoney = (count: number) => {
-    app.execute('player_balance:decrement_money', count)
+    store.execute('player_balance:decrement_money', count)
   }
 
   return (

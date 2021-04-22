@@ -1,30 +1,30 @@
 import { observer } from 'mobx-react-lite'
-import { useCommander } from '../contexts/commanderStoreContext'
+import { useStore } from '../contexts/storeContext'
 
 const BlockCharacteristic = () => {
-  const app = useCommander()
+  const store = useStore()
 
-  const allCharacteristicPoints = app.execute('player_characteristic:get_all_points')
-  const availableCharacteristicPoints = app.execute('player_characteristic:get_available_points')
+  const allCharacteristicPoints = store.execute('player_characteristic:get_all_points')
+  const availableCharacteristicPoints = store.execute('player_characteristic:get_available_points')
 
   const addCharacteristicPoint = (name: any) => {
-    app.execute('player_characteristic:set_point', name)
+    store.execute('player_characteristic:set_point', name)
   }
 
   const unsetAllPoints = () => {
-    app.execute('player_characteristic:unset_points')
+    store.execute('player_characteristic:unset_points')
   }
 
   const disabledCharacteristicButton = (name: any) => {
     return (
-      app.execute('player_characteristic:check_point_limit', name) ||
+      store.execute('player_characteristic:check_point_limit', name) ||
       availableCharacteristicPoints === 0
     )
   }
 
-  const strength = app.execute('player_characteristic:get_point', 'strength')
-  const endurance = app.execute('player_characteristic:get_point', 'endurance')
-  const intelligence = app.execute('player_characteristic:get_point', 'intelligence')
+  const strength = store.execute('player_characteristic:get_point', 'strength')
+  const endurance = store.execute('player_characteristic:get_point', 'endurance')
+  const intelligence = store.execute('player_characteristic:get_point', 'intelligence')
 
   return (
     <div>

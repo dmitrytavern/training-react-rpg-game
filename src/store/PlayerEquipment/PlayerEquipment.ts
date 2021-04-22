@@ -5,35 +5,35 @@ import PlayerEquipmentSlot from '../PlayerEquipmentSlot'
 
 class PlayerEquipment {
   public weapon: PlayerEquipmentSlot<ItemWeapon>
-  public leftRingSlot: PlayerEquipmentSlot<ItemArmor>
-  public rightRingSlot: PlayerEquipmentSlot<ItemArmor>
-  public waistSlot: PlayerEquipmentSlot<ItemArmor>
-  public helmetSlot: PlayerEquipmentSlot<ItemArmor>
-  public armorSlot: PlayerEquipmentSlot<ItemArmor>
-  public armsSlot: PlayerEquipmentSlot<ItemArmor>
-  public feetSlot: PlayerEquipmentSlot<ItemArmor>
+  public leftRing: PlayerEquipmentSlot<ItemArmor>
+  public rightRing: PlayerEquipmentSlot<ItemArmor>
+  public waist: PlayerEquipmentSlot<ItemArmor>
+  public helmet: PlayerEquipmentSlot<ItemArmor>
+  public armor: PlayerEquipmentSlot<ItemArmor>
+  public arms: PlayerEquipmentSlot<ItemArmor>
+  public feet: PlayerEquipmentSlot<ItemArmor>
 
   constructor() {
     this.weapon = new PlayerEquipmentSlot('weapon')
-    this.leftRingSlot = new PlayerEquipmentSlot('armor', 'Armor:Ring')
-    this.rightRingSlot = new PlayerEquipmentSlot('armor', 'Armor:Ring')
-    this.waistSlot = new PlayerEquipmentSlot('armor', 'Armor:Waist')
-    this.helmetSlot = new PlayerEquipmentSlot('armor', 'Armor:Helmet')
-    this.armorSlot = new PlayerEquipmentSlot('armor', 'Armor:Armor')
-    this.armsSlot = new PlayerEquipmentSlot('armor', 'Armor:Arms')
-    this.feetSlot = new PlayerEquipmentSlot('armor', 'Armor:Feet')
+    this.leftRing = new PlayerEquipmentSlot('armor', 'Armor:Ring')
+    this.rightRing = new PlayerEquipmentSlot('armor', 'Armor:Ring')
+    this.waist = new PlayerEquipmentSlot('armor', 'Armor:Waist')
+    this.helmet = new PlayerEquipmentSlot('armor', 'Armor:Helmet')
+    this.armor = new PlayerEquipmentSlot('armor', 'Armor:Armor')
+    this.arms = new PlayerEquipmentSlot('armor', 'Armor:Arms')
+    this.feet = new PlayerEquipmentSlot('armor', 'Armor:Feet')
   }
 
   public getEffects(): Effect[] {
     return [
       ...this.weapon.getEffects(),
-      ...this.leftRingSlot.getEffects(),
-      ...this.rightRingSlot.getEffects(),
-      ...this.waistSlot.getEffects(),
-      ...this.helmetSlot.getEffects(),
-      ...this.armorSlot.getEffects(),
-      ...this.armsSlot.getEffects(),
-      ...this.feetSlot.getEffects(),
+      ...this.leftRing.getEffects(),
+      ...this.rightRing.getEffects(),
+      ...this.waist.getEffects(),
+      ...this.helmet.getEffects(),
+      ...this.armor.getEffects(),
+      ...this.arms.getEffects(),
+      ...this.feet.getEffects(),
     ]
   }
 }

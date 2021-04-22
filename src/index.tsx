@@ -7,11 +7,10 @@ import Player from './store/Player'
 import Craft from './store/Craft'
 import Quests from './store/Quests'
 import ItemsFactory from './store/ItemsFactory'
-import Commander from './store/Commander'
+import Store from './store/Store'
 
+import { StoreContext } from './contexts/storeContext'
 import { PlayerContext } from './contexts/playerStoreContext'
-import { ItemsFactoryContext } from './contexts/itemsFactoryStoreContext'
-import { CommanderContext } from './contexts/commanderStoreContext'
 
 const itemsFactory = ItemsFactory.newInstance()
 
@@ -19,9 +18,10 @@ const player = new Player()
 const craft = new Craft(player.inventory)
 const quests = new Quests()
 
-const commander = new Commander({
+const store = new Store({
   craft,
   quests,
+  itemsFactory,
   playerLevel: player.level,
   playerHealth: player.health,
   playerDamage: player.damage,
@@ -33,17 +33,15 @@ const commander = new Commander({
   playerFavorites: player.favorites,
 })
 
-quests.init(commander)
+quests.init(store)
 
 ReactDOM.render(
   <React.StrictMode>
-    <CommanderContext.Provider value={commander}>
+    <StoreContext.Provider value={store}>
       <PlayerContext.Provider value={player}>
-        <ItemsFactoryContext.Provider value={itemsFactory}>
-          <App />
-        </ItemsFactoryContext.Provider>
+        <App />
       </PlayerContext.Provider>
-    </CommanderContext.Provider>
+    </StoreContext.Provider>
   </React.StrictMode>,
   document.getElementById('root')
 )

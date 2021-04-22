@@ -1,11 +1,11 @@
 import { observer } from 'mobx-react-lite'
-import { useCommander } from '../contexts/commanderStoreContext'
+import { useStore } from '../contexts/storeContext'
 
 const BlockDefence = () => {
-  const app = useCommander()
+  const store = useStore()
 
-  const defenceNumber = app.execute('player_defense:get_defense')
-  const defencePercent = app.execute('player_defense:get_defense_percent')
+  const defenceNumber = store.execute('player_defense:get_defense')
+  const defencePercent = store.execute('player_defense:get_defense_percent')
 
   return (
     <div>

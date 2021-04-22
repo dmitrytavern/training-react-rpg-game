@@ -3,10 +3,12 @@ import { ItemArmorProps } from '../../Items/ItemArmor'
 const armors: ItemArmorProps[] = [
   {
     id: 4,
-    name: 'Super legendary Helmet',
-    type: 'armor',
+    type: 'Armor',
     category: 'Armor:Helmet',
-    quality: 'common',
+    meta: {
+      name: 'Super legendary Helmet',
+      quality: 'common',
+    },
     effects: [
       { name: 'Health', type: 'maxHealth', operator: '+', value: 100 },
       { name: 'Energy', type: 'maxEnergy', operator: '+', value: 40 },
@@ -14,10 +16,12 @@ const armors: ItemArmorProps[] = [
   },
   {
     id: 5,
-    name: 'Super legendary Armor',
-    type: 'armor',
+    type: 'Armor',
     category: 'Armor:Armor',
-    quality: 'common',
+    meta: {
+      name: 'Super legendary Armor',
+      quality: 'common',
+    },
     effects: [
       { name: 'Health', type: 'maxHealth', operator: '+', value: 10 },
       { name: 'Defense', type: 'defense', operator: '+', value: 50 },
@@ -25,10 +29,12 @@ const armors: ItemArmorProps[] = [
   },
   {
     id: 7,
-    name: 'Super legendary Arms',
-    type: 'armor',
+    type: 'Armor',
     category: 'Armor:Arms',
-    quality: 'common',
+    meta: {
+      name: 'Super legendary Arms',
+      quality: 'common',
+    },
     effects: [
       { name: 'Health', type: 'maxHealth', operator: '+', value: 10 },
       { name: 'Defense', type: 'defense', operator: '+', value: 40 },
@@ -36,10 +42,12 @@ const armors: ItemArmorProps[] = [
   },
   {
     id: 6,
-    name: 'Super legendary Feet',
-    type: 'armor',
+    type: 'Armor',
     category: 'Armor:Feet',
-    quality: 'common',
+    meta: {
+      name: 'Super legendary Feet',
+      quality: 'common',
+    },
     effects: [
       { name: 'Health', type: 'maxHealth', operator: '+', value: 10 },
       { name: 'Defense', type: 'defense', operator: '+', value: 40 },
@@ -47,10 +55,12 @@ const armors: ItemArmorProps[] = [
   },
   {
     id: 8,
-    name: 'Super legendary Left Ring',
-    type: 'armor',
+    type: 'Armor',
     category: 'Armor:Ring',
-    quality: 'common',
+    meta: {
+      name: 'Super legendary Left Ring',
+      quality: 'common',
+    },
     effects: [
       { name: 'Health', type: 'maxHealth', operator: '+', value: 10 },
       { name: 'Defense', type: 'defense', operator: '+', value: 40 },
@@ -58,10 +68,12 @@ const armors: ItemArmorProps[] = [
   },
   {
     id: 9,
-    name: 'Super legendary Right Ring',
-    type: 'armor',
+    type: 'Armor',
     category: 'Armor:Ring',
-    quality: 'common',
+    meta: {
+      name: 'Super legendary Right Ring',
+      quality: 'common',
+    },
     effects: [
       { name: 'Health', type: 'maxHealth', operator: '+', value: 10 },
       { name: 'Defense', type: 'defense', operator: '+', value: 40 },
@@ -69,10 +81,13 @@ const armors: ItemArmorProps[] = [
   },
   {
     id: 10,
-    name: 'Super legendary Waist',
-    type: 'armor',
+    type: 'Armor',
     category: 'Armor:Waist',
-    quality: 'common',
+
+    meta: {
+      name: 'Super legendary Waist',
+      quality: 'common',
+    },
     effects: [
       { name: 'Health', type: 'maxHealth', operator: '+', value: 10 },
       { name: 'Defense', type: 'defense', operator: '+', value: 40 },

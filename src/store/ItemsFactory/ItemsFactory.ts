@@ -1,21 +1,11 @@
 import Item from '../Items/Item'
-import ItemWeapon from '../Items/ItemWeapon'
-import ItemArmor from '../Items/ItemArmor'
-import ItemPotion from '../Items/ItemPotion'
-import ItemMaterial from '../Items/ItemMaterial'
-import ItemTrash from '../Items/ItemTrash'
+import { ReturnItem, itemTypes } from './types'
 
 import data from './data'
 
 let instance: ItemsFactory | undefined = undefined
 class ItemsFactory {
-  create(itemId: number, type: 'weapon'): ItemWeapon
-  create(itemId: number, type: 'armor'): ItemArmor
-  create(itemId: number, type: 'potion'): ItemPotion
-  create(itemId: number, type: 'material'): ItemMaterial
-  create(itemId: number, type: 'trash'): ItemTrash
-  create(itemId: number, type?: string): Item
-  create(itemId: number, type?: string): any {
+  public create<T extends keyof itemTypes>(itemId: number, type: T): ReturnItem<T> {
     return this.getItem(itemId, type)
   }
 
@@ -23,7 +13,7 @@ class ItemsFactory {
     return this.getItem(itemId)
   }
 
-  private getItem(itemId: number, type: string | null = null): Item {
+  private getItem<T extends keyof itemTypes>(itemId: number, type: T | null = null): ReturnItem<T> {
     const itemData = data.find((item) => item.id === itemId)
 
     if (itemData === undefined) {

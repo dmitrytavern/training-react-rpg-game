@@ -1,18 +1,18 @@
 import { observer } from 'mobx-react-lite'
-import { useCommander } from '../contexts/commanderStoreContext'
+import { useStore } from '../contexts/storeContext'
 
 const BlockEnergy = () => {
-  const app = useCommander()
+  const store = useStore()
 
-  const energy = app.execute('player_energy:get_energy')
-  const maxEnergy = app.execute('player_energy:get_max_energy')
+  const energy = store.execute('player_energy:get_energy')
+  const maxEnergy = store.execute('player_energy:get_max_energy')
 
   const incrementEnergy = () => {
-    app.execute('player_energy:increment', 100)
+    store.execute('player_energy:increment', 100)
   }
 
   const decrementEnergy = () => {
-    app.execute('player_energy:decrement', 100)
+    store.execute('player_energy:decrement', 100)
   }
 
   return (

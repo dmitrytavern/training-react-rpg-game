@@ -1,10 +1,10 @@
 import { observer } from 'mobx-react-lite'
-import { useCommander } from '../contexts/commanderStoreContext'
+import { useStore } from '../contexts/storeContext'
 
 const Item = observer(({ id }: { id: number }) => {
-  const app = useCommander()
+  const store = useStore()
 
-  const item = app.execute('player_inventory:get_item', id)
+  const item = store.execute('player_inventory:get_item', id)
 
   if (!item) return null
 
@@ -16,9 +16,9 @@ const Item = observer(({ id }: { id: number }) => {
 })
 
 const BlockFavorites = () => {
-  const app = useCommander()
+  const store = useStore()
 
-  const items = app.execute('player_favorites:get_all_items')
+  const items = store.execute('player_favorites:get_all_items')
 
   return (
     <div>

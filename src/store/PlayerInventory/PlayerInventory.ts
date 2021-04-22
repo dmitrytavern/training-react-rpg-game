@@ -1,10 +1,8 @@
 import { makeAutoObservable } from 'mobx'
 import PlayerInventoryItem from '../PlayerInventoryItem'
-import ItemsFactory from '../ItemsFactory'
 
 class PlayerInventory {
   private readonly inventory: Map<number, PlayerInventoryItem>
-  private readonly itemsFactory: ItemsFactory | undefined
 
   constructor() {
     this.inventory = new Map()

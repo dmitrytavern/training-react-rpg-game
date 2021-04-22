@@ -3,7 +3,7 @@ import { CommanderContext, commandTypes, commandTypePayload, commandTypeReturn }
 
 import commands from './commands'
 
-class Commander {
+class Store {
   private readonly context: CommanderContext
   private readonly actions
 
@@ -42,7 +42,9 @@ class Commander {
     if (!this.actions.hasOwnProperty(name)) {
       throw new Error('Not found action: ' + name)
     }
+
+    this.execute('items:create', { id: 1, type: 'Weapon' })
   }
 }
 
-export default Commander
+export default Store

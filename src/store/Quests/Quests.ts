@@ -2,7 +2,7 @@ import QuestsFactory from '../QuestsFactory'
 import QuestsRequirements from '../QuestsRequirements'
 import QuestsRewards from '../QuestsRewards'
 import QuestsGroup from '../QuestsGroup'
-import Commander from '../Commander'
+import Commander from '../Store'
 
 class Quests {
   private readonly questsFactory: QuestsFactory

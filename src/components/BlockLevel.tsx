@@ -1,20 +1,20 @@
 import { observer } from 'mobx-react-lite'
-import { useCommander } from '../contexts/commanderStoreContext'
+import { useStore } from '../contexts/storeContext'
 
 const BlockLevel = () => {
-  const app = useCommander()
+  const store = useStore()
 
-  const level = app.execute('player_level:get_level')
-  const xp = app.execute('player_level:get_experience')
-  const maxEp = app.execute('player_level:get_experience_max')
+  const level = store.execute('player_level:get_level')
+  const xp = store.execute('player_level:get_experience')
+  const maxEp = store.execute('player_level:get_experience_max')
 
   const addExp = () => {
-    app.execute('player_level:add_experience', 50)
+    store.execute('player_level:add_experience', 50)
   }
 
   const addExpWithCalc = () => {
-    const exp = app.execute('player_level:calculate_experience', 50)
-    app.execute('player_level:add_experience', exp)
+    const exp = store.execute('player_level:calculate_experience', 50)
+    store.execute('player_level:add_experience', exp)
   }
 
   return (

@@ -1,5 +1,5 @@
-import Commander from '../Commander'
-import { commandTypes, commandAction } from '../Commander/types'
+import Commander from '../Store'
+import { commandTypes, commandAction } from '../Store/types'
 
 class QuestsRewards {
   private commands: Commander | undefined

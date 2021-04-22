@@ -9,6 +9,7 @@ import PlayerCharacteristic from '../PlayerCharacteristic'
 import PlayerFavorites from '../PlayerFavorites'
 import Craft from '../Craft'
 import Quests from '../Quests'
+import ItemsFactory from '../ItemsFactory'
 import commands from './commands'
 
 export interface CommanderContext {
@@ -23,6 +24,7 @@ export interface CommanderContext {
   playerFavorites?: PlayerFavorites
   craft?: Craft
   quests?: Quests
+  itemsFactory?: ItemsFactory
 }
 
 export type commandTypes = keyof typeof commands

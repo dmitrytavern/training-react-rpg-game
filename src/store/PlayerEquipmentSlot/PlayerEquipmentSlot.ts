@@ -14,10 +14,6 @@ class PlayerEquipmentSlot<T extends ItemArmor | ItemWeapon> {
     makeAutoObservable(this)
   }
 
-  public getName(): string {
-    return this.equipment?.name || ''
-  }
-
   public getEquipment(): T | undefined {
     return this.equipment
   }

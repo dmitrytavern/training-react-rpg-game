@@ -1,9 +1,9 @@
 import { makeAutoObservable, IReactionDisposer } from 'mobx'
 
-import Commander from '../Commander'
+import Commander from '../Store'
 
 import { QuestsRequirementsData } from './types'
-import { commandTypes, commandAction } from '../Commander/types'
+import { commandTypes, commandAction } from '../Store/types'
 
 class QuestsRequirements {
   private readonly data: QuestsRequirementsData

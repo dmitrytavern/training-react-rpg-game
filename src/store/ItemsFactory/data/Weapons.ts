@@ -1,20 +1,24 @@
-import { ItemWeaponProps } from '../../Items/ItemWeapon'
+import { ItemWeaponProps } from '../../Items/ItemWeapon/types'
 
 const weapons: ItemWeaponProps[] = [
   {
     id: 1,
-    name: 'Sword',
-    type: 'weapon',
-    category: 'swords',
-    quality: 'common',
+    type: 'Weapon',
+    category: 'Weapon:Sword',
+    meta: {
+      name: 'Sword',
+      quality: 'common',
+    },
     effects: [{ name: 'Damage', type: 'damage', operator: '+', value: 50 }],
   },
   {
     id: 11,
-    name: 'Super Sword',
-    type: 'weapon',
-    category: 'swords',
-    quality: 'common',
+    type: 'Weapon',
+    category: 'Weapon:Sword',
+    meta: {
+      name: 'Super Sword',
+      quality: 'common',
+    },
     effects: [{ name: 'Damage', type: 'damage', operator: '+', value: 50 }],
   },
 ]

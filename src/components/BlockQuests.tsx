@@ -1,5 +1,5 @@
 import { observer } from 'mobx-react-lite'
-import { useCommander } from '../contexts/commanderStoreContext'
+import { useStore } from '../contexts/storeContext'
 import QuestsGroupStore from '../store/QuestsGroup'
 
 const QuestList = observer((props: { quests: QuestsGroupStore['quests'] }) => {
@@ -19,12 +19,12 @@ const QuestList = observer((props: { quests: QuestsGroupStore['quests'] }) => {
 })
 
 const QuestGroup = observer((props: { group: QuestsGroupStore }) => {
-  const app = useCommander()
+  const store = useStore()
   const { group } = props
   const activeQuest = group.getActiveQuest()
 
   const toDoQuest = (groupId: number, questId: number) => {
-    app.execute('quests:do_quest', { groupId, questId })
+    store.execute('quests:do_quest', { groupId, questId })
   }
 
   return (
@@ -63,35 +63,35 @@ const QuestGroup = observer((props: { group: QuestsGroupStore }) => {
 })
 
 const BlockQuests = () => {
-  const app = useCommander()
-  const inventoryQuest = app.execute('quests:get_guest_group', 1)
-  const playerQuest = app.execute('quests:get_guest_group', 2)
+  const store = useStore()
+  const inventoryQuest = store.execute('quests:get_guest_group', 1)
+  const playerQuest = store.execute('quests:get_guest_group', 2)
   const inventoryQuestStatus = inventoryQuest.getStatus()
   const playerQuestStatus = playerQuest.getStatus()
 
   const activateInventoryQuest = () => {
-    app.execute('quests:activate_quest', { groupId: 1, questId: 1 })
+    store.execute('quests:activate_quest', { groupId: 1, questId: 1 })
   }
 
   const activatePlayerQuest = () => {
-    app.execute('quests:activate_quest', { groupId: 2, questId: 1 })
+    store.execute('quests:activate_quest', { groupId: 2, questId: 1 })
   }
 
-  const completedQuests = app.execute('quests:get_completed_guest_groups')
-  const activeQuests = app.execute('quests:get_active_guest_groups')
-  const doneQuests = app.execute('quests:get_done_guest_groups')
+  const completedQuests = store.execute('quests:get_completed_guest_groups')
+  const activeQuests = store.execute('quests:get_active_guest_groups')
+  const doneQuests = store.execute('quests:get_done_guest_groups')
 
   const disabledActivateButtonInventory =
     inventoryQuestStatus === 'active' ||
     inventoryQuestStatus === 'completed' ||
     inventoryQuestStatus === 'done' ||
-    !app.execute('quests:check_quest_group_requirements', 1)
+    !store.execute('quests:check_quest_group_requirements', 1)
 
   const disabledActivateButtonPlayer =
     playerQuestStatus === 'active' ||
     playerQuestStatus === 'completed' ||
     playerQuestStatus === 'done' ||
-    !app.execute('quests:check_quest_group_requirements', 2)
+    !store.execute('quests:check_quest_group_requirements', 2)
 
   return (
     <div>

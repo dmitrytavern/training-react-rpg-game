@@ -1,4 +1,4 @@
-import { commandTypes } from '../Commander/types'
+import { commandTypes } from '../Store/types'
 
 export type QuestStatus = 'unlocked' | 'active' | 'completed' | 'done'
 
