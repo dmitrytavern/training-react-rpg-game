@@ -1,8 +1,10 @@
 import Controller from '../Controller'
 import { ControllerProps } from '../Controller/types'
 
-class PlayerLevelController extends Controller {
-  constructor(props: ControllerProps) {
+type ControllerContext = 'playerLevel' | 'playerCharacteristic'
+
+class PlayerLevelController extends Controller<ControllerContext> {
+  constructor(props: ControllerProps<ControllerContext>) {
     super(props)
 
     const context = this.context

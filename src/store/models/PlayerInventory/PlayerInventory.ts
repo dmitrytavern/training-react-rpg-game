@@ -1,9 +1,18 @@
 import { makeAutoObservable } from 'mobx'
-import Item from '../Items/Item'
-import { InventoryReturn } from './types'
+import Item from '../Item'
+import ItemsFactory from '../ItemFactory'
+import { ItemTypes } from '../Item/types'
+
+type Inventory = [key: Item<any>, quantity: number]
 
 class PlayerInventory {
-  private readonly inventory: Item[]
+  private readonly inventory: Inventory[]
+  private _itemFactory: ItemsFactory | undefined
+
+  private get itemFactory(): ItemsFactory {
+    if (!this._itemFactory) throw new Error('Item Factory not exists!')
+    return this._itemFactory
+  }
 
   constructor() {
     this.inventory = []
@@ -11,75 +20,146 @@ class PlayerInventory {
     makeAutoObservable(this)
   }
 
-  public getInventory(): InventoryReturn[] {
-    const obj: { [key: string]: InventoryReturn } = {}
+  public setItemsFactory(itemFactory: ItemsFactory) {
+    this._itemFactory = itemFactory
+  }
 
-    for (const item of this.inventory) {
-      if (obj.hasOwnProperty(item.uuid)) {
-        obj[item.uuid][1] += 1
-      } else {
-        obj[item.uuid] = [item, 1]
+  public getInventory(): Inventory[] {
+    return this.inventory
+  }
+
+  public getItem<T extends ItemTypes>(uuid: string, type?: T): Item<T> | undefined {
+    for (const [item] of this.inventory) {
+      if (uuid === item.uuid) {
+        return this.getObject(uuid, type)
+      }
+    }
+  }
+
+  public addItem<T extends ItemTypes>(id: number, quantity?: number, type?: T): Item<T> {
+    const inventory = this.inventory
+    const item = this.createObject(id, type)
+    const incrementQuantity = quantity || 1
+
+    if (incrementQuantity <= 0) {
+      throw new Error('You try create unique item, but quantity less or equal 0')
+    }
+
+    if (item.getSetting('unique')) {
+      if (incrementQuantity > 1) {
+        throw new Error('You try create unique item, but quantity more then 1')
       }
     }
 
-    return Object.values(obj)
-  }
+    for (const exp of inventory) {
+      if (item.uuid === exp[0].uuid) {
+        exp[1] = exp[1] + incrementQuantity
 
-  public getItem(itemId: string): InventoryReturn | undefined {
-    let item = null
-    let quantity = 0
-
-    for (const _item of this.inventory) {
-      if (_item.uuid === itemId) {
-        if (!item) item = _item
-        quantity++
+        return item as Item<T>
       }
     }
 
-    return item ? [item, quantity] : undefined
+    this.inventory.push([item, incrementQuantity])
+
+    return item as Item<T>
   }
 
-  public addItem(item: Item, quantity: number): void {
-    for (let i = 0; i < quantity; i++) {
-      this.inventory.push(item)
+  public removeItem(uuid: string, quantity?: number): void {
+    const inventory = this.inventory
+    const decrementQuantity = quantity || 1
+
+    for (const exp of inventory) {
+      if (uuid === exp[0].uuid) {
+        const newQuantity = exp[1] - decrementQuantity
+
+        if (newQuantity < 0) {
+          throw new Error('You try remove item with less quantity')
+        }
+
+        if (newQuantity > 0) {
+          exp[1] = newQuantity
+        } else {
+          const index = inventory.indexOf(exp)
+          this.inventory.splice(index, 1)
+          this.deleteObject(uuid)
+        }
+
+        break
+      }
     }
   }
 
-  public removeItem(itemId: string, quantity: number): void {
-    let _quantity = quantity
+  public removeItemById(id: number, quantity?: number) {
+    const inventory = this.inventory
+    const decrementQuantity = quantity || 1
 
-    for (const key in this.inventory) {
-      if (_quantity === 0) break
+    for (const exp of inventory) {
+      if (id === exp[0].id) {
+        const newQuantity = exp[1] - decrementQuantity
 
-      const item = this.inventory[key]
+        if (newQuantity < 0) {
+          throw new Error('You try remove item with less quantity')
+        }
 
-      if (_quantity > 0 && item.uuid === itemId) {
-        this.inventory.splice(+key, 1)
-        _quantity--
+        if (newQuantity > 0) {
+          exp[1] = newQuantity
+        } else {
+          const index = inventory.indexOf(exp)
+          this.inventory.splice(index, 1)
+          this.deleteObject(exp[0].uuid)
+        }
+
+        break
+      }
+    }
+  }
+
+  public existsItem(uuid: string, quantity?: number): boolean {
+    const inventory = this.inventory
+    const necessaryQuantity = quantity || 1
+
+    for (const [item, _quantity] of inventory) {
+      if (uuid === item.uuid) {
+        if (_quantity >= necessaryQuantity) {
+          return true
+        }
       }
     }
 
-    if (_quantity > 0) {
-      throw new Error('Not found more items!')
-    }
-  }
-
-  public existsItem(itemId: string, quantity?: number): boolean {
-    let exists = false
-
-    let _quantity = 0
-
-    for (const _item of this.inventory) {
-      if (_item.uuid === itemId) _quantity++
-    }
-
-    if (_quantity > 0) exists = true
-
-    if (exists) {
-      if (!!quantity) return _quantity >= quantity
-      return true
-    }
     return false
+  }
+
+  public existsItemById(id: number, quantity?: number) {
+    const inventory = this.inventory
+    const necessaryQuantity = quantity || 1
+
+    for (const [item, _quantity] of inventory) {
+      if (id === item.id) {
+        if (_quantity >= necessaryQuantity) {
+          return true
+        }
+      }
+    }
+
+    return false
+  }
+
+  private getObject<T extends ItemTypes>(uuid: string, type?: T): Item<T> {
+    const item = this.itemFactory.getItem(uuid, type)
+
+    if (!item) {
+      throw new Error('Inventory have uuid, but in factory have not object for this uuid')
+    }
+
+    return item
+  }
+
+  private createObject<T extends ItemTypes>(id: number, type?: T): Item<T> {
+    return this.itemFactory.create({ id, type })
+  }
+
+  private deleteObject(uuid: string) {
+    this.itemFactory.delete(uuid)
   }
 }
 

@@ -12,7 +12,7 @@ import PlayerCharacteristic from '../models/PlayerCharacteristic'
 import PlayerFavorites from '../models/PlayerFavorites'
 import Craft from '../models/Craft'
 import Quests from '../models/Quests'
-import ItemsFactory from '../models/ItemsFactory'
+import ItemFactory from '../models/ItemFactory'
 
 export interface StoreContext {
   playerLevel: PlayerLevel
@@ -27,7 +27,7 @@ export interface StoreContext {
   playerFavorites: PlayerFavorites
   craft: Craft
   quests: Quests
-  itemsFactor: ItemsFactory
+  itemFactor: ItemFactory
 }
 
 export type StoreControllers = Controllers

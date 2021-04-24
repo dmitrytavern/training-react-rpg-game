@@ -1,10 +1,12 @@
 import Controller from '../Controller'
-import { ControllerContext, ControllerProps } from '../Controller/types'
+import { ControllerProps } from '../Controller/types'
 
 import { calculateEffect } from '../../../utils/calculateEffect'
 
-class PlayerEnergyController extends Controller {
-  constructor(props: ControllerProps) {
+type ControllerContext = 'playerEnergy' | 'playerLevel' | 'playerEquipment' | 'playerCharacteristic'
+
+class PlayerEnergyController extends Controller<ControllerContext> {
+  constructor(props: ControllerProps<ControllerContext>) {
     super(props)
 
     const context = this.context

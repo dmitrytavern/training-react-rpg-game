@@ -3,44 +3,15 @@ import ReactDOM from 'react-dom'
 import App from './App'
 import reportWebVitals from './reportWebVitals'
 
-import Player from './store/models/Player'
-import Craft from './store/models/Craft'
-import Quests from './store/models/Quests'
-import ItemsFactory from './store/models/ItemsFactory'
 import Store from './store/Store'
-
 import { StoreContext } from './contexts/storeContext'
-import { PlayerContext } from './contexts/playerStoreContext'
 
-const itemsFactory = ItemsFactory.newInstance()
-
-const player = new Player()
-const craft = new Craft(player.inventory)
-const quests = new Quests()
-
-const store = new Store({
-  craft,
-  quests,
-  itemsFactory,
-  playerLevel: player.level,
-  playerHealth: player.health,
-  playerDamage: player.damage,
-  playerDefense: player.defense,
-  playerEnergy: player.energy,
-  playerInventory: player.inventory,
-  playerBalance: player.balance,
-  playerCharacteristic: player.characteristic,
-  playerFavorites: player.favorites,
-})
-
-quests.init(store)
+const store = new Store()
 
 ReactDOM.render(
   <React.StrictMode>
     <StoreContext.Provider value={store}>
-      <PlayerContext.Provider value={player}>
-        <App />
-      </PlayerContext.Provider>
+      <App />
     </StoreContext.Provider>
   </React.StrictMode>,
   document.getElementById('root')

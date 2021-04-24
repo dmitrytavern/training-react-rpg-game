@@ -2,8 +2,14 @@ import Controller from '../Controller'
 import { ControllerProps } from '../Controller/types'
 import { calculateEffect } from '../../../utils/calculateEffect'
 
-class PlayerDefenseController extends Controller {
-  constructor(props: ControllerProps) {
+type ControllerContext =
+  | 'playerDefense'
+  | 'playerLevel'
+  | 'playerEquipment'
+  | 'playerCharacteristic'
+
+class PlayerDefenseController extends Controller<ControllerContext> {
+  constructor(props: ControllerProps<ControllerContext>) {
     super(props)
 
     const context = this.context

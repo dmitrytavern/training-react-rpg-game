@@ -1,39 +1,37 @@
 import { Effect } from '../../../../types/Effect'
-import ItemWeapon from '../Items/ItemWeapon'
-import ItemArmor from '../Items/ItemArmor'
 import PlayerEquipmentSlot from '../PlayerEquipmentSlot'
 
 class PlayerEquipment {
-  public weapon: PlayerEquipmentSlot<ItemWeapon>
-  public leftRing: PlayerEquipmentSlot<ItemArmor>
-  public rightRing: PlayerEquipmentSlot<ItemArmor>
-  public waist: PlayerEquipmentSlot<ItemArmor>
-  public helmet: PlayerEquipmentSlot<ItemArmor>
-  public armor: PlayerEquipmentSlot<ItemArmor>
-  public arms: PlayerEquipmentSlot<ItemArmor>
-  public feet: PlayerEquipmentSlot<ItemArmor>
+  public weapon: PlayerEquipmentSlot<'Weapon'>
+  public leftRing: PlayerEquipmentSlot<'Armor'>
+  public rightRing: PlayerEquipmentSlot<'Armor'>
+  public waist: PlayerEquipmentSlot<'Armor'>
+  public helmet: PlayerEquipmentSlot<'Armor'>
+  public armor: PlayerEquipmentSlot<'Armor'>
+  public arms: PlayerEquipmentSlot<'Armor'>
+  public feet: PlayerEquipmentSlot<'Armor'>
 
   constructor() {
-    this.weapon = new PlayerEquipmentSlot('weapon')
-    this.leftRing = new PlayerEquipmentSlot('armor', 'Armor:Ring')
-    this.rightRing = new PlayerEquipmentSlot('armor', 'Armor:Ring')
-    this.waist = new PlayerEquipmentSlot('armor', 'Armor:Waist')
-    this.helmet = new PlayerEquipmentSlot('armor', 'Armor:Helmet')
-    this.armor = new PlayerEquipmentSlot('armor', 'Armor:Armor')
-    this.arms = new PlayerEquipmentSlot('armor', 'Armor:Arms')
-    this.feet = new PlayerEquipmentSlot('armor', 'Armor:Feet')
+    this.weapon = new PlayerEquipmentSlot('Weapon')
+    this.leftRing = new PlayerEquipmentSlot('Armor', 'Armor:Ring')
+    this.rightRing = new PlayerEquipmentSlot('Armor', 'Armor:Ring')
+    this.waist = new PlayerEquipmentSlot('Armor', 'Armor:Waist')
+    this.helmet = new PlayerEquipmentSlot('Armor', 'Armor:Helmet')
+    this.armor = new PlayerEquipmentSlot('Armor', 'Armor:Armor')
+    this.arms = new PlayerEquipmentSlot('Armor', 'Armor:Arms')
+    this.feet = new PlayerEquipmentSlot('Armor', 'Armor:Feet')
   }
 
   public getEffects(): Effect[] {
     return [
-      ...this.weapon.getEffects(),
-      ...this.leftRing.getEffects(),
-      ...this.rightRing.getEffects(),
-      ...this.waist.getEffects(),
-      ...this.helmet.getEffects(),
-      ...this.armor.getEffects(),
-      ...this.arms.getEffects(),
-      ...this.feet.getEffects(),
+      ...(this.weapon.getEquipment()?.getParameter('effects') || []),
+      ...(this.leftRing.getEquipment()?.getParameter('effects') || []),
+      ...(this.rightRing.getEquipment()?.getParameter('effects') || []),
+      ...(this.waist.getEquipment()?.getParameter('effects') || []),
+      ...(this.helmet.getEquipment()?.getParameter('effects') || []),
+      ...(this.armor.getEquipment()?.getParameter('effects') || []),
+      ...(this.arms.getEquipment()?.getParameter('effects') || []),
+      ...(this.feet.getEquipment()?.getParameter('effects') || []),
     ]
   }
 }

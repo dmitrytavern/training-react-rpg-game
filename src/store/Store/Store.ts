@@ -13,7 +13,7 @@ import PlayerEquipment from '../models/PlayerEquipment'
 import PlayerFavorites from '../models/PlayerFavorites'
 import PlayerCharacteristic from '../models/PlayerCharacteristic'
 import PlayerBalance from '../models/PlayerBalance'
-import ItemsFactory from '../models/ItemsFactory'
+import ItemFactory from '../models/ItemFactory'
 
 import PlayerLevelController from '../controllers/PlayerLevelController'
 import PlayerHealthController from '../controllers/PlayerHealthController'
@@ -46,7 +46,7 @@ class Store {
       playerBalance: new PlayerBalance({ money: 0 }),
       craft: new Craft(),
       quests: new Quests(),
-      itemsFactor: new ItemsFactory(),
+      itemFactor: new ItemFactory(),
     }
 
     const controllerContext = {

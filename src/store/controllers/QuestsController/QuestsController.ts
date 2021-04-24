@@ -1,5 +1,7 @@
 import Controller from '../Controller'
 
-class QuestsController extends Controller {}
+type ControllerContext = 'quests'
+
+class QuestsController extends Controller<ControllerContext> {}
 
 export default QuestsController

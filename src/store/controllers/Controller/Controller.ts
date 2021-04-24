@@ -1,9 +1,9 @@
-import { ControllerProps, ControllerContext } from './types'
+import { ControllerProps, ControllerContext, StoreContext } from './types'
 
-class Controller {
-  protected readonly context: ControllerContext
+class Controller<T extends keyof StoreContext> {
+  protected readonly context: ControllerContext<T>
 
-  constructor(props: ControllerProps) {
+  constructor(props: ControllerProps<T>) {
     const { context } = props
 
     this.context = context

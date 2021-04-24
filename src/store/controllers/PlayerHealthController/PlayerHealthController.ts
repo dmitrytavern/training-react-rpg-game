@@ -3,8 +3,10 @@ import { ControllerProps } from '../Controller/types'
 
 import { calculateEffect } from '../../../utils/calculateEffect'
 
-class PlayerHealthController extends Controller {
-  constructor(props: ControllerProps) {
+type ControllerContext = 'playerHealth' | 'playerLevel' | 'playerCharacteristic' | 'playerEquipment'
+
+class PlayerHealthController extends Controller<ControllerContext> {
+  constructor(props: ControllerProps<ControllerContext>) {
     super(props)
 
     const context = this.context

@@ -1,111 +1,86 @@
 import PlayerEquipmentSlot from './PlayerEquipmentSlot'
-import ItemsFactory from '../ItemsFactory'
+import ItemFactory from '../ItemFactory'
 
-const itemsFactory = ItemsFactory.newInstance()
+const itemFactory = new ItemFactory()
 
 describe('Check base functions', () => {
-  it('Getting name', () => {
-    const equipmentSlot = new PlayerEquipmentSlot('weapon')
-    const item = itemsFactory.create(1, 'weapon')
-
-    equipmentSlot.setEquipment(item)
-
-    expect(equipmentSlot.getName()).toBe(item.name)
+  it('Getting not exists equipment', () => {
+    const slot = new PlayerEquipmentSlot('Weapon')
+    expect(slot.getEquipment()).toBeUndefined()
   })
 
-  it('Getting name of not existing item', () => {
-    const equipmentSlot = new PlayerEquipmentSlot('weapon')
+  it('Getting equipment', () => {
+    const slot = new PlayerEquipmentSlot('Weapon')
+    const item = itemFactory.create({ id: 1, type: 'Weapon' })
 
-    expect(equipmentSlot.getName()).toHaveLength(0)
+    slot.setEquipment(item)
+
+    expect(slot.getEquipment()).toBe(item)
+  })
+
+  it('Existing not exists item', () => {
+    const slot = new PlayerEquipmentSlot('Weapon')
+    expect(slot.existsEquipment()).toBeFalsy()
   })
 
   it('Existing item', () => {
-    const equipmentSlot = new PlayerEquipmentSlot('weapon')
-    const item = itemsFactory.create(1, 'weapon')
+    const slot = new PlayerEquipmentSlot('Weapon')
+    const item = itemFactory.create({ id: 1, type: 'Weapon' })
 
-    equipmentSlot.setEquipment(item)
+    slot.setEquipment(item)
 
-    expect(equipmentSlot.existsEquipment()).toBeTruthy()
-  })
-
-  it('Getting item', () => {
-    const equipmentSlot = new PlayerEquipmentSlot('weapon')
-    const item = itemsFactory.create(1, 'weapon')
-
-    equipmentSlot.setEquipment(item)
-
-    expect(equipmentSlot.getEquipment()).toEqual(item)
-  })
-
-  it('Getting not existing item', () => {
-    const equipmentSlot = new PlayerEquipmentSlot('weapon')
-
-    expect(equipmentSlot.getEquipment()).toBeUndefined()
-  })
-
-  it('Getting effects', () => {
-    const equipmentSlot = new PlayerEquipmentSlot('weapon')
-    const item = itemsFactory.create(1, 'weapon')
-
-    equipmentSlot.setEquipment(item)
-
-    expect(equipmentSlot.getEffects()).toEqual(item.effects)
-  })
-
-  it('Getting effects of not exists item', () => {
-    const equipmentSlot = new PlayerEquipmentSlot('weapon')
-
-    expect(equipmentSlot.getEffects()).toEqual([])
+    expect(slot.existsEquipment()).toBeTruthy()
   })
 })
 
 describe('Check change equip', () => {
   it('Changing item1 on item2', () => {
-    const equipmentSlot = new PlayerEquipmentSlot('armor', 'Armor:Ring')
-    const item1 = itemsFactory.create(8, 'armor')
-    const item2 = itemsFactory.create(9, 'armor')
+    const slot = new PlayerEquipmentSlot('Armor', 'Armor:Ring')
+    const _item1 = itemFactory.create({ id: 8, type: 'Armor' })
+    const _item2 = itemFactory.create({ id: 9, type: 'Armor' })
 
-    equipmentSlot.setEquipment(item1)
+    slot.setEquipment(_item1)
 
-    expect(equipmentSlot.getEquipment()).toEqual(item1)
+    expect(slot.getEquipment()).toEqual(_item1)
 
-    equipmentSlot.setEquipment(item2)
+    slot.setEquipment(_item2)
 
-    expect(equipmentSlot.getEquipment()).toEqual(item2)
+    expect(slot.getEquipment()).toEqual(_item2)
   })
 
   it('Unsetting item', () => {
-    const equipmentSlot = new PlayerEquipmentSlot('weapon')
-    const item = itemsFactory.create(1, 'weapon')
+    const slot = new PlayerEquipmentSlot('Weapon')
+    const _item = itemFactory.create({ id: 1, type: 'Weapon' })
 
-    equipmentSlot.setEquipment(item)
+    slot.setEquipment(_item)
 
-    expect(equipmentSlot.getEquipment()).toEqual(item)
+    expect(slot.getEquipment()).toEqual(_item)
 
-    equipmentSlot.unsetEquipment()
+    slot.unsetEquipment()
 
-    expect(equipmentSlot.getEquipment()).toBeUndefined()
+    expect(slot.getEquipment()).toBeUndefined()
   })
 
   it('Setting item with other type', () => {
-    const equipmentSlot = new PlayerEquipmentSlot('weapon')
-    const item = itemsFactory.create(9, 'armor')
+    const slot = new PlayerEquipmentSlot('Weapon')
+    const item = itemFactory.create({ id: 9, type: 'Armor' })
 
-    expect(() => equipmentSlot.setEquipment(item)).toThrow()
+    // @ts-ignore
+    expect(() => slot.setEquipment(item)).toThrow()
   })
 
   it('Setting item with other category', () => {
-    const equipmentSlot = new PlayerEquipmentSlot('armor', 'ring')
-    const item = itemsFactory.create(9, 'armor')
+    const slot = new PlayerEquipmentSlot('Armor', 'Armor:Helmet')
+    const item = itemFactory.create({ id: 9, type: 'Armor' })
 
-    expect(() => equipmentSlot.setEquipment(item)).toThrow()
+    expect(() => slot.setEquipment(item)).toThrow()
   })
 
   it('Setting not armor item', () => {
-    const equipmentSlot = new PlayerEquipmentSlot('armor', 'ring')
-    const item = itemsFactory.create(101)
+    const slot = new PlayerEquipmentSlot('Armor', 'Armor:Ring')
+    const item = itemFactory.create({ id: 101, type: 'CraftMaterial' })
 
     // @ts-ignore
-    expect(() => equipmentSlot.setEquipment(item)).toThrow()
+    expect(() => slot.setEquipment(item)).toThrow()
   })
 })

@@ -1,7 +1,9 @@
-import { StoreContext } from '../../Store/types'
+import { StoreContext as Store } from '../../Store/types'
 
-export type ControllerContext = StoreContext
+export type StoreContext = Store
 
-export interface ControllerProps {
-  context: StoreContext
+export type ControllerContext<T extends keyof StoreContext> = Pick<StoreContext, T>
+
+export interface ControllerProps<T extends keyof StoreContext> {
+  context: ControllerContext<T>
 }

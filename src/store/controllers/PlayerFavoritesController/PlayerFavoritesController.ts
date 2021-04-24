@@ -1,5 +1,7 @@
 import Controller from '../Controller'
 
-class PlayerFavoritesController extends Controller {}
+type ControllerContext = 'playerFavorites'
+
+class PlayerFavoritesController extends Controller<ControllerContext> {}
 
 export default PlayerFavoritesController

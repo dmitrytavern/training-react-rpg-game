@@ -1,29 +1,29 @@
 import { makeAutoObservable } from 'mobx'
-import ItemWeapon from '../Items/ItemWeapon'
-import ItemArmor from '../Items/ItemArmor'
+import Item from '../Item'
+import { Items, ItemsTypes } from '../../../../types/Items'
 
-class PlayerEquipmentSlot<T extends ItemArmor | ItemWeapon> {
-  private readonly type: string
-  private readonly category: string | null
-  private equipment: T | undefined
+class PlayerEquipmentSlot<T extends ItemsTypes> {
+  private readonly type: T
+  private readonly category: Items[T]['Categories'] | undefined
+  private equipment: Item<T> | undefined
 
-  constructor(type: string, category: string | null = null) {
+  constructor(type: T, category?: Items[T]['Categories']) {
     this.type = type
     this.category = category
 
     makeAutoObservable(this)
   }
 
-  public getEquipment(): T | undefined {
+  public getEquipment(): Item<T> | undefined {
     return this.equipment
   }
 
-  public setEquipment(item: T): void {
+  public setEquipment(item: Item<T>): void {
     if (item.type !== this.type) {
       throw new Error('Type is wrong')
     }
 
-    if (this.category && item.category !== this.category) {
+    if (this.category && this.category !== item.category) {
       throw new Error('Category is wrong')
     }
 
@@ -32,10 +32,6 @@ class PlayerEquipmentSlot<T extends ItemArmor | ItemWeapon> {
 
   public unsetEquipment() {
     this.equipment = undefined
-  }
-
-  public getEffects(): Array<any> {
-    return this.equipment?.effects || []
   }
 
   public existsEquipment(): boolean {

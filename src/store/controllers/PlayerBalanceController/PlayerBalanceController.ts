@@ -1,5 +1,7 @@
 import Controller from '../Controller'
 
-class PlayerBalanceController extends Controller {}
+type ControllerContext = 'playerBalance'
+
+class PlayerBalanceController extends Controller<ControllerContext> {}
 
 export default PlayerBalanceController
