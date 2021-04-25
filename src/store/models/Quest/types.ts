@@ -1,9 +1,7 @@
-import { commandTypes } from '../Store/types'
-
 export type QuestStatus = 'unlocked' | 'active' | 'completed' | 'done'
 
 export interface QuestAction {
-  action: commandTypes
+  action: any
   payload: any
 }
 

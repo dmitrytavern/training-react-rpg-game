@@ -1,20 +1,22 @@
 import { observer } from 'mobx-react-lite'
 import { useStore } from '../contexts/storeContext'
 
+import PlayerHealthController from '../store/controllers/PlayerHealthController'
+
 const BlockHealth = () => {
   const store = useStore()
+  const controller: PlayerHealthController = store.getController(PlayerHealthController)
 
-  const alive = store.execute('player_health:get_alive')
-  const health = store.execute('player_health:get_health')
-  const maxHealth = store.execute('player_health:get_max_health')
+  const alive = controller.isAlive()
+  const health = controller.getHealth()
+  const maxHealth = controller.getHealthMax()
 
   const addHealth = () => {
-    store.execute('player_health:increment', 500)
+    controller.increment(500)
   }
 
   const getHit = () => {
-    const damage = store.execute('player_defense:calculate_damaging', 500)
-    store.execute('player_health:decrement', damage)
+    controller.decrement(500)
   }
 
   return (

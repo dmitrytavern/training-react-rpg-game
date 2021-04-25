@@ -20,9 +20,10 @@ class PlayerDamage {
   private getEffects: EffectsFunction
   private getStrengthCharacteristic: StrengthFunction
 
-  constructor(minDamage: number, maxDamage: number) {
-    this.minDamage = minDamage
-    this.maxDamage = maxDamage
+  // TODO: Need min/max damage setting
+  constructor() {
+    this.minDamage = 0
+    this.maxDamage = 10
     this.getPlayerLevel = () => 1
     this.getEffects = () => 0
     this.getStrengthCharacteristic = () => 1

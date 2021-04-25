@@ -15,9 +15,10 @@ class PlayerEnergy {
   private getEffects: EffectsFunction
   private getEnduranceCharacteristic: EnduranceFunction
 
-  constructor(startValue: number, maxValue: number) {
-    this.energy = startValue
-    this.maxEnergy = maxValue
+  // TODO: need add setting
+  constructor() {
+    this.energy = 10
+    this.maxEnergy = 20
     this.getPlayerLevel = () => 1
     this.getEffects = () => 0
     this.getEnduranceCharacteristic = () => 1

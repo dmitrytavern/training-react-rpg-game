@@ -3,7 +3,6 @@ import { makeAutoObservable, IReactionDisposer } from 'mobx'
 import Commander from '../../Store'
 
 import { QuestsRequirementsData } from './types'
-import { commandTypes, commandAction } from '../../Store/types'
 
 class QuestsRequirements {
   private readonly data: QuestsRequirementsData
@@ -19,9 +18,9 @@ class QuestsRequirements {
     this.commands = commander
   }
 
-  public subscribe<T extends commandTypes>(
+  public subscribe<T extends any>(
     name: string,
-    requirements: commandAction<T>[],
+    requirements: any[],
     callback: Function
   ) {
     if (!this.commands) throw new Error('Commander not found!')
@@ -52,7 +51,7 @@ class QuestsRequirements {
     delete this.data[name]
   }
 
-  public checkRequirements<T extends commandTypes>(requirements: commandAction<T>[]): boolean {
+  public checkRequirements<T extends any>(requirements: any[]): boolean {
     if (!this.commands) throw new Error('Commander not found!')
 
     for (let i = 0; i < requirements.length; i++) {

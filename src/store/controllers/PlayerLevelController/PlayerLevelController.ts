@@ -1,17 +1,36 @@
 import Controller from '../Controller'
-import { ControllerProps } from '../Controller/types'
+import PlayerLevel from '../../models/PlayerLevel'
+import PlayerCharacteristic from '../../models/PlayerCharacteristic'
 
-type ControllerContext = 'playerLevel' | 'playerCharacteristic'
-
-class PlayerLevelController extends Controller<ControllerContext> {
-  constructor(props: ControllerProps<ControllerContext>) {
-    super(props)
-
-    const context = this.context
-
-    context.playerLevel.setComputedFunction('intelligence', () => {
-      return context.playerCharacteristic.getCharacteristic('intelligence')
+@Controller([
+  PlayerLevel,
+  PlayerCharacteristic
+])
+class PlayerLevelController {
+  constructor(
+    private playerLevel: PlayerLevel,
+    private playerCharacteristic: PlayerCharacteristic,
+  ) {
+    this.playerLevel.setComputedFunction('intelligence', () => {
+      return this.playerCharacteristic.getCharacteristic('intelligence')
     })
+  }
+
+  public getLevel() {
+    return this.playerLevel.getLevel()
+  }
+
+  public getExperience() {
+    return this.playerLevel.getExperience()
+  }
+
+  public getExperienceMax() {
+    return this.playerLevel.getExperienceForLevelUp()
+  }
+
+  public addExperience(exp: number) {
+    const _exp = this.playerLevel.calculateExperience(exp)
+    this.playerLevel.addExperience(_exp)
   }
 }
 

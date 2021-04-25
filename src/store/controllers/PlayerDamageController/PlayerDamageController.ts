@@ -1,26 +1,47 @@
 import Controller from '../Controller'
-import { ControllerProps } from '../Controller/types'
 import { calculateEffect } from '../../../utils/calculateEffect'
 
-type ControllerContext = 'playerDamage' | 'playerLevel' | 'playerEquipment' | 'playerCharacteristic'
+import PlayerDamage from '../../models/PlayerDamage'
+import PlayerLevel from '../../models/PlayerLevel'
+import PlayerEquipment from '../../models/PlayerEquipment'
+import PlayerCharacteristic from '../../models/PlayerCharacteristic'
 
-class PlayerDamageController extends Controller<ControllerContext> {
-  constructor(props: ControllerProps<ControllerContext>) {
-    super(props)
-
-    const context = this.context
-
-    context.playerDamage.setComputedFunction('level', () => {
-      return context.playerLevel.getLevel()
+@Controller([
+  PlayerLevel,
+  PlayerDamage,
+  PlayerEquipment,
+  PlayerCharacteristic
+])
+class PlayerDamageController {
+  constructor(
+    private playerLevel: PlayerLevel,
+    private playerDamage: PlayerDamage,
+    private playerEquipment: PlayerEquipment,
+    private playerCharacteristic: PlayerCharacteristic
+  ) {
+    this.playerDamage.setComputedFunction('level', () => {
+      return this.playerLevel.getLevel()
     })
 
-    context.playerDamage.setComputedFunction('effects', () => {
-      return calculateEffect('damage', [...context.playerEquipment.getEffects()])
+    this.playerDamage.setComputedFunction('effects', () => {
+      return calculateEffect('damage', [...this.playerEquipment.getEffects()])
     })
 
-    context.playerDamage.setComputedFunction('strength', () => {
-      return context.playerCharacteristic.getCharacteristic('strength')
+    this.playerDamage.setComputedFunction('strength', () => {
+      return this.playerCharacteristic.getCharacteristic('strength')
     })
+  }
+
+  public getDamage() {
+    return this.playerDamage.getDamage()
+  }
+
+  public getDamageMin() {
+    return this.playerDamage.getMinDamage()
+  }
+
+  public getDamageMax() {
+    return this.playerDamage.getMaxDamage()
   }
 }
 

@@ -1,27 +1,50 @@
 import Controller from '../Controller'
-import { ControllerProps } from '../Controller/types'
-
 import { calculateEffect } from '../../../utils/calculateEffect'
+import PlayerLevel from '../../models/PlayerLevel'
+import PlayerEquipment from '../../models/PlayerEquipment'
+import PlayerCharacteristic from '../../models/PlayerCharacteristic'
+import PlayerEnergy from '../../models/PlayerEnergy'
 
-type ControllerContext = 'playerEnergy' | 'playerLevel' | 'playerEquipment' | 'playerCharacteristic'
-
-class PlayerEnergyController extends Controller<ControllerContext> {
-  constructor(props: ControllerProps<ControllerContext>) {
-    super(props)
-
-    const context = this.context
-
-    context.playerEnergy.setComputedFunction('level', () => {
-      return context.playerLevel.getLevel()
+@Controller([
+  PlayerLevel,
+  PlayerEnergy,
+  PlayerEquipment,
+  PlayerCharacteristic
+])
+class PlayerEnergyController {
+  constructor(
+    private playerLevel: PlayerLevel,
+    private playerEnergy: PlayerEnergy,
+    private playerEquipment: PlayerEquipment,
+    private playerCharacteristic: PlayerCharacteristic
+  ) {
+    this.playerEnergy.setComputedFunction('level', () => {
+      return this.playerLevel.getLevel()
     })
 
-    context.playerEnergy.setComputedFunction('effects', () => {
-      return calculateEffect('maxEnergy', [...context.playerEquipment.getEffects()])
+    this.playerEnergy.setComputedFunction('effects', () => {
+      return calculateEffect('maxEnergy', [...this.playerEquipment.getEffects()])
     })
 
-    context.playerEnergy.setComputedFunction('endurance', () => {
-      return context.playerCharacteristic.getCharacteristic('endurance')
+    this.playerEnergy.setComputedFunction('endurance', () => {
+      return this.playerCharacteristic.getCharacteristic('endurance')
     })
+  }
+
+  public getEnergy () {
+    return this.playerEnergy.getEnergy()
+  }
+
+  public getEnergyMax () {
+    return this.playerEnergy.getMaxEnergy()
+  }
+
+  public increment (value: number) {
+    this.playerEnergy.incrementHealth(value)
+  }
+
+  public decrement (value: number) {
+    this.playerEnergy.decrementHealth(value)
   }
 }
 

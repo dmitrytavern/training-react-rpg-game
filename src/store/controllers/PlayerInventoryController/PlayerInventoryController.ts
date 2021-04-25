@@ -1,15 +1,40 @@
 import Controller from '../Controller'
-import { ControllerProps } from '../Controller/types'
 
-type ControllerContext = 'playerInventory' | 'craft' | 'itemFactor'
+import PlayerInventory from '../../models/PlayerInventory'
+import ItemsFactory from '../../models/ItemFactory'
+import Item from '../../models/Item'
+import { Inventory } from '../../models/PlayerInventory/PlayerInventory'
 
-class PlayerInventoryController extends Controller<ControllerContext> {
-  constructor(props: ControllerProps<ControllerContext>) {
-    super(props)
+@Controller([
+  PlayerInventory,
+  ItemsFactory
+])
+class PlayerInventoryController {
+  constructor(
+    private playerInventory: PlayerInventory,
+    private itemsFactory: ItemsFactory
+  ) {
+    this.playerInventory.setItemsFactory(this.itemsFactory)
+  }
 
-    const context = this.context
+  public getInventory(): Inventory<any>[] {
+    return this.playerInventory.getInventory()
+  }
 
-    context.playerInventory.setItemsFactory(context.itemFactor)
+  public getItem(uuid: string): Inventory<any> | undefined {
+    return this.playerInventory.getItem(uuid)
+  }
+
+  public addItem(id: number, quantity?: number): Item<any> {
+    return this.playerInventory.addItem(id, quantity)
+  }
+
+  public removeItem(uuid: string, quantity?: number) {
+    this.playerInventory.removeItem(uuid, quantity)
+  }
+
+  public existsItem(uuid: string): boolean {
+    return this.playerInventory.existsItem(uuid)
   }
 }
 

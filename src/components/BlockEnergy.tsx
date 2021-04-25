@@ -1,18 +1,21 @@
 import { observer } from 'mobx-react-lite'
 import { useStore } from '../contexts/storeContext'
 
+import PlayerEnergyController from '../store/controllers/PlayerEnergyController'
+
 const BlockEnergy = () => {
   const store = useStore()
+  const controller: PlayerEnergyController = store.getController(PlayerEnergyController)
 
-  const energy = store.execute('player_energy:get_energy')
-  const maxEnergy = store.execute('player_energy:get_max_energy')
+  const energy = controller.getEnergy()
+  const maxEnergy = controller.getEnergyMax()
 
   const incrementEnergy = () => {
-    store.execute('player_energy:increment', 100)
+    controller.increment(100)
   }
 
   const decrementEnergy = () => {
-    store.execute('player_energy:decrement', 100)
+    controller.decrement(100)
   }
 
   return (

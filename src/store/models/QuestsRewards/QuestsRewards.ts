@@ -1,5 +1,4 @@
 import Commander from '../../Store'
-import { commandTypes, commandAction } from '../../Store/types'
 
 class QuestsRewards {
   private commands: Commander | undefined
@@ -8,7 +7,7 @@ class QuestsRewards {
     this.commands = commander
   }
 
-  public getRewards<T extends commandTypes>(rewards: commandAction<T>[]) {
+  public getRewards<T extends any>(rewards: any[]) {
     if (!this.commands) throw new Error('Commander not found!')
 
     for (let { action, payload } of rewards) {

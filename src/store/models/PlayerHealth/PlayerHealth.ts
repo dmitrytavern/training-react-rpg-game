@@ -15,9 +15,10 @@ class PlayerHealth {
   private getEffects: EffectsFunction
   private getEnduranceCharacteristic: EnduranceFunction
 
-  constructor(startValue: number, maxValue: number) {
-    this.health = startValue
-    this.maxHealth = maxValue
+  // TODO: add setting
+  constructor() {
+    this.health = 10
+    this.maxHealth = 20
     this.getPlayerLevel = () => 1
     this.getEffects = () => 0
     this.getEnduranceCharacteristic = () => 1

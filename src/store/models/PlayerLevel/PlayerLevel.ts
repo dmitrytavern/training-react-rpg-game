@@ -7,13 +7,14 @@ class PlayerLevel {
   private experienceForLevelUp: number
   private getIntelligenceCharacteristic: IntelligenceFunction
 
-  constructor(startLevel: number, startExp: number) {
-    this.level = startLevel
+  // TODO: add setting
+  constructor() {
+    this.level = 10
     this.experience = 0
-    this.experienceForLevelUp = PlayerLevel._calcExperienceForLevelUp(startLevel)
+    this.experienceForLevelUp = PlayerLevel._calcExperienceForLevelUp(10)
     this.getIntelligenceCharacteristic = () => 1
 
-    this.addExperience(startExp)
+    this.addExperience(10)
 
     makeAutoObservable<PlayerLevel, ComputedProperties>(this, {
       getIntelligenceCharacteristic: false,

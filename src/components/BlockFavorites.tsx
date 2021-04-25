@@ -1,31 +1,38 @@
 import { observer } from 'mobx-react-lite'
 import { useStore } from '../contexts/storeContext'
 
-const Item = observer(({ id }: { id: number }) => {
+import PlayerInventoryController from '../store/controllers/PlayerInventoryController'
+import PlayerFavoritesController from '../store/controllers/PlayerFavoritesController'
+
+const Item = observer(({ uuid }: { uuid: string }) => {
   const store = useStore()
+  const controller: PlayerInventoryController = store.getController(PlayerInventoryController)
 
-  const item = store.execute('player_inventory:get_item', id)
+  const exp = controller.getItem(uuid)
 
-  if (!item) return null
+  if (!exp) return null
+
+  const [item, quantity] = exp
 
   return (
     <li>
-      {item.item.name} x{item.getQuantity()}
+      {item.meta.name} x{quantity}
     </li>
   )
 })
 
 const BlockFavorites = () => {
   const store = useStore()
+  const controller: PlayerFavoritesController = store.getController(PlayerFavoritesController)
 
-  const items = store.execute('player_favorites:get_all_items')
+  const items = controller.getAll()
 
   return (
     <div>
       <div>Your favorite items: </div>
       <ul>
-        {items.map((id, i) => (
-          <Item key={i} id={id} />
+        {items.map((uuid, i) => (
+          <Item key={i} uuid={uuid} />
         ))}
       </ul>
     </div>

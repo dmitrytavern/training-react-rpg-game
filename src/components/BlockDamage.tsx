@@ -1,11 +1,14 @@
 import { observer } from 'mobx-react-lite'
 import { useStore } from '../contexts/storeContext'
 
+import PlayerDamageController from '../store/controllers/PlayerDamageController'
+
 const BlockDamage = () => {
   const store = useStore()
+  const controller: PlayerDamageController = store.getController(PlayerDamageController)
 
-  const minDamage = store.execute('player_damage:get_min_damage')
-  const maxDamage = store.execute('player_damage:get_max_damage')
+  const minDamage = controller.getDamageMin()
+  const maxDamage = controller.getDamageMax()
 
   return (
     <div>

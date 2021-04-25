@@ -1,5 +1,6 @@
 import styles from './App.module.css'
 import { observer } from 'mobx-react-lite'
+import { useStore } from './contexts/storeContext'
 
 import BlockLevel from './components/BlockLevel'
 import BlockHealth from './components/BlockHealth'
@@ -12,7 +13,7 @@ import BlockInventory from './components/BlockInventory'
 import BlockFavorites from './components/BlockFavorites'
 import BlockEquipment from './components/BlockEquipment'
 import BlockCraft from './components/BlockCraft'
-import BlockQuests from './components/BlockQuests'
+// import BlockQuests from './components/BlockQuests'
 
 const App = () => {
   return (
@@ -83,10 +84,10 @@ const App = () => {
 
       <h1>Quests Mechanics: </h1>
       <div className={styles.Container}>
-        <div>
-          <h2>Quests</h2>
-          <BlockQuests />
-        </div>
+      {/*  <div>*/}
+      {/*    <h2>Quests</h2>*/}
+      {/*    <BlockQuests />*/}
+      {/*  </div>*/}
       </div>
     </div>
   )

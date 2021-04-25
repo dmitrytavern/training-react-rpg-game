@@ -2,7 +2,6 @@ import QuestsFactory from '../QuestsFactory'
 import QuestsRequirements from '../QuestsRequirements'
 import QuestsRewards from '../QuestsRewards'
 import QuestsGroup from '../QuestsGroup'
-import Commander from '../Store'
 
 class Quests {
   private readonly questsFactory: QuestsFactory
@@ -13,11 +12,6 @@ class Quests {
     this.questsFactory = new QuestsFactory()
     this.questsRequirements = new QuestsRequirements()
     this.questsRewards = new QuestsRewards()
-  }
-
-  public init(commander: Commander) {
-    this.questsRequirements.init(commander)
-    this.questsRewards.init(commander)
   }
 
   public getQuestGroup(id: number) {

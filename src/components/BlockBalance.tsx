@@ -1,17 +1,20 @@
 import { observer } from 'mobx-react-lite'
 import { useStore } from '../contexts/storeContext'
 
+import PlayerBalanceController from '../store/controllers/PlayerBalanceController'
+
 const BlockBalance = () => {
   const store = useStore()
+  const controller: PlayerBalanceController = store.getController(PlayerBalanceController)
 
-  const balanceMoney = store.execute('player_balance:get_money')
+  const balanceMoney = controller.getMoney()
 
   const addMoney = (count: number) => {
-    store.execute('player_balance:increment_money', count)
+    controller.incrementMoney(count)
   }
 
   const removeMoney = (count: number) => {
-    store.execute('player_balance:decrement_money', count)
+    controller.decrementMoney(count)
   }
 
   return (

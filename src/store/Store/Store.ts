@@ -1,72 +1,45 @@
 import { reaction } from 'mobx'
-import { StoreContext, StoreControllers } from './types'
-
-import Craft from '../models/Craft'
-import Quests from '../models/Quests'
-import PlayerLevel from '../models/PlayerLevel'
-import PlayerHealth from '../models/PlayerHealth'
-import PlayerEnergy from '../models/PlayerEnergy'
-import PlayerDamage from '../models/PlayerDamage'
-import PlayerDefense from '../models/PlayerDefense'
-import PlayerInventory from '../models/PlayerInventory'
-import PlayerEquipment from '../models/PlayerEquipment'
-import PlayerFavorites from '../models/PlayerFavorites'
-import PlayerCharacteristic from '../models/PlayerCharacteristic'
-import PlayerBalance from '../models/PlayerBalance'
-import ItemFactory from '../models/ItemFactory'
-
-import PlayerLevelController from '../controllers/PlayerLevelController'
-import PlayerHealthController from '../controllers/PlayerHealthController'
-import PlayerEnergyController from '../controllers/PlayerEnergyController'
-import PlayerDamageController from '../controllers/PlayerDamageController'
-import PlayerDefenseController from '../controllers/PlayerDefenseController'
-import PlayerInventoryController from '../controllers/PlayerInventoryController'
-import PlayerEquipmentController from '../controllers/PlayerEquipmentController'
-import PlayerFavoritesController from '../controllers/PlayerFavoritesController'
-import PlayerCharacteristicController from '../controllers/PlayerCharacteristicController'
-import PlayerBalanceController from '../controllers/PlayerBalanceController'
-import CraftController from '../controllers/CraftController'
-import QuestsController from '../controllers/QuestsController'
 
 class Store {
-  private readonly controllers: StoreControllers
-  private readonly context: StoreContext
+  private readonly controllers: any[]
+  private readonly models: any[]
 
   constructor() {
-    this.context = {
-      playerLevel: new PlayerLevel(50, 10),
-      playerHealth: new PlayerHealth(5000, 100),
-      playerEnergy: new PlayerEnergy(50, 100),
-      playerDamage: new PlayerDamage(30, 50),
-      playerDefense: new PlayerDefense(),
-      playerInventory: new PlayerInventory(),
-      playerEquipment: new PlayerEquipment(),
-      playerFavorites: new PlayerFavorites(),
-      playerCharacteristic: new PlayerCharacteristic(),
-      playerBalance: new PlayerBalance({ money: 0 }),
-      craft: new Craft(),
-      quests: new Quests(),
-      itemFactor: new ItemFactory(),
+    this.models = []
+    this.controllers = []
+  }
+
+  public getController(Controller: any) {
+    const obj = this.controllers.find((x) => x instanceof Controller)
+
+    if (obj) return obj
+
+    const depends = Controller.prototype.provides
+
+    const arg = []
+    for (const depend of depends) {
+      arg.push(this.getModel(depend))
     }
 
-    const controllerContext = {
-      context: this.context,
-    }
+    const newController = new Controller(...arg)
 
-    this.controllers = {
-      playerLevel: new PlayerLevelController(controllerContext),
-      playerHealth: new PlayerHealthController(controllerContext),
-      playerEnergy: new PlayerEnergyController(controllerContext),
-      playerDamage: new PlayerDamageController(controllerContext),
-      playerDefense: new PlayerDefenseController(controllerContext),
-      playerInventory: new PlayerInventoryController(controllerContext),
-      playerEquipment: new PlayerEquipmentController(controllerContext),
-      playerFavorites: new PlayerFavoritesController(controllerContext),
-      playerCharacteristic: new PlayerCharacteristicController(controllerContext),
-      playerBalance: new PlayerBalanceController(controllerContext),
-      craft: new CraftController(controllerContext),
-      quests: new QuestsController(controllerContext),
-    }
+    this.controllers.push(newController)
+
+    console.log(this.controllers)
+    return newController
+  }
+
+  private getModel(Model: any) {
+    const obj = this.models.find((x) => x instanceof Model)
+
+    if (obj) return obj
+
+    const newModel = new Model()
+
+    this.models.push(newModel)
+
+    console.log(this.models)
+    return newModel
   }
 
   public execute(name: string, payload?: any): any {

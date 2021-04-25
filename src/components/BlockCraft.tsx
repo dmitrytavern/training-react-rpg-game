@@ -3,32 +3,34 @@ import CraftBlueprint from '../store/models/CraftBlueprint'
 import { observer } from 'mobx-react-lite'
 import { useStore } from '../contexts/storeContext'
 
-const CraftBlueprintMaterial = observer(
-  (props: { id: number; quantity: number; available: boolean }) => {
-    const store = useStore()
+import CraftController from '../store/controllers/CraftController'
+import PlayerInventoryController from '../store/controllers/PlayerInventoryController'
 
-    const { id, quantity, available } = props
+const CraftBlueprintMaterial = observer((props: { id: number; quantity: number }) => {
+  const store = useStore()
+  const controller: CraftController = store.getController(CraftController)
 
-    const data = store.execute('items:get_data', id)
+  const { id, quantity } = props
 
-    const opacity = available ? 1 : 0.5
-    return (
+  const available = controller.checkMaterialAvailable(id, quantity)
+  const opacity = available ? 1 : 0.5
+  return (
       <span style={{ opacity }}>
-        {data.name} x{quantity}
+        {id} x{quantity}
       </span>
     )
   }
 )
 
-const CraftBlueprintTool = observer((props: { id: number; available: boolean }) => {
+const CraftBlueprintTool = observer((props: { id: number }) => {
   const store = useStore()
+  const controller: CraftController = store.getController(CraftController)
 
-  const { id, available } = props
+  const { id } = props
 
-  const data = store.execute('items:get_data', id)
-
+  const available = controller.checkToolAvailable(id)
   const opacity = available ? 1 : 0.5
-  return <span style={{ opacity }}>{data.name}</span>
+  return <span style={{ opacity }}>{id}</span>
 })
 
 interface BlueprintProps {
@@ -36,50 +38,55 @@ interface BlueprintProps {
   materials: CraftBlueprint['materials']
   tools: CraftBlueprint['tools']
   result: CraftBlueprint['result']
-  available: boolean
 }
 
 const AppCraftBlueprint = observer((props: BlueprintProps) => {
   const store = useStore()
-  const { id, materials, tools, result, available } = props
+  const controller: CraftController = store.getController(CraftController)
 
-  const resultData = store.execute('items:get_data', result.id)
+  const { id, materials, tools, result } = props
 
   const onCraft = () => {
-    store.execute('craft:create', id)
+    controller.create(id)
   }
 
+  const available = controller.checkBlueprintAvailable(+id)
   const opacity = available ? 1 : 0.5
   return (
     <li>
       <span>
         <div>
-          {materials.map((item, i) => (
-            <span key={i}>
+          {materials.map((exp, i) => {
+            const [id, quantity] = exp.split(':')
+            return (<span key={i}>
               {i > 0 && ' X '}
               <CraftBlueprintMaterial
-                id={item.material.id}
-                quantity={item.quantity}
-                available={item.material.isAvailable()}
+                id={+id}
+                quantity={+quantity}
               />
-            </span>
-          ))}
+            </span>)
+          })}
 
           <span> = </span>
 
-          <span style={{ opacity }}>
-            {resultData.name} x{result.quantity}
+          <span style={{opacity}}>
+            {result.map((exp, i) => (
+              <span key={i}>
+              {i > 0 && ' , '}
+                {exp}
+            </span>
+            ))}
           </span>
         </div>
         {tools.length > 0 && (
           <div>
             Tools:
-            {tools.map((tool, i) => (
-              <span key={i}>
+            {tools.map((id, i) => {
+              return (<span key={i}>
                 {i > 0 && ', '}
-                <CraftBlueprintTool id={tool.id} available={tool.isAvailable()} />
-              </span>
-            ))}
+                <CraftBlueprintTool id={+id} />
+              </span>)
+            })}
           </div>
         )}
       </span>
@@ -93,29 +100,31 @@ const AppCraftBlueprint = observer((props: BlueprintProps) => {
 
 const BlockCraft = () => {
   const store = useStore()
+  const controller: CraftController = store.getController(CraftController)
+  const controllerInventory: PlayerInventoryController = store.getController(PlayerInventoryController)
 
   const [category, setCategory] = useState('all')
 
-  const blueprints = store.execute('craft:get_blueprints', category)
+  const blueprints = controller.getBlueprints(category)
 
   const addCommonHammer = () => {
-    store.execute('player_inventory:add_item', { itemId: 301, quantity: 1 })
+    controllerInventory.addItem(301)
   }
 
   const addCommonWood = () => {
-    store.execute('player_inventory:add_item', { itemId: 101, quantity: 1 })
+    controllerInventory.addItem(101)
   }
 
   const addCommonIron = () => {
-    store.execute('player_inventory:add_item', { itemId: 102, quantity: 1 })
+    controllerInventory.addItem(102)
   }
 
   const addCommonMandrake = () => {
-    store.execute('player_inventory:add_item', { itemId: 103, quantity: 1 })
+    controllerInventory.addItem(103)
   }
 
   const addCommonCelandine = () => {
-    store.execute('player_inventory:add_item', { itemId: 104, quantity: 1 })
+    controllerInventory.addItem(104)
   }
 
   const changeHandler = (event: React.SyntheticEvent) => {
@@ -151,7 +160,6 @@ const BlockCraft = () => {
             materials={item.materials}
             tools={item.tools}
             result={item.result}
-            available={item.isAvailable()}
           />
         ))}
       </ul>

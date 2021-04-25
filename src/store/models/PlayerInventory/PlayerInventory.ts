@@ -2,11 +2,12 @@ import { makeAutoObservable } from 'mobx'
 import Item from '../Item'
 import ItemsFactory from '../ItemFactory'
 import { ItemTypes } from '../Item/types'
+import { Items } from '../../../../types/Items'
 
-type Inventory = [key: Item<any>, quantity: number]
+export type Inventory<T extends keyof Items> = [key: Item<T>, quantity: number]
 
 class PlayerInventory {
-  private readonly inventory: Inventory[]
+  private readonly inventory: Inventory<any>[]
   private _itemFactory: ItemsFactory | undefined
 
   private get itemFactory(): ItemsFactory {
@@ -24,14 +25,14 @@ class PlayerInventory {
     this._itemFactory = itemFactory
   }
 
-  public getInventory(): Inventory[] {
+  public getInventory(): Inventory<any>[] {
     return this.inventory
   }
 
-  public getItem<T extends ItemTypes>(uuid: string, type?: T): Item<T> | undefined {
-    for (const [item] of this.inventory) {
-      if (uuid === item.uuid) {
-        return this.getObject(uuid, type)
+  public getItem<T extends ItemTypes>(uuid: string, type?: T): Inventory<T> | undefined {
+    for (const exp of this.inventory) {
+      if (uuid === exp[0].uuid) {
+        return exp
       }
     }
   }

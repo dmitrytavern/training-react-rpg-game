@@ -1,7 +1,7 @@
 import { makeAutoObservable } from 'mobx'
 
 class PlayerFavorites {
-  private readonly ids: number[]
+  private readonly ids: string[]
 
   constructor() {
     this.ids = []
@@ -9,23 +9,23 @@ class PlayerFavorites {
     makeAutoObservable(this)
   }
 
-  public getItems(): number[] {
+  public getItems(): string[] {
     return this.ids
   }
 
-  public setItem(itemId: number): void {
-    this.ids.push(itemId)
+  public setItem(uuid: string): void {
+    this.ids.push(uuid)
   }
 
-  public unsetItem(itemId: number): void {
-    const index = this.ids.findIndex((x) => x === itemId)
+  public unsetItem(uuid: string): void {
+    const index = this.ids.findIndex((x) => x === uuid)
     if (index !== -1) {
       this.ids.splice(index, 1)
     }
   }
 
-  public exists(itemId: number): boolean {
-    return this.ids.includes(itemId)
+  public exists(uuid: string): boolean {
+    return this.ids.includes(uuid)
   }
 }
 

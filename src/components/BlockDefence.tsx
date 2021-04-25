@@ -1,11 +1,14 @@
 import { observer } from 'mobx-react-lite'
 import { useStore } from '../contexts/storeContext'
 
+import PlayerDefenseController from '../store/controllers/PlayerDefenseController'
+
 const BlockDefence = () => {
   const store = useStore()
+  const controller: PlayerDefenseController = store.getController(PlayerDefenseController)
 
-  const defenceNumber = store.execute('player_defense:get_defense')
-  const defencePercent = store.execute('player_defense:get_defense_percent')
+  const defenceNumber = controller.getDefense()
+  const defencePercent = controller.getDefensePercent()
 
   return (
     <div>

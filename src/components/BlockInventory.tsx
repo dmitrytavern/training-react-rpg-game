@@ -1,24 +1,33 @@
 import { observer } from 'mobx-react-lite'
 import { useStore } from '../contexts/storeContext'
-import PlayerInventoryItem from '../store/models/PlayerInventoryItem'
 
-const Item = observer(({ item }: { item: PlayerInventoryItem }) => {
+import PlayerInventoryController from '../store/controllers/PlayerInventoryController'
+import Item from '../store/models/Item'
+import PlayerFavoritesController from '../store/controllers/PlayerFavoritesController'
+
+const InventoryItem = observer(({ item, quantity }: { item: Item<any>, quantity: number }) => {
   const store = useStore()
+  const controllerInventory: PlayerInventoryController = store.getController(PlayerInventoryController)
+  const controllerFavorites: PlayerFavoritesController = store.getController(PlayerFavoritesController)
 
-  const favoriteExists = store.execute('player_favorites:has_item', item.id)
+  const favoriteExists = controllerFavorites.exists(item.uuid)
 
   const addItemToFavorite = () => {
-    store.execute('player_favorites:set_item', item.id)
+    controllerFavorites.set(item.uuid)
   }
 
   const unsetItemFromFavorite = () => {
-    store.execute('player_favorites:unset_item', item.id)
+    controllerFavorites.unset(item.uuid)
+  }
+
+  const deleteItem = () => {
+    controllerInventory.removeItem(item.uuid)
   }
 
   return (
     <li>
       <span>
-        {item.item.name} x{item.getQuantity()}
+        {item.meta.name} x{quantity}
       </span>
       |
       <button onClick={addItemToFavorite} disabled={favoriteExists}>
@@ -27,39 +36,33 @@ const Item = observer(({ item }: { item: PlayerInventoryItem }) => {
       <button onClick={unsetItemFromFavorite} disabled={!favoriteExists}>
         Unset from favorite
       </button>
+      <button onClick={deleteItem}>
+        Delete
+      </button>
     </li>
   )
 })
 
 const BlockInventory = () => {
   const store = useStore()
-  const sword = { itemId: 1, quantity: 1 }
+  const controller: PlayerInventoryController = store.getController(PlayerInventoryController)
 
-  const inventory = store.execute('player_inventory:get_inventory')
-
-  const disableSwordBtn = store.execute('player_inventory:has_item', sword)
+  const inventory = controller.getInventory()
 
   const addItem = () => {
-    store.execute('player_inventory:add_item', sword)
-  }
-
-  const removeItem = () => {
-    store.execute('player_inventory:remove_item', sword)
+    controller.addItem(1, 1)
   }
 
   return (
     <div>
       <div>Your inventory: </div>
       <ul>
-        {inventory.map((item, i) => (
-          <Item key={i} item={item} />
+        {inventory.map(([item, quantity], i) => (
+          <InventoryItem key={i} item={item} quantity={quantity} />
         ))}
       </ul>
 
       <button onClick={addItem}>Add 1 Sword</button>
-      <button onClick={removeItem} disabled={!disableSwordBtn}>
-        Remove 1 Sword
-      </button>
     </div>
   )
 }

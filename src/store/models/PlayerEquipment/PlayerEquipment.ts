@@ -1,6 +1,8 @@
 import { Effect } from '../../../../types/Effect'
 import PlayerEquipmentSlot from '../PlayerEquipmentSlot'
 
+export type Slots = 'weapon' | 'leftRing' | 'rightRing' | 'waist' | 'helmet' | 'armor' | 'arms' | 'feet'
+
 class PlayerEquipment {
   public weapon: PlayerEquipmentSlot<'Weapon'>
   public leftRing: PlayerEquipmentSlot<'Armor'>

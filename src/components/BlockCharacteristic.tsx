@@ -1,30 +1,33 @@
 import { observer } from 'mobx-react-lite'
 import { useStore } from '../contexts/storeContext'
 
+import PlayerCharacteristicController from '../store/controllers/PlayerCharacteristicController'
+
 const BlockCharacteristic = () => {
   const store = useStore()
+  const controller: PlayerCharacteristicController = store.getController(PlayerCharacteristicController)
 
-  const allCharacteristicPoints = store.execute('player_characteristic:get_all_points')
-  const availableCharacteristicPoints = store.execute('player_characteristic:get_available_points')
+  const allCharacteristicPoints = controller.getAllPoints()
+  const availableCharacteristicPoints = controller.getAvailablePoints()
 
   const addCharacteristicPoint = (name: any) => {
-    store.execute('player_characteristic:set_point', name)
+    controller.setPoint(name)
   }
 
   const unsetAllPoints = () => {
-    store.execute('player_characteristic:unset_points')
+    controller.unsetPoints()
   }
 
   const disabledCharacteristicButton = (name: any) => {
     return (
-      store.execute('player_characteristic:check_point_limit', name) ||
+      controller.checkLimit(name) ||
       availableCharacteristicPoints === 0
     )
   }
 
-  const strength = store.execute('player_characteristic:get_point', 'strength')
-  const endurance = store.execute('player_characteristic:get_point', 'endurance')
-  const intelligence = store.execute('player_characteristic:get_point', 'intelligence')
+  const strength = controller.getPoints('strength')
+  const endurance = controller.getPoints('endurance')
+  const intelligence = controller.getPoints('intelligence')
 
   return (
     <div>

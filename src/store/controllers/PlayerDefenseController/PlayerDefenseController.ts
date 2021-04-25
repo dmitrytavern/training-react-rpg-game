@@ -1,30 +1,42 @@
 import Controller from '../Controller'
-import { ControllerProps } from '../Controller/types'
 import { calculateEffect } from '../../../utils/calculateEffect'
+import PlayerDefense from '../../models/PlayerDefense'
+import PlayerLevel from '../../models/PlayerLevel'
+import PlayerEquipment from '../../models/PlayerEquipment'
+import PlayerCharacteristic from '../../models/PlayerCharacteristic'
 
-type ControllerContext =
-  | 'playerDefense'
-  | 'playerLevel'
-  | 'playerEquipment'
-  | 'playerCharacteristic'
-
-class PlayerDefenseController extends Controller<ControllerContext> {
-  constructor(props: ControllerProps<ControllerContext>) {
-    super(props)
-
-    const context = this.context
-
-    context.playerDefense.setComputedFunction('level', () => {
-      return context.playerLevel.getLevel()
+@Controller([
+  PlayerLevel,
+  PlayerDefense,
+  PlayerEquipment,
+  PlayerCharacteristic
+])
+class PlayerDefenseController {
+  constructor(
+    private playerLevel: PlayerLevel,
+    private playerDefense: PlayerDefense,
+    private playerEquipment: PlayerEquipment,
+    private playerCharacteristic: PlayerCharacteristic
+  ) {
+    this.playerDefense.setComputedFunction('level', () => {
+      return this.playerLevel.getLevel()
     })
 
-    context.playerDefense.setComputedFunction('effects', () => {
-      return calculateEffect('defense', [...context.playerEquipment.getEffects()])
+    this.playerDefense.setComputedFunction('effects', () => {
+      return calculateEffect('defense', [...this.playerEquipment.getEffects()])
     })
 
-    context.playerDefense.setComputedFunction('strength', () => {
-      return context.playerCharacteristic.getCharacteristic('strength')
+    this.playerDefense.setComputedFunction('strength', () => {
+      return this.playerCharacteristic.getCharacteristic('strength')
     })
+  }
+
+  public getDefense() {
+    return this.playerDefense.getDefense()
+  }
+
+  public getDefensePercent() {
+    return this.playerDefense.getDefensePercent()
   }
 }
 
