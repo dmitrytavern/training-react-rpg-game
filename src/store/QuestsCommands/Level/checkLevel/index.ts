@@ -1,1 +1,0 @@
-export { checkLevel } from './checkLevel'
