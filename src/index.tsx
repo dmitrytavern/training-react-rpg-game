@@ -3,16 +3,9 @@ import ReactDOM from 'react-dom'
 import App from './App'
 import reportWebVitals from './reportWebVitals'
 
-import Store from './store/Store'
-import { StoreContext } from './contexts/storeContext'
-
-const store = new Store()
-
 ReactDOM.render(
   <React.StrictMode>
-    <StoreContext.Provider value={store}>
-      <App />
-    </StoreContext.Provider>
+    <App />
   </React.StrictMode>,
   document.getElementById('root')
 )
