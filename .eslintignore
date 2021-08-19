@@ -1,0 +1,7 @@
+/.git
+/.vscode
+/.idea
+src/setupTests.ts
+src/reportWebVitals.ts
+node_modules
+.husky

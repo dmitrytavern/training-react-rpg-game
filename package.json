@@ -24,6 +24,9 @@
     "build": "react-scripts build",
     "test": "react-scripts test",
     "eject": "react-scripts eject",
+    "lint": "eslint src/",
+    "lint:write": "eslint src/ --fix",
+    "prettier": "prettier --write src/**/*.{ts,tsx}",
     "prepare": "husky install"
   },
   "eslintConfig": {
@@ -46,12 +49,14 @@
   },
   "devDependencies": {
     "@types/uuid": "^8.3.0",
+    "@typescript-eslint/eslint-plugin": "^4.29.2",
+    "@typescript-eslint/parser": "^4.29.2",
+    "eslint": "^7.32.0",
+    "eslint-config-prettier": "^8.3.0",
+    "eslint-plugin-prettier": "^3.4.0",
+    "eslint-plugin-react": "^7.24.0",
     "husky": "^6.0.0",
+    "lint-staged": "^11.1.2",
     "prettier": "2.2.1"
-  },
-  "husky": {
-    "hooks": {
-      "pre-commit": "npm run test"
-    }
   }
 }
