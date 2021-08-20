@@ -2,6 +2,7 @@
 	"compilerOptions": {
 		"target": "es5",
 		"lib": ["dom", "dom.iterable", "esnext"],
+		"types": ["reflect-metadata"],
 		"paths": {
 			"@store/*": ["./src/store/*"]
 		},
@@ -17,6 +18,7 @@
 		"resolveJsonModule": true,
 		"isolatedModules": true,
 		"experimentalDecorators": true,
+		"emitDecoratorMetadata": true,
 		"noEmit": true,
 		"jsx": "react-jsx"
 	},
