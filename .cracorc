@@ -1,9 +1,9 @@
 const path = require('path')
 
 module.exports = {
-  webpack: {
-    alias: {
-      '@store': path.join(path.resolve(__dirname, './src/store')),
-    },
-  },
+	webpack: {
+		alias: {
+			'@store': path.join(path.resolve(__dirname, './src/store')),
+		},
+	},
 }
