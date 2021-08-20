@@ -22,8 +22,7 @@
   "scripts": {
     "start": "react-scripts start",
     "build": "react-scripts build",
-    "test": "react-scripts test --config .jest.json",
-    "eject": "react-scripts eject",
+    "test": "react-scripts test",
     "lint": "eslint src/",
     "lint:write": "eslint src/ --fix",
     "prettier": "prettier --write src/**/*.{ts,tsx}",
