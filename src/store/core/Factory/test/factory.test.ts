@@ -14,7 +14,6 @@ describe('Factory core', () => {
 	@AppFactory({
 		name: 'factory',
 		target: TestFactoryTaget,
-		targetOptions: {},
 	})
 	class TestFactory extends Factory<typeof TestFactoryTaget> {
 		public only_test_clear_list() {
@@ -65,7 +64,6 @@ describe('Factory private methods', () => {
 	@AppFactory({
 		name: 'factory',
 		target: TestFactoryTaget,
-		targetOptions: {},
 	})
 	class TestFactory extends Factory<typeof TestFactoryTaget> {
 		public only_test_create_object(props: TargetOptions<typeof TestFactoryTaget>) {
@@ -97,7 +95,6 @@ describe('Factory reactive', () => {
 	@AppFactory({
 		name: 'factory',
 		target: TestFactoryTaget,
-		targetOptions: {},
 	})
 	class TestFactory extends Factory<typeof TestFactoryTaget> {
 		protected encrypt() {
@@ -119,5 +116,40 @@ describe('Factory reactive', () => {
 	it('should be true when adding object', () => {
 		factory.addObject({})
 		expect(called).toBeTruthy()
+	})
+})
+
+describe('Factory encrypt', () => {
+	@AppFactory({
+		name: 'factory',
+		target: TestFactoryTaget,
+	})
+	class FactoryWithoutOptions extends Factory<typeof TestFactoryTaget> {
+		public only_test_encrypt() {
+			return this.encrypt()
+		}
+	}
+
+	@AppFactory({
+		name: 'factory',
+		target: TestFactoryTaget,
+		targetOptions: {},
+	})
+	class FactoryWithOptions extends Factory<typeof TestFactoryTaget> {
+		public only_test_encrypt() {
+			return this.encrypt()
+		}
+	}
+
+	it('should return array of uuid when options not defined', () => {
+		const factory = new FactoryWithoutOptions()
+		const item = factory.addObject({})
+		expect(factory.only_test_encrypt()).toEqual([item.uuid.toString()])
+	})
+
+	it('should return object with uuid when options defined', () => {
+		const factory = new FactoryWithOptions()
+		const item = factory.addObject({})
+		expect(factory.only_test_encrypt()).toEqual([{ uuid: item.uuid }])
 	})
 })

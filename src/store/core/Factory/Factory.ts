@@ -9,7 +9,7 @@ export class Factory<Target extends typeof GameObject> {
 	protected readonly name: string
 	protected readonly list: InstanceType<Target>[]
 	private target: Target
-	private targetOptions: DecoratorTargetOptions<Target>
+	private targetOptions: DecoratorTargetOptions<Target> | null
 
 	constructor() {
 		const _constructor = this.constructor
@@ -21,7 +21,7 @@ export class Factory<Target extends typeof GameObject> {
 		this.targetOptions = Reflect.getOwnMetadata(
 			'targetOptions',
 			_constructor
-		) as DecoratorTargetOptions<Target>
+		) as DecoratorTargetOptions<Target> | null
 
 		this.list = this.decrypt([])
 
@@ -98,18 +98,20 @@ export class Factory<Target extends typeof GameObject> {
 		return undefined
 	}
 
-	protected encrypt(): TargetOptions<Target>[] {
-		if (!this.targetOptions) {
-			throw new Error('You not set targetOptions and not override encrypt function')
-		}
-
+	protected encrypt(): (TargetOptions<Target> | string)[] {
 		const list = this.list
 		const options = this.targetOptions
-		const arr: TargetOptions<Target>[] = []
+		const arr: (TargetOptions<Target> | string)[] = []
 
 		for (const item of list) {
+			if (!options) {
+				arr.push(item.uuid.toString())
+
+				continue
+			}
+
 			const obj: TargetOptions<Target> = {
-				uuid: 'uuid',
+				uuid: item.uuid,
 			} as TargetOptions<Target>
 
 			for (const key in options) {
@@ -126,9 +128,18 @@ export class Factory<Target extends typeof GameObject> {
 		return arr
 	}
 
-	private decrypt(data: TargetOptions<Target>[]): InstanceType<Target>[] {
+	private decrypt(data: (TargetOptions<Target> | string)[]): InstanceType<Target>[] {
 		const arr = []
 		for (const targetOptions of data) {
+			if (typeof targetOptions === 'string') {
+				arr.push(
+					this.createObject({
+						uuid: targetOptions,
+					} as TargetOptions<Target>)
+				)
+				continue
+			}
+
 			arr.push(this.createObject(targetOptions))
 		}
 		return arr
