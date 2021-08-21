@@ -1,6 +1,5 @@
 import { runInAction } from 'mobx'
 import { Factory, AppFactory } from '../index'
-import { TargetOptions } from '../types'
 import { GameObject } from '../../GameObject'
 
 // Removing di class registration
@@ -9,6 +8,15 @@ jest.mock('@store/core', () => ({
 }))
 
 class TestFactoryTaget extends GameObject {}
+
+class TestFactoryTagetWithOptions extends GameObject {
+	public name: string
+
+	constructor(options: { uuid: string; name: string }) {
+		super({ uuid: options.uuid })
+		this.name = options.name
+	}
+}
 
 describe('Factory core', () => {
 	@AppFactory({
@@ -39,12 +47,23 @@ describe('Factory core', () => {
 		expect(factory.getObject(item.uuid)).toEqual(item)
 	})
 
-	it('should delete item', () => {
+	it('should delete object from list', () => {
 		const item = factory.addObject({})
 
 		factory.deleteObject(item.uuid)
 
 		expect(factory.existsObject(item.uuid)).toBeFalsy()
+	})
+
+	it('should return target object without adding in list', () => {
+		const object = factory['createObject']({
+			uuid: 'none',
+		})
+
+		expect(object.uuid).toEqual('none')
+		expect(factory.existsObject(object.uuid)).toBeFalsy()
+		expect(() => factory.getObject(object.uuid)).toThrow()
+		expect(() => factory.deleteObject(object.uuid)).toThrow()
 	})
 
 	it('should return false when getting object not exists', () => {
@@ -57,35 +76,6 @@ describe('Factory core', () => {
 
 	it('should throw when deleting object not exists', () => {
 		expect(() => factory.deleteObject('none')).toThrow()
-	})
-})
-
-describe('Factory private methods', () => {
-	@AppFactory({
-		name: 'factory',
-		target: TestFactoryTaget,
-	})
-	class TestFactory extends Factory<typeof TestFactoryTaget> {
-		public only_test_create_object(props: TargetOptions<typeof TestFactoryTaget>) {
-			return this.createObject(props)
-		}
-
-		public only_test_get_encrypt() {
-			return this.encrypt()
-		}
-	}
-
-	const factory = new TestFactory()
-
-	it('should return object', () => {
-		const object = factory.only_test_create_object({
-			uuid: 'none',
-		})
-
-		expect(object.uuid).toEqual('none')
-		expect(factory.existsObject(object.uuid)).toBeFalsy()
-		expect(() => factory.getObject(object.uuid)).toThrow()
-		expect(() => factory.deleteObject(object.uuid)).toThrow()
 	})
 })
 
@@ -119,37 +109,63 @@ describe('Factory reactive', () => {
 	})
 })
 
-describe('Factory encrypt', () => {
+describe('Factory encrypt/decrypt', () => {
 	@AppFactory({
 		name: 'factory',
 		target: TestFactoryTaget,
 	})
-	class FactoryWithoutOptions extends Factory<typeof TestFactoryTaget> {
-		public only_test_encrypt() {
-			return this.encrypt()
-		}
-	}
+	class FactoryWithoutOptions extends Factory<typeof TestFactoryTaget> {}
 
 	@AppFactory({
 		name: 'factory',
 		target: TestFactoryTaget,
 		targetOptions: {},
 	})
-	class FactoryWithOptions extends Factory<typeof TestFactoryTaget> {
-		public only_test_encrypt() {
-			return this.encrypt()
-		}
-	}
+	class FactoryWithOptions extends Factory<typeof TestFactoryTaget> {}
+
+	@AppFactory({
+		name: 'factory',
+		target: TestFactoryTagetWithOptions,
+		targetOptions: {
+			name: 'name',
+		},
+	})
+	class FactoryWithRequiredOptions extends Factory<typeof TestFactoryTagetWithOptions> {}
 
 	it('should return array of uuid when options not defined', () => {
 		const factory = new FactoryWithoutOptions()
 		const item = factory.addObject({})
-		expect(factory.only_test_encrypt()).toEqual([item.uuid.toString()])
+		expect(factory['encrypt']()).toEqual([item.uuid.toString()])
 	})
 
-	it('should return object with uuid when options defined', () => {
+	it('should return object with only uuid when options defined', () => {
 		const factory = new FactoryWithOptions()
 		const item = factory.addObject({})
-		expect(factory.only_test_encrypt()).toEqual([{ uuid: item.uuid }])
+		expect(factory['encrypt']()).toEqual([{ uuid: item.uuid }])
+	})
+
+	it('should return array of target options', () => {
+		const factory = new FactoryWithRequiredOptions()
+		const item = factory.addObject({ name: 'test' })
+
+		expect(factory['encrypt']()).toEqual([
+			{
+				uuid: item.uuid,
+				name: item.name,
+			},
+		])
+	})
+
+	it('should return array of objects when get array of options', () => {
+		const factory = new FactoryWithRequiredOptions()
+		const opt = { uuid: '1', name: 'test' }
+		const objects = factory['decrypt']([opt])
+		expect(objects).toEqual([factory['createObject'](opt)])
+	})
+
+	it('should return array of objects when get array of uuid', () => {
+		const factory = new FactoryWithoutOptions()
+		const objects = factory['decrypt'](['1'])
+		expect(objects).toEqual([factory['createObject']({ uuid: '1' })])
 	})
 })
