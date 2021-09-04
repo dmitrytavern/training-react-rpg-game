@@ -1,4 +1,4 @@
-import { makeObservable, reaction, action, observable } from 'mobx'
+import { makeObservable, reaction, action, observable, toJS } from 'mobx'
 import { FactoryPrivateKeys, TargetOptions, DecoratorTargetOptions } from './types'
 import { Injectable, GameObject } from '..'
 
@@ -38,7 +38,7 @@ export class Factory<Target extends typeof GameObject> {
 		})
 
 		reaction(
-			() => this.list.slice(),
+			() => toJS(this.list),
 			() => {
 				this.encrypt()
 			}

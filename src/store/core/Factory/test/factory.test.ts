@@ -1,4 +1,4 @@
-import { runInAction } from 'mobx'
+import { runInAction, makeObservable, observable, action } from 'mobx'
 import { Factory, AppFactory } from '../index'
 import { GameObject } from '../../GameObject'
 
@@ -82,11 +82,28 @@ describe('Factory core', () => {
 describe('Factory reactive', () => {
 	let called = false
 
+	class ReactiveFactoryTaget extends GameObject {
+		public propery = 'Hello'
+
+		constructor(props: { uuid: string }) {
+			super(props)
+
+			makeObservable(this, {
+				propery: observable,
+				changeProperty: action,
+			})
+		}
+
+		public changeProperty(val: string) {
+			this.propery = val
+		}
+	}
+
 	@AppFactory({
 		name: 'factory',
-		target: TestFactoryTaget,
+		target: ReactiveFactoryTaget,
 	})
-	class TestFactory extends Factory<typeof TestFactoryTaget> {
+	class TestFactory extends Factory<typeof ReactiveFactoryTaget> {
 		protected encrypt() {
 			called = true
 			return []
@@ -105,6 +122,16 @@ describe('Factory reactive', () => {
 
 	it('should be true when adding object', () => {
 		factory.addObject({})
+		expect(called).toBeTruthy()
+	})
+
+	it('should be true when changed object', () => {
+		const object = factory.addObject({})
+
+		called = false
+
+		object.changeProperty('Property changed!')
+
 		expect(called).toBeTruthy()
 	})
 })
