@@ -7,18 +7,32 @@ jest.mock('@store/core', () => ({
 }))
 
 describe('Model core', () => {
+	@AppModel()
+	class TestModel extends Model<TestService | TestServiceWithoutInit> {
+		constructor() {
+			super()
+			this.createProperty('private', {
+				defaultValue: 'String',
+			})
+		}
+	}
+
 	@AppService()
-	class TestService extends Service {
+	class TestServiceWithoutInit extends Service {
 		private privateProperty: null | string = null
 	}
 
-	@AppModel()
-	class TestModel extends Model<TestService> {
-		constructor() {
+	@AppService()
+	class TestService extends Service {
+		private privateProperty: string
+
+		constructor(model: TestModel) {
 			super()
-			this.createProperty({
-				name: 'private',
-				defaultValue: 'String',
+
+			this.privateProperty = model.getValue<string>('private')
+
+			model.init<'privateProperty'>(this, {
+				privateProperty: 'private',
 			})
 		}
 	}
@@ -29,75 +43,58 @@ describe('Model core', () => {
 		expect(model['properties'].length).toBe(1)
 	})
 
-	it('should return default value of property', () => {
-		const service = new TestService()
-		const model = new TestModel()
-
-		model.init(service)
-
-		expect(service['privateProperty']).toBeNull()
-		expect(model.set('private', 'privateProperty')).toBe('String')
-	})
-
 	it('should return default value of not setted property', () => {
 		const model = new TestModel()
 
-		expect(model.get('private')()).toBe('String')
+		expect(model.getValue('private')).toBe('String')
+		expect(model.getGetter('private')()).toBe('String')
 	})
 
-	it('should return new value of property', () => {
-		const service = new TestService()
+	it('should setted default value of property', () => {
 		const model = new TestModel()
+		const service = new TestService(model)
 
-		model.init(service)
-		service['privateProperty'] = model.set('private', 'privateProperty')
+		expect(service['privateProperty']).toBe('String')
+	})
+
+	it('should return changed value of property', () => {
+		const model = new TestModel()
+		const service = new TestService(model)
+
 		service['privateProperty'] = 'NewString'
 
-		expect(model.get('private')()).toBe('NewString')
+		expect(model.getValue('private')).toBe('NewString')
+		expect(model.getGetter('private')()).toBe('NewString')
 	})
 
 	// Errors
 
 	it('should throw when service aready defined', () => {
-		const service = new TestService()
 		const model = new TestModel()
+		const service = new TestService(model)
 
-		model.init(service)
-
-		expect(() => model.init(service)).toThrow()
+		expect(() => model.init(service, {})).toThrow()
 	})
 
 	it('should throw when property name is wrong', () => {
-		const service = new TestService()
+		const service = new TestServiceWithoutInit()
 		const model = new TestModel()
 
-		model.init(service)
-
-		expect(() => model.set('wrong', 'privateProperty')).toThrow()
+		expect(() => {
+			model.init(service, {
+				privateProperty: 'wrong',
+			})
+		}).toThrow()
 	})
 
 	it('should throw when service key is wrong', () => {
-		const service = new TestService()
+		const service = new TestServiceWithoutInit()
 		const model = new TestModel()
 
-		model.init(service)
-
-		expect(() => model.set('private', 'wrong')).toThrow()
-	})
-
-	it('should throw when service is not defined', () => {
-		const model = new TestModel()
-
-		expect(() => model.set('private', 'privateProperty')).toThrow()
-	})
-
-	it('should throw when key already setted', () => {
-		const service = new TestService()
-		const model = new TestModel()
-
-		model.init(service)
-		model.set('private', 'privateProperty')
-
-		expect(() => model.set('private', 'privateProperty')).toThrow()
+		expect(() => {
+			model.init(service, {
+				wrong: 'private',
+			})
+		}).toThrow()
 	})
 })

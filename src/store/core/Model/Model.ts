@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { Injectable, Service } from '..'
 
 interface Property<Target> {
@@ -7,50 +8,47 @@ interface Property<Target> {
 }
 
 interface PropertyOptions {
-	name: string
-	defaultValue: any
+	defaultValue?: any
 }
+
+type InitFields<Target, AdditionalFields extends PropertyKey> = {
+	[P in keyof Target]: string
+} &
+	Record<AdditionalFields, string>
 
 @Injectable()
 export class Model<Target extends Service> {
 	private readonly properties: Property<Target>[] = []
 	private service: Target | null = null
 
-	public init(service: Target): void {
+	public init<AdditionalKeys extends string>(
+		service: Target,
+		fields: InitFields<Target, AdditionalKeys>
+	): void {
 		if (this.service) {
 			throw new Error('[Model]: Service already defined')
 		}
 
 		this.service = service
+
+		for (const [serviceKey, modelKey] of Object.entries<string>(fields)) {
+			this.set(modelKey, serviceKey)
+		}
 	}
 
-	public set<T extends Target[keyof Target]>(propertyName: string, serviceKey: string): T {
-		const propertyObject = this.findProperty(propertyName)
-
-		if (propertyObject.key) {
-			throw new Error('[Model]: Property already have key')
-		}
-
-		if (!Object.prototype.hasOwnProperty.call(this.service, serviceKey)) {
-			throw new Error('[Model]: Not found property in service')
-		}
-
-		const _val = propertyObject.getter()
-
-		propertyObject.key = serviceKey
-
-		return _val as T
-	}
-
-	public get<T extends any>(propertyName: string): () => T {
+	public getGetter<T extends any>(propertyName: string): () => T {
 		const propertyObject = this.findProperty(propertyName)
 
 		return propertyObject.getter as () => T
 	}
 
-	protected createProperty(options: PropertyOptions): void {
+	public getValue<T extends any>(propertyName: string): T {
+		return this.getGetter<T>(propertyName)()
+	}
+
+	protected createProperty(name: string, options: PropertyOptions = {}): void {
 		const object: Property<Target> = {
-			name: options.name,
+			name,
 			key: null,
 			getter: () => {
 				if (!object.key) {
@@ -70,6 +68,20 @@ export class Model<Target extends Service> {
 		}
 
 		this.properties.push(object)
+	}
+
+	private set(propertyName: string, serviceKey: string): void {
+		const propertyObject = this.findProperty(propertyName)
+
+		if (propertyObject.key) {
+			throw new Error('[Model]: Property already have key')
+		}
+
+		if (!Object.prototype.hasOwnProperty.call(this.service, serviceKey)) {
+			throw new Error('[Model]: Not found property in service')
+		}
+
+		propertyObject.key = serviceKey
 	}
 
 	private findProperty(propertyName: string): Property<Target> {
