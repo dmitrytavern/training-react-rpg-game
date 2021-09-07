@@ -1,18 +1,21 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
+import { reaction } from 'mobx'
 import { Injectable, Service } from '..'
 
 interface Property<Target> {
 	name: string
 	key: null | string
 	getter: () => Target[keyof Target]
+	onChange(newVal: any): void
 }
 
 interface PropertyOptions {
 	defaultValue?: any
+	onChange?(newVal: any): void
 }
 
 type InitFields<Target, AdditionalFields extends PropertyKey> = {
-	[P in keyof Target]: string
+	[P in keyof Target]?: string
 } &
 	Record<AdditionalFields, string>
 
@@ -65,6 +68,9 @@ export class Model<Target extends Service> {
 
 				throw new Error('[Model]: Not found property in service')
 			},
+			onChange: (value: any) => {
+				if (options.onChange) options.onChange(value)
+			},
 		}
 
 		this.properties.push(object)
@@ -82,6 +88,20 @@ export class Model<Target extends Service> {
 		}
 
 		propertyObject.key = serviceKey
+
+		reaction(
+			() => {
+				const value = propertyObject.getter()
+
+				if (Array.isArray(value)) {
+					return value.length
+				}
+				return value
+			},
+			() => {
+				propertyObject.onChange(propertyObject.getter())
+			}
+		)
 	}
 
 	private findProperty(propertyName: string): Property<Target> {

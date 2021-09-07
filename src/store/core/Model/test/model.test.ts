@@ -1,3 +1,4 @@
+import { action, makeObservable, observable } from 'mobx'
 import { Model, AppModel } from '..'
 import { Service, AppService } from '../../Service'
 
@@ -96,5 +97,139 @@ describe('Model core', () => {
 				wrong: 'private',
 			})
 		}).toThrow()
+	})
+})
+
+describe('Model reactive', () => {
+	describe('Primitive values', () => {
+		let valuesHistroy: string[] = []
+		let model: TestModel
+		let service: TestService
+
+		@AppModel()
+		class TestModel extends Model<TestService> {
+			constructor() {
+				super()
+				this.createProperty('private', {
+					defaultValue: 'String',
+					onChange: (newVal: string) => {
+						valuesHistroy.push(newVal)
+					},
+				})
+			}
+		}
+
+		@AppService()
+		class TestService extends Service {
+			private privateProperty: string
+
+			constructor(model: TestModel) {
+				super()
+
+				this.privateProperty = model.getValue<string>('private')
+
+				makeObservable<TestService, 'privateProperty'>(this, {
+					privateProperty: observable,
+					changeValue: action,
+				})
+
+				model.init<'privateProperty'>(this, {
+					privateProperty: 'private',
+				})
+			}
+
+			public changeValue(newVal: string) {
+				this.privateProperty = newVal
+			}
+		}
+
+		beforeEach(() => {
+			valuesHistroy = []
+			model = new TestModel()
+			service = new TestService(model)
+		})
+
+		it('should be empty array after created service', () => {
+			expect(valuesHistroy.length).toBe(0)
+		})
+
+		it('should be only one new value', () => {
+			service.changeValue('Hello')
+
+			expect(valuesHistroy.length).toBe(1)
+			expect(valuesHistroy[0]).toBe('Hello')
+		})
+
+		it('should be some new values', () => {
+			service.changeValue('Hello')
+			service.changeValue('World')
+			service.changeValue('!')
+
+			expect(valuesHistroy.length).toBe(3)
+			expect(valuesHistroy[0]).toBe('Hello')
+			expect(valuesHistroy[1]).toBe('World')
+			expect(valuesHistroy[2]).toBe('!')
+		})
+	})
+
+	describe('Arrays', () => {
+		let valuesHistroy: string[] = []
+		let model: TestModel
+		let service: TestService
+
+		@AppModel()
+		class TestModel extends Model<TestService> {
+			constructor() {
+				super()
+
+				this.createProperty('array', {
+					defaultValue: ['one', 'two'],
+					onChange: (newVal: string) => {
+						valuesHistroy.push(newVal)
+					},
+				})
+			}
+		}
+
+		@AppService()
+		class TestService extends Service {
+			private privateArray: string[]
+
+			constructor(model: TestModel) {
+				super()
+
+				this.privateArray = model.getValue<string[]>('array')
+
+				makeObservable<TestService, 'privateArray'>(this, {
+					privateArray: observable,
+					add: action,
+				})
+
+				model.init<'privateArray'>(this, {
+					privateArray: 'array',
+				})
+			}
+
+			public add(newVal: string) {
+				this.privateArray.push(newVal)
+			}
+		}
+
+		beforeEach(() => {
+			valuesHistroy = []
+			model = new TestModel()
+			service = new TestService(model)
+		})
+
+		it('should be empty array after created service', () => {
+			expect(valuesHistroy.length).toBe(0)
+		})
+
+		it('should be only one new value', () => {
+			service.add('Hello')
+
+			expect(valuesHistroy.length).toBe(1)
+			expect(valuesHistroy[0]).toStrictEqual(['one', 'two', 'Hello'])
+		})
 	})
 })
