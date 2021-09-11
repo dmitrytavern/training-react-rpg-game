@@ -21,6 +21,7 @@ describe('Model core', () => {
 	@AppService()
 	class TestServiceWithoutInit extends Service {
 		private privateProperty: null | string = null
+		private privateProperty2: null | string = null
 	}
 
 	@AppService()
@@ -95,6 +96,18 @@ describe('Model core', () => {
 		expect(() => {
 			model.init(service, {
 				wrong: 'private',
+			})
+		}).toThrow()
+	})
+
+	it('should throw when service key is wrong', () => {
+		const service = new TestServiceWithoutInit()
+		const model = new TestModel()
+
+		expect(() => {
+			model.init(service, {
+				privateProperty: 'private',
+				privateProperty2: 'private',
 			})
 		}).toThrow()
 	})
