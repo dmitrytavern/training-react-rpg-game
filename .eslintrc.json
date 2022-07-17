@@ -1,0 +1,34 @@
+{
+	"env": {
+		"browser": true,
+		"es2021": true
+	},
+	"parser": "@typescript-eslint/parser",
+	"parserOptions": {
+		"tsconfigRootDir": ".",
+		"project": "tsconfig.json",
+		"ecmaFeatures": {
+			"jsx": true
+		},
+		"ecmaVersion": 12,
+		"sourceType": "module"
+	},
+	"plugins": ["jest", "react", "@typescript-eslint"],
+	"extends": [
+		"eslint:recommended",
+		"plugin:@typescript-eslint/recommended",
+		"plugin:@typescript-eslint/recommended-requiring-type-checking",
+		"plugin:prettier/recommended",
+		"plugin:react/recommended"
+	],
+	"rules": {
+		"prettier/prettier": ["error", { "useTabs": true }],
+		"indent": ["error", "tab"]
+	},
+	"settings": {
+		"react": {
+			"version": "detect"
+		}
+	},
+	"ignorePatterns": []
+}
