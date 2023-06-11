@@ -15,7 +15,7 @@ All hidden registrations are stuffed into TypeScript decorators.
 
 Earlier in the history of git, there were other versions of the application that even worked. That is, inventory, buffs, effects, equipment, crafting, health, and energy worked there. There was also quest logic.
 
-See: 7e0d7abddc9da2d201d02d6aa98dda3aa4b12daa
+See: [7e0d7abddc9da2d201d02d6aa98dda3aa4b12daa](https://github.com/dmitrytavern/training-react-rpg-game/tree/7e0d7abddc9da2d201d02d6aa98dda3aa4b12daa).
 
 ## Player
 
